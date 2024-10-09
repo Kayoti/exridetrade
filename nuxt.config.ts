@@ -16,30 +16,18 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       meta: [
         {
-          hid: 'description', name: 'description', content: 'The questions and photos MintList needs to show your car to 100s of interested and vetted buyers.'
+          hid: 'og:site_name', name: 'og:site_name', content: 'ExRide'
         },
         {
-          hid: 'keywords', name: 'keywords', content: 'add, your, keywords, here',
-        },
-        {
-          hid: 'og:site_name', name: 'og:site_name', content: 'MintList'
-        },
-        {
-            hid: 'og:title', name: 'og:title', content: 'MintList - Auction Onboarding Process'
-        },
-        {
-            hid: 'og:description', name: 'og:description', content: 'The questions and photos MintList needs to show your car to 100s of interested and vetted buyers.'
-        },
-        {
-            hid: 'og:image', name: 'og:image', content: 'https://cdn.mintlist.com/consumer/onboarding-thumbnail.png'
+            hid: 'og:description', name: 'og:description', content: 'We Help Buy and Sell Cars Privately.'
         },
         {
             hid: 'og:type', name: 'og:type', content: 'website'
         },
       ],
-      // link: [
-      //   { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
-      // ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/exride_favicon.png' }
+      ],
     }
   },
 

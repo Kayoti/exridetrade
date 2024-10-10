@@ -130,9 +130,13 @@ const checkLead = async () => {
   onMounted(()=>{
     //returnFromNext 
     checkLead();
-    if(router.currentRoute.value.query.returnFromNext) {
-      step.value = 2;
-    }
+    // if(router.currentRoute.value.query.returnFromNext) {
+    //   step.value = 2;
+    // }
+
+    if(!localStorage.getItem("leadid")){
+    router.push('/login');
+  }
   
   })
 

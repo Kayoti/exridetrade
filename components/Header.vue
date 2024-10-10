@@ -26,7 +26,7 @@
           <div class="absolute left-0 mt-3 w-60 hidden bg-white shadow-lg group-hover:block rounded-lg divide-y">
             <a href="https://aaa.easypear.com/loan-calculator/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">Loan Calculator</a>
             <a href="https://aaa.easypear.com/faqs/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">FAQS</a>
-            <a href="https://aaa.easypear.com/blog/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">NEWS/BLOGS</a>
+            <a href="https://aaa.easypear.com/blog/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">News/Blogs</a>
           </div>
         </div>
         <div class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7] group">

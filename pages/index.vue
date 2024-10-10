@@ -221,7 +221,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 onBeforeMount(() => {
-  router.push('/vehicle-details')
+  router.push('/login')
 
 })
 </script>

@@ -35,9 +35,11 @@
   import Step6 from "@/components/photos/Step6.vue"
   import Step7 from "@/components/photos/Step7.vue"
   import CameraModal from "@/components/UI/CameraModal.vue";
+  import { useAuthStore } from '@/stores/authStore';
 
   import { useAppStore } from '@/stores/app.js';
   const store = useAppStore();
+  const authStore = useAuthStore();
   const step = ref(1);
   const CameraModalRef = ref(null)
   const Direction = useDirection();
@@ -134,7 +136,7 @@ const checkLead = async () => {
     //   step.value = 2;
     // }
 
-    if(!localStorage.getItem("leadid")){
+    if(!authStore.getUser){
     router.push('/login');
   }
   

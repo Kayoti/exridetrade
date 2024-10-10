@@ -22,6 +22,7 @@ import Step1 from "@/components/steps/Step1.vue"
 import Step2 from "@/components/steps/Step2.vue"
 import Step3 from "@/components/steps/Step3.vue"
 import Step4 from "@/components/steps/Step4.vue"
+import { useAuthStore } from '@/stores/authStore';
 
 import { useAppStore } from '@/stores/app.js';
 const store = useAppStore();
@@ -29,6 +30,7 @@ const step = ref(1);
 const Direction = useDirection();
 const router = useRouter();
 const animation = ref('animation-from-bottom')
+const authStore = useAuthStore();
 
 async function updateLead() {
   const vtiger_data_update_lead = new URLSearchParams({
@@ -96,7 +98,7 @@ onMounted(() => {
   // if (router.currentRoute.value.query.returnFromNext) {
   //   step.value = 2;
   // }
-  if(!localStorage.getItem("leadid")){
+  if(!authStore.getUser){
     router.push('/login');
   }
 

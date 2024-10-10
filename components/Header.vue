@@ -1,42 +1,71 @@
 <template>
-    <div class="fixed bg-gray-50 w-full mx-auto px-4 sm:px-6 -translate-y-6 py-4 pt-10 z-50 top-0" style="z-index: 50;">
-           <nav class="relative mx-auto w-full flex items-center justify-between sm:h-10 md:justify-center z-50" aria-label="Global">
-             <div class="flex flex-row gap-2 z-50">
-               <div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0">
-                 <div class="flex items-center justify-between w-full md:w-auto">
-                   <h3 class="font-bold text-black text-xl">
-                     <a href="/" onclick="window.location.href='/';">
-                       <img src="~assets/images/exride_logo.png" class="h-10" alt="">
-                     </a>
-                   </h3>
-                 </div>
-               </div>
-             </div>
-             <div class="hidden md:flex md:items-center md:space-x-10">
-               <a href="" onclick="window.location.href='';" class="font-medium text-gray-500 hover:text-gray-900">Future Values</a> 
-               <a href="/#how-we-help" class="font-medium text-gray-500 hover:text-gray-900 hidden xl:block">How We Help</a> 
-               <a href="" onclick="window.location.href='';" class="font-medium text-gray-500 hover:text-gray-900">Financing</a> 
-               <a href="/#contact" onclick="window.location.href='/#contact';" class="font-medium text-gray-500 hover:text-gray-900 hidden xl:block">Contact Us</a> 
-               <a href="/#faq" onclick="window.location.href='/#faq';" class="font-medium text-gray-500 hover:text-gray-900 hidden xl:block">FAQ</a>
-             </div> 
-             <div class="hidden md:absolute md:flex md:items-center md:justify-end md:inset-y-0 md:right-0">
-               <div class="flex flex-row items-center gap-4">
-                 <a class="bg-[#2563EB] text-white px-6 py-2 border border-transparent text-base font-medium rounded-3xl"><NuxtLink to="/login">LOGIN</NuxtLink>
-   
-                 </a>
-               </div>
-             </div> 
-             <div class="flex items-center flex-1 md:absolute md:inset-y-0 md:left-0 z-50">
-               <div class="flex items-center justify-end w-full md:w-auto z-50">
-                 <div class="flex items-center md:hidden z-50">
-                   <button type="button" class="bg-gray-50 z-50 rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-expanded="false" id="mobile_menu_button">
-                     <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                     </svg>
-                   </button>
-                 </div>
-               </div>
-             </div>
-           </nav>
-         </div>
+  <div class="fixed bg-gray-50 w-full mx-auto px-4 sm:px-6 -translate-y-6 py-6 pt-10 z-50 top-0" style="z-index: 50;">
+    <nav class="relative mx-auto w-full flex items-center justify-around sm:h-10 z-50" aria-label="Global">
+      <!-- Left: Logo -->
+      <div class="md:hidden flex">
+        <a href="https://aaa.easypear.com/" >
+          <img src="~assets/images/exride_logo.png" class="h-8" alt="ExRide Logo">
+        </a>
+      </div>
+
+      <!-- Center: Navigation Links -->
+      <div class="hidden md:flex md:space-x-10">
+        <a href="https://aaa.easypear.com/" class="">
+          <img src="~assets/images/exride_logo.png" class="h-8" alt="ExRide Logo">
+        </a>
+        <a href="https://aaa.easypear.com/search/" class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7]">Shop Cars</a>
+        <a href="https://aaa.easypear.com/sell-trade-app/" class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7]">Sell Cars</a>
+        <a href="https://aaa.easypear.com/auto-finance-application/" class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7]">Auto Financing</a>
+        <div class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7] group">
+          <a href="https://aaa.easypear.com/about-us/" class="font-bold text-black hover:text-gray-900 flex items-center">Resources 
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </a>
+          <!-- Dropdown (example) -->
+          <div class="absolute left-0 mt-3 w-60 hidden bg-white shadow-lg group-hover:block rounded-lg divide-y">
+            <a href="https://aaa.easypear.com/loan-calculator/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">Loan Calculator</a>
+            <a href="https://aaa.easypear.com/faqs/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">FAQS</a>
+            <a href="https://aaa.easypear.com/blog/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">NEWS/BLOGS</a>
+          </div>
+        </div>
+        <div class="relative font-bold text-black hover:text-gray-900 inline-block hover:before:absolute hover:before:left-0 hover:before:top-[-0.75rem] hover:before:h-[1px] hover:before:w-full hover:before:bg-[#2B9DD7] group">
+          <a href="https://aaa.easypear.com/about-us/" class="font-bold text-black hover:text-gray-900 flex items-center">Why ExRide 
+            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </a>
+          <!-- Dropdown (example) -->
+          <div class="absolute left-0 mt-3 w-60 hidden bg-white shadow-lg group-hover:block rounded-lg divide-y">
+            <a href="https://aaa.easypear.com/about-us/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">About Us</a>
+            <a href="https://aaa.easypear.com/contact-us/" class="block px-4 py-2 text-gray-700 hover:text-[#2B9DD7]">Contact</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Log In/Register -->
+      <div class="hidden md:flex items-center space-x- divide-x divide-black">
+        <!-- <i class="fa fa-user"></i> -->
+        <a href="#" class="text-gray-700 hover:text-gray-900 me-2">Log in</a>
+        <a href="#" class="text-gray-700 hover:text-gray-900 ms-">Register</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden flex items-center">
+        <button type="button" class="bg-gray-50 rounded-md p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </div>
 </template>
+
+<style>
+  /* Add necessary spacing and dropdown styling */
+  .group:hover .group-hover\:block {
+    display: block;
+  }
+  
+</style>

@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 export const useAppStore = defineStore("app", () => {
   const form = ref({
+    firstname:"",
+    lastname:"",
       phone: "",
       email: "",
       otp: "",
@@ -23,7 +25,7 @@ export const useAppStore = defineStore("app", () => {
         accidents: "",
         damages:"",
         damages_details: "",
-        lien:"no",
+        lien:"No",
         lien_amount:"",
         lender:"",
       },
@@ -34,7 +36,16 @@ export const useAppStore = defineStore("app", () => {
         car_seats:"",
         car_dash:"",
 
-      }
+      },
+      vehicle_location:{
+        location:'',
+        prov: '',
+        city: '',
+        street_number: '',
+        code : '',
+        route : '',
+        country:'',
+          },
 
   });
 

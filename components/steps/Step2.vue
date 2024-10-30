@@ -50,7 +50,7 @@
                               </div>
                             </div> 
 
-                            <textarea rows="2" class="mx-2 mt-4 rounded-lg w-full pr-4" placeholder="Describe the damage..." style="border: none; outline: none;" v-show="store.$state.form.vehicle_condition.damages==='yes'" v-model="store.$state.form.vehicle_condition.damages_details"></textarea>
+                            <textarea rows="2" class="mx-2 mt-4 rounded-lg w-full pr-4" placeholder="Describe the damage..." style="border: none; outline: none;" v-show="store.$state.form.vehicle_condition.damages==='Yes'" v-model="store.$state.form.vehicle_condition.damages_details"></textarea>
                         </div> 
                         <div class="p-4 w-full border border-black/20 rounded-2xl">
                             <p class="pt-1 text-center font-bold pb-2">Are You Looking to Replace Your Vehicle and Receive an HST Credit on Your Sale?</p> 
@@ -66,7 +66,7 @@
                               </div>
                             </div> 
 
-                            <textarea rows="2" class="mx-2 mt-4 rounded-lg w-full pr-4" placeholder="Price range, make, model, etc..." style="border: none; outline: none;" v-show="store.$state.form.replace_vehicle==='yes'" v-model="store.$state.form.replace_vehicle_details"></textarea>
+                            <textarea rows="2" class="mx-2 mt-4 rounded-lg w-full pr-4" placeholder="Price range, make, model, etc..." style="border: none; outline: none;" v-show="store.$state.form.replace_vehicle==='Yes'" v-model="store.$state.form.replace_vehicle_details"></textarea>
                         </div> 
                         <div class="flex flex-row gap-2 w-full justify-center pt-4">
                             <button class="rounded-full py-3 text-white w-full" :disabled="!isFormNotEmpty" :class="{'bg-gray-200':!isFormNotEmpty,'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty}" @click="$emit('Next')">Next</button>
@@ -100,11 +100,11 @@ const store = useAppStore();
 const options = ref([
 {
             title:'No',
-            value:'no',
+            value:'No',
         },
         {
             title:'Yes',
-            value:'yes',
+            value:'Yes',
         },
        
 
@@ -117,7 +117,7 @@ const options = ref([
     }
 
     const Selectd = (option) => {
-      if(option.value==='no'){
+      if(option.value==='No'){
         store.$state.form.vehicle_condition.damages_details=''
       }
       store.$state.form.vehicle_condition.damages = option.value
@@ -125,7 +125,7 @@ const options = ref([
     }
 
     const Selectr = (option) => {
-      if(option.value==='no'){
+      if(option.value==='No'){
         store.$state.form.replace_vehicle_details=''
       }
       store.$state.form.replace_vehicle = option.value

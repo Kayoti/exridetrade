@@ -31,7 +31,7 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['@pinia/nuxt', 'nuxt-auth-utils'],
+  modules: ['@pinia/nuxt'],
 
   // scripts: [
   //   {

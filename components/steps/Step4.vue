@@ -56,6 +56,7 @@ import { useAppStore } from '@/stores/app';
 const router = useRouter();
 
 const store = useAppStore();
+const emit = defineEmits(['next']);
 
 watch(() => [store.$state.form.vehicle_info.asking_price], () => {
     localStorage.setItem('form', JSON.stringify(store.$state.form))
@@ -66,4 +67,10 @@ const isFormNotEmpty = computed(() => {
 return store.$state.form.vehicle_info.asking_price !== '';
 
 })
+
+// const stepUpload = () => {
+//   if(localStorage.getItem('edit')){
+//     emit('next');
+//   }else
+// }
 </script>

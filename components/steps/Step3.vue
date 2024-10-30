@@ -14,14 +14,14 @@
                     <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">Lien</h2> 
                     <p class="pt-1 text-center font-bold pb-2 px-4">Are there any liens against this vehicle?</p> 
                     <div class="flex flex-row content-center w-full justify-center px-2 pb-2">
-                        <button class="rounded-l-xl w-full h-8 border border-black/20 hover:border-4"  :class="{'text-white bg-[#2563EB]':store.$state.form.vehicle_condition.lien==='no'}" @click="toggleFirstForm">No</button> 
-                        <button class="rounded-r-xl w-full h-8 border border-black/20 hover:border-4" :class="{'text-white bg-[#2563EB]':store.$state.form.vehicle_condition.lien==='yes'}" @click="toggleSecondForm">Yes</button>
+                        <button class="rounded-l-xl w-full h-8 border border-black/20 hover:border-4"  :class="{'text-white bg-[#2563EB]':store.$state.form.vehicle_condition.lien==='No'}" @click="toggleFirstForm">No</button> 
+                        <button class="rounded-r-xl w-full h-8 border border-black/20 hover:border-4" :class="{'text-white bg-[#2563EB]':store.$state.form.vehicle_condition.lien==='Yes'}" @click="toggleSecondForm">Yes</button>
                     </div> 
-                    <div class="flex flex-row px-2 pt-2" v-show="store.$state.form.vehicle_condition.lien==='yes'">
+                    <div class="flex flex-row px-2 pt-2" v-show="store.$state.form.vehicle_condition.lien==='Yes'">
                         <p class="border border-black/20 pr-4 rounded-l-xl pl-4 py-2 h-min font-bold w-1/4">$CAD</p> 
                         <input class="pr-5 pl-2 py-2 rounded-r-xl border border-black/20 w-full" type="number" v-model="store.$state.form.vehicle_condition.lien_amount" placeholder="5000">
                     </div> 
-                    <div class="flex flex-row pt-2 pb-2 px-2" v-show="store.$state.form.vehicle_condition.lien==='yes'">
+                    <div class="flex flex-row pt-2 pb-2 px-2" v-show="store.$state.form.vehicle_condition.lien==='Yes'">
                         <p class="border border-black/20 rounded-l-xl pr-5 pl-4 py-2 h-min font-bold w-1/4">Lender</p> 
                         <input class="pr-5 pl-2 py-2 rounded-r-xl border border-black/20 w-full" type="text" v-model="store.$state.form.vehicle_condition.lender" placeholder="BMO">
                     </div>
@@ -60,13 +60,13 @@ const store = useAppStore();
  const toggleFirstForm = () => {
   //  here.value=1;
   //  there.value=0;
-   store.$state.form.vehicle_condition.lien = "no";
+   store.$state.form.vehicle_condition.lien = "No";
  }
 
  const toggleSecondForm = () => {
   //  there.value=1;
   //  here.value=0;
-   store.$state.form.vehicle_condition.lien = "yes";
+   store.$state.form.vehicle_condition.lien = "Yes";
  }
 
  watch(() => [store.$state.form.vehicle_condition.lien, store.$state.form.vehicle_condition.lien], () => {

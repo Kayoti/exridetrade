@@ -43,6 +43,7 @@
 
 body {
   --ease-fn: cubic-bezier(0.16,1,0.3,1);
+  font-family: Poppins, Arial, Helvetica, sans-serif !important;
   /* background-color: #2f2f2f; */
 }
 

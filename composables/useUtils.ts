@@ -2,7 +2,7 @@ import { useAppStore } from '@/stores/app';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-export const useUtils = () => {
+export const useUtils = (emit: Function) => {
   const store = useAppStore();
   const files = ref();
   const holderInput = ref('');
@@ -10,8 +10,10 @@ export const useUtils = () => {
   const formData = new FormData();
   const router = useRouter();
 
+ 
 
   const handleFile = (e: any, item: string) => {
+    console.log("jkkj");
     const holderPic = document.getElementById(item);
 
     if (!holderPic) {
@@ -46,21 +48,36 @@ export const useUtils = () => {
     // Read the selected file as a Data URL (Base64)
     reader.readAsDataURL(selectedFile);
 
-    // formData.append(holderPic.name, dataURLtoFile(holderPic.src, holderPic.name));
-    formData.append(holderPic.name, selectedFile);
-    formData.append('leadid', localStorage.getItem('leadid'));
+    // console.log(dataURItoBlob(store.$state.form.images["car_side"]))
 
-    submitFile();
+    // formData.append(holderPic.name, dataURLtoFile(holderPic.src, holderPic.name));
+    // formData.append(holderPic.name, selectedFile);
+    // formData.append('leadid', localStorage.getItem('leadid'));
+
+    // submitFile();
+    Swal.fire({
+      title: 'Success!',
+      text: 'Photo uploaded successfully',
+      icon: 'success',
+      confirmButtonText: 'Ok',
+      confirmButtonColor: '#E1251B',
+    }).then((result) => {
+      if (result.isConfirmed) {
+    emit('Next');
+      }
+    })
 
   };
 
   const submitFile = async () => {
+
     try {
-      const response = await axios.post('http://localhost/CAE-APP-V2/CaeApp/Controller/FileHandler/UploadCdn.php', formData, {
+      const response = await axios.post('https://exride.easypear.com/test_images.php', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
       });
+      console.log(response);
 
       if (response.data.status === 'success') {
         Swal.fire({
@@ -99,7 +116,8 @@ export const useUtils = () => {
             
               // Redirect after saving
               // router.push('/photos-upload');
-              window.location.reload();
+              emit('Next');
+              // window.location.reload();
             }
             
 

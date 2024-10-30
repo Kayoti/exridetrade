@@ -77,6 +77,7 @@ const store = useAppStore();
 const formData = new FormData();
 const config = useRuntimeConfig();
 const router = useRouter();
+const emit = defineEmits(['Next']);
 
 const props = defineProps({
   finalImage: {
@@ -85,7 +86,7 @@ const props = defineProps({
   }
 })
 
-const { handleFile } = useUtils();
+const { handleFile } = useUtils(emit);
 
 
 watch(
@@ -100,13 +101,13 @@ watch(
     store.$state.form.images.car_back_angle = seatPic.src;
     localStorage.setItem('form', JSON.stringify(store.$state.form));
 
-    const response = await axios.post('http://localhost/CAE-APP-V2/CaeApp/Controller/FileHandler/UploadCdn.php', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    console.log(response.data);
-    if (response.data.status === 'success') {
+    // const response = await axios.post('https://exride.easypear.com/test_images.php', formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    // });
+    // console.log(response.data);
+    // if (response.data.status === 'success') {
       Swal.fire({
         title: 'Success!',
         text: 'Photo uploaded successfully',
@@ -138,27 +139,27 @@ watch(
           //   }, 0)
           //   })
           // Assuming "response.data.resp" contains the new data
-          const newDrivefile = {
-            "car_back_angle": response.data.resp["car_back_angle"]
-          };
+          // const newDrivefile = {
+          //   "car_back_angle": response.data.resp["car_back_angle"]
+          // };
 
-          // Retrieve the existing object from localStorage (if it exists), or initialize an empty object
-          let drivefiles = JSON.parse(localStorage.getItem('drivefiles')) || {};
+          // // Retrieve the existing object from localStorage (if it exists), or initialize an empty object
+          // let drivefiles = JSON.parse(localStorage.getItem('drivefiles')) || {};
 
-          // Merge the new drivefile into the existing object
-          drivefiles = { ...drivefiles, ...newDrivefile };
+          // // Merge the new drivefile into the existing object
+          // drivefiles = { ...drivefiles, ...newDrivefile };
 
-          // Store the updated object in localStorage as a JSON string
-          localStorage.setItem('drivefiles', JSON.stringify(drivefiles));
+          // // Store the updated object in localStorage as a JSON string
+          // localStorage.setItem('drivefiles', JSON.stringify(drivefiles));
 
           // Redirect after saving
           // router.push('/photos-upload');
 
           // router.push('/');
-          window.location.reload();
+          emit('Next');
         }
       })
     }
-  }
+  // }
 )
 </script>

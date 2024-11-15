@@ -2,14 +2,12 @@
   <div class="w-full h-full" style="background-color: white !important;">
 
     <!-- BEGINNING OF THE CONTAINER -->
-    <div class=" w-full  h-full font-pnova relative ">
+   
       <!-- <div class=" w-[8px] h-full fixed left-0 top-0 bg-tertiary"></div> -->
-       
-      <div class=" w-full ">
-        <Header />
-        <div class=" w-full flex justify-center items-center h-screen ">
 
-          <div class="flex flex-col gap-4 max-w-100 rounded-xl shadow-xl p-10">
+        <div class=" w-full flex justify-center items-center  ">
+
+          <div class="flex flex-col gap-4 w-full rounded-xl shadow-xl p-10">
             <h2 class="font-bold text-2xl pb-5 text-center"  >Vehicle Upload</h2> 
             <div class="mt-4 flex flex-row justify-center border rounded-full bg-gray-200">
               <button class="w-1/2 py-1 rounded-full text-white" :class="{'text-white bg-[#2563EB]':here}" @click="toggleFirstForm">VIN</button> 
@@ -49,9 +47,7 @@
           </div>
 
           </div>
-     
-      </div>
-    </div>
+ 
      <!-- END OF THE CONTAINER -->
 
 
@@ -169,7 +165,7 @@ await useFetch(makeurl).then((response) => {
 }
 
 const onChangeMake = () => {
-  store.$state.form.vehicle_info.model = ''
+  // store.$state.form.vehicle_info.model = ''
 
   fillModel(store.$state.form.vehicle_info.make)
 }
@@ -195,6 +191,6 @@ const isFormNotEmpty = computed(() => {
   if (store.$state.form.vehicle_vin.length === 17) {
     getCarDetails()
   }
-  // onChangeMake()
+  onChangeMake()
  })
 </script>

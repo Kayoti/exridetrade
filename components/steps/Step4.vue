@@ -2,14 +2,10 @@
     <div class="w-full h-full" style="background-color: white !important;">
   
       <!-- BEGINNING OF THE CONTAINER -->
-      <div class=" w-full  h-full font-pnova relative ">
-        <!-- <div class=" w-[8px] h-full fixed left-0 top-0 bg-tertiary"></div> -->
-         
-        <div class=" w-full ">
-          <Header />
-          <div class=" w-full flex justify-center items-center h-screen">
+ 
+          <div class=" w-full flex justify-center items-center">
 
-            <div class="px-4 max-h-[80%] p-8 md:p-12 overflow-y-auto rounded-xl shadow-xl md:max-w-3xl">
+            <div class="px-4 max-h-[80%] p-8 md:p-12 overflow-y-auto rounded-xl border border-2 md:max-w-3xl">
                 <div class="flex flex-col gap-2 md:w-64">
                     <h2 class="font-bold text-2xl pb-4 text-center">Asking Price</h2> 
                     <div class="px-3 py-2 pt-3 border border-black/20 rounded-xl" title="This is based on the market value of similar vehicles in your area.">
@@ -35,9 +31,7 @@
             </div>
 
             </div>
-       
-        </div>
-      </div>
+
        <!-- END OF THE CONTAINER -->
   
   

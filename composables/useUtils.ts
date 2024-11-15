@@ -63,7 +63,7 @@ export const useUtils = (emit: Function) => {
       confirmButtonColor: '#E1251B',
     }).then((result) => {
       if (result.isConfirmed) {
-    emit('Next');
+    // emit('Next');
       }
     })
 

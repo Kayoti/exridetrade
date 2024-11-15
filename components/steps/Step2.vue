@@ -1,17 +1,13 @@
 <template>
-    <div class="w-full h-full" style="background-color: white !important;">
+    <div class="w-full" style="background-color: white !important;">
   
       <!-- BEGINNING OF THE CONTAINER -->
-      <div class=" w-full  h-full font-pnova relative ">
-        <!-- <div class=" w-[8px] h-full fixed left-0 top-0 bg-tertiary"></div> -->
-         
-        <div class=" w-full ">
-          <Header />
-          <div class=" w-full flex justify-center items-center h-screen">
 
-            <div class="px-4 max-h-[90%] p-8 md:p-12 overflow-y-auto rounded-xl shadow-xl md:max-w-3xl">
+          <div class=" w-full flex justify-center items-center ">
+
+            <div class="px-4 max-h-[90%] p-8 md:p-12 overflow-y-auto rounded-xl border border-2 md:max-w-3xl">
                 <div class="flex flex-col gap-2 w-full text-center">
-                    <h2 class="text-2xl font-bold text-center w-full pb-8 mt-6">General Information</h2> 
+                    <h2 class="text-2xl font-bold text-center w-full pb-8 ">General Information</h2> 
                     <div class="flex flex-row">
                         <p class="border border-black/20 rounded-l-xl pr-3 pl-4 py-2 h-min font-bold">Kilometers</p> 
                         <input class="pr-5 pl-2 py-2 rounded-r-xl border border-black/20 w-full" type="number" placeholder="120000" v-model="store.$state.form.vehicle_info.mileage">
@@ -75,9 +71,7 @@
                 </div>
 
             </div>
-       
-        </div>
-      </div>
+
        <!-- END OF THE CONTAINER -->
   
   

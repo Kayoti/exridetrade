@@ -1,30 +1,10 @@
 <template>
-    <div class="w-full h-full" style="background-color: white !important;">
-  
-      <!-- BEGINNING OF THE CONTAINER -->
-      <div class=" w-full  h-full font-pnova relative ">
-        <!-- <div class=" w-[8px] h-full fixed left-0 top-0 bg-tertiary"></div> -->
-         
-        <div class=" w-full ">
-          <Header />
-          <div class="flex flex-row justify-center">
-            <p class="text-sm mt-[20vh] text-center text-green-500 border w-[20vw] p-3 rounded-lg" v-if="success==='ok'">Listing recorded successfully!</p>
-          </div>
-         
-          <div class=" w-full flex justify-center items-start  ">
-            
-            <div class="flex flex-col gap-4 w-full  rounded-xl shadow-xl px-10 py-5 mx-[10vw] md:mx-[20vw] bg-[#1E3A8A] " :class="success==='ok'?'mt-[5vh]':'mt-[20vh]'">
-                <div class="flex flex-row justify-between">
-                <p class="font-bold text-[30px] text-[#fff] ">{{ lead.firstname }} {{ lead.lastname }}</p>
-                <button class="bg-[#fff] p-2 rounded-full" @click="Logout()">Sign-out</button>
-                </div>
-                <p class=" text-[#fff] leading-none"><span v-if="lead.phone">+1 </span> {{ lead.phone }}</p>
-                <p class=" text-[#fff] leading-none">{{ lead.email }}</p>
-            </div>
-
-          </div>
-
-          <div
+  <Header />
+    <!-- <div class="" style="background-color: white !important;"> -->
+      
+      <div class="flex flex-col md:flex-row  items-center md:items-start md:justify-around  ">
+        
+        <div
     v-if="isOpen"
     class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
     @click.self="closeModal"
@@ -56,49 +36,96 @@
       </div>
     </div>
   </div>
+            <div class="flex flex-col rounded-xl border-2 items-center h-[70vh]  w-80 mb-2 md:me-2" >
 
-          <!-- <li v-for="product in leads" :key="lead.id" class="mb-2 p-4 border rounded shadow">
-            <p><strong>ID:</strong> {{ lead.id }}</p>
-          </li> -->
+                  <div class="bg-[#0ea5e9] w-11/12 h-20 rounded-lg mt-5"></div>
 
-          <div class=" w-full flex justify-center items-start  " v-for="product in products" :key="product.id">
-            <div class="flex flex-col gap-4 w-full  rounded-xl   mx-[10vw] md:mx-[20vw] border mt-[5vh]">
-                <div class="flex flex-row justify-between">
-                    <div class="flex flex-row justify-between">
-                        <img src="https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg" alt="Front left profile" class="w-20 h-20 rounded-xl">
-                        <div class="mt-3 ms-3">
-                            <p class="text-sm">{{ product[2]['product']['cf_1280'] }} {{ product[2]['product']['cf_1282'].toUpperCase() }} {{ product[2]['product']['cf_1284'].toUpperCase() }}</p>
-                            <div class="flex">
-                                <div class="w-2 h-2 rounded-full bg-orange-500 mt-2"></div>
-                                <p class="font-bold text-lg ms-2">Draft</p>
+                  <p class="font-bold text-[24px] mt-">{{ lead.firstname }} {{ lead.lastname }}</p>
+
+                  
+                  <div class="border border-2 text-center hover:border-red-600 py-1 hover:text-red-600 p-2 rounded-xl w-40 mt-3 ">
+                    
+                                <!-- <div class="w-2 h-2 rounded-full bg-orange-500 mt-2"></div> -->
+                                <p class="font-bold text-sm ms-2" @click="Logout()">SIGN OUT</p>
                             </div>
+
                             
-                        </div>
+                  
+            
+                  <!-- <button class="bg-[#fff] p-2 rounded-full" >Sign-out</button> -->
+              
+                  <p class="text-center text-sm text-gray-400 mt-3">Email</p>
+                  <p class="text-center font-bold text-sm"><span v-if="!lead.email">N/A </span>{{ lead.email }}</p>
 
-                    </div>
+                  <p class="text-center text-sm text-gray-400 mt-3">Phone</p>
+                  <p class="text-center font-bold text-sm"><span v-if="lead.phone">+1 </span> <span v-if="!lead.phone">N/A </span>{{ lead.phone }}</p>
+                  
+                  <p class="text-center text-sm text-gray-400 mt-3">Address</p>
+                  <p class="text-center font-bold text-sm w-1/2"><span v-if="!lead.cf_939">N/A </span>{{ lead.cf_939 }}</p>
+               
+            </div>
 
-                    <div class="flex flex-row content-center h-full flex-grow justify-end text-sm pr-4">
-                        <div class="flex flex-col content-center w-20 justify-center pt-2 gap-y-2">
-                            <button class="rounded-full py-1 outline outline-1 outline-blue-600 hover:bg-[#2563EB] hover:text-white w-20" @click="editProduct(product[2]['product']['productid'] )">Edit</button> 
-                            <button class="rounded-full outline outline-1 outline-red-600 py-1 hover:bg-red-600 hover:text-white w-20" @click="openModal(product[2]['product']['productid'])">Delete</button>
-                        </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-[] ">
+              
+          <div class="" v-for="product in products" :key="product.id">
+           
+              
+                    <div class="border border-2 w-70 rounded-xl p-3 ">
+                      <div class="">
+                        <img :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'" alt="Front left profile" class="w-full max-h-20 rounded-xl">
+                      </div>
+                        
+                        <div class="mt-5  ">
+                            <p class="text-sm text-center font-bold mb-3">{{ product[2]['product']['cf_1280'] }} {{ product[2]['product']['cf_1282'].toUpperCase() }} {{ product[2]['product']['cf_1284'].toUpperCase() }}</p>
+                           
+                            <div class="flex items-center justify-center">
+  <hr class="border-t border-2 border-gray-300 flex-grow" />
+  <div class="border text-center text-[#fff] p-1 rounded-full w-40 bg-[#f97316]" v-if="product[2]['product']['cf_2011']==='under review'">
+                                <!-- <div class="w-2 h-2 rounded-full bg-orange-500 mt-2"></div> -->
+                                <p class="font-bold text-sm ms-2">Under Review</p>
+                            </div>
+
+                            <div class="border text-center text-[#fff] p-1 rounded-full w-40 bg-[#22c55e]" v-if="product[2]['product']['cf_2011']==='publish'" >
+                                <!-- <div class="w-2 h-2 rounded-full bg-orange-500 mt-2"></div> -->
+                                <p class="font-bold text-sm ms-2">Published</p>
+                            </div>
+
+                            <div class="border text-center text-[#fff] p-1 rounded-full w-40 bg-[#dc2626]" v-if="product[2]['product']['cf_2011']==='draft'" >
+                                <!-- <div class="w-2 h-2 rounded-full bg-orange-500 mt-2"></div> -->
+                                <p class="font-bold text-sm ms-2">Draft</p>
+                            </div>
+
+  <hr class="border-t border-2 border-gray-300 flex-grow" />
+</div>
+
+<p class="text-center text-sm text-gray-400 mt-3">Mileage</p>
+<p class="text-center font-bold text-sm">{{ product[2]['product']['cf_1288'] }} KM</p>
+
+<p class="text-center text-sm text-gray-400 mt-3">Asking Price</p>
+<p class="text-center font-bold text-sm">$ {{ product[2]['product']['cf_2007'] }} CAD</p>
+                            
+                        </div>          
+
+                    <div class="flex flex-row h-full justify-around text-sm  mt-5">
+                       
+                            <button class="rounded-full py-1 outline outline-1 outline-[#0ea5e9] hover:bg-[#0ea5e9] text-[#0ea5e9] hover:text-white w-20" @click="editProduct(product[2]['product']['productid'] )">Edit</button> 
+                            <button class="rounded-full outline outline-1 outline-red-600 py-1 text-red-600 hover:bg-red-600 hover:text-white w-20" @click="openModal(product[2]['product']['productid'])">Delete</button>
+                     
                     </div>
                 
                 </div>
                 
-            </div>
-
-          </div>
-
-          <div class=" w-full flex justify-center    my-5">
-            <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#2563EB] hover:text-[#fff] text-black me-10 outline outline-[#2563EB]" @click="Listpr()" >+ Add Vehicle</a>
-          </div>
-
           
 
+          </div>
         </div>
       </div>
-    </div>
+
+      <div class=" w-full flex justify-center  my-5">
+            <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] ms- outline outline-[#0ea5e9]" @click="Listpr()" >+ Add Vehicle</a>
+          </div>
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">
@@ -114,8 +141,7 @@ const store = useAppStore();
 const emit = defineEmits(['next'])
 const delProd = ref("")
 
-localStorage.removeItem('edit');
-localStorage.removeItem('selProduct');
+
 
 const isOpen = ref(false);
 
@@ -278,6 +304,9 @@ const Logout = () => {
  }
 
 onMounted(()=>{
+  localStorage.setItem('form', JSON.stringify(store.$state.form))
+  localStorage.removeItem('edit');
+localStorage.removeItem('selProduct');
   success.value = localStorage.getItem("success")??'';
   setTimeout(() => {
     success.value = "";

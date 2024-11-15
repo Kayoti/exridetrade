@@ -2,14 +2,10 @@
     <div class="w-full h-full" style="background-color: white !important;">
   
       <!-- BEGINNING OF THE CONTAINER -->
-      <div class=" w-full  h-full font-pnova relative ">
-        <!-- <div class=" w-[8px] h-full fixed left-0 top-0 bg-tertiary"></div> -->
-         
-        <div class=" w-full ">
-          <Header />
-          <div class=" w-full flex justify-center items-center h-screen">
 
-            <div class="px-4 max-h-[80%] p-8 md:p-12 overflow-y-auto rounded-xl shadow-xl md:max-w-3xl">
+          <div class=" w-full flex justify-center items-center ">
+
+            <div class="px-4 max-h-[80%] p-8 md:p-12 overflow-y-auto rounded-xl border border-2 md:max-w-3xl">
                 <div class="p-2 w-full border border-black/20 rounded-2xl">
                     <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">Lien</h2> 
                     <p class="pt-1 text-center font-bold pb-2 px-4">Are there any liens against this vehicle?</p> 
@@ -34,8 +30,7 @@
 
             </div>
        
-        </div>
-      </div>
+   
        <!-- END OF THE CONTAINER -->
   
   

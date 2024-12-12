@@ -55,7 +55,7 @@
                                     <p>{{ err1 }}</p>
                                 </div>
                                 <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4"  v-if="!err">
-                                    <input placeholder="Enter your OTP" type="number" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.otp">
+                                    <input placeholder="Enter your OTP" type="text" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.otp">
                                     
                                 
                                     <button class="rounded-full text text-white px-4 text-center bg-[#2563EB] hover:bg-[#2B9DD7] py-2" 

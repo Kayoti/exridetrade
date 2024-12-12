@@ -40,7 +40,7 @@
 
                   <div class="bg-[#0ea5e9] w-11/12 h-20 rounded-lg mt-5"></div>
 
-                  <p class="font-bold text-[24px] mt-">{{ lead.firstname }} {{ lead.lastname }}</p>
+                  <p class="font-bold text-[24px] mt-5">{{ lead.firstname }} {{ lead.lastname }}</p>
 
                   
                   <div class="border border-2 text-center hover:border-red-600 py-1 hover:text-red-600 p-2 rounded-xl w-40 mt-3 ">
@@ -55,13 +55,13 @@
                   <!-- <button class="bg-[#fff] p-2 rounded-full" >Sign-out</button> -->
               
                   <p class="text-center text-sm text-gray-400 mt-3">Email</p>
-                  <p class="text-center font-bold text-sm"><span v-if="!lead.email">N/A </span>{{ lead.email }}</p>
+                  <p class="text-center font-medium text-sm"><span v-if="!lead.email">N/A </span>{{ lead.email }}</p>
 
                   <p class="text-center text-sm text-gray-400 mt-3">Phone</p>
-                  <p class="text-center font-bold text-sm"><span v-if="lead.phone">+1 </span> <span v-if="!lead.phone">N/A </span>{{ lead.phone }}</p>
+                  <p class="text-center font-medium text-sm"><span v-if="lead.phone">+1 </span> <span v-if="!lead.phone">N/A </span>{{ lead.phone }}</p>
                   
                   <p class="text-center text-sm text-gray-400 mt-3">Address</p>
-                  <p class="text-center font-bold text-sm w-1/2"><span v-if="!lead.cf_939">N/A </span>{{ lead.cf_939 }}</p>
+                  <p class="text-center font-medium text-sm w-1/2"><span v-if="!lead.cf_939">N/A </span>{{ lead.cf_939 }}</p>
                
             </div>
 
@@ -71,9 +71,9 @@
           <div class="" v-for="product in products" :key="product.id">
            
               
-                    <div class="border border-2 w-70 rounded-xl p-3 ">
-                      <div class="">
-                        <img :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'" alt="Front left profile" class="w-full max-h-20 rounded-xl">
+                    <div class="border border-2 rounded-xl p-[14vw] md:p-3">
+                      <div class="flex justify-center">
+                        <img :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'" alt="Front left profile" class=" max-h-20 rounded-xl">
                       </div>
                         
                         <div class="mt-5  ">
@@ -257,6 +257,7 @@ const editProduct = (selProduct) => {
   console.log(products);
   for (let item of products.value) {
     const product = item["2"].product;
+    console.log( item["2"])
     if (product.productid === selProduct ) {
       console.log(product);
 

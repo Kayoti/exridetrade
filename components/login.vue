@@ -29,7 +29,7 @@
                                 <button class="w-1/2 rounded-full " :class="{'text-white bg-[#2563EB]':here}" @click="toggleFirstForm">Phone</button> 
                                 <button class="w-1/2 py-1 rounded-full" :class="{'text-white bg-[#2563EB]':there}" @click="toggleSecondForm">Email</button>
                             </div> 
-                            <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4">
+                            <div class="flex flex-col md:flex-row gap-2 pt-4 md:pt-4">
                                 <input placeholder="Enter your email" type="email" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.email" v-show="there">
                                 
                                 <div class="relative inline-flex w-full"  v-show="here">
@@ -38,10 +38,31 @@
                                     </button>
                                     <input placeholder="Enter your phone number" type="number" class="rounded-e-full py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.phone" >
                                 </div> 
-                                <button class="rounded-full text text-white px-4 text-center hover:bg-accent py-2" 
-                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="checkLead()">
-                                    <p class="">Next</p>
+                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 " 
+                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="sendOtp('create', '')">
+                                    <p class="" v-if="!otpsent">Next</p>
+                                    <p class="" v-if="otpsent">Resend</p>
                                 </button>
+                            </div>
+                            
+                            <div v-show="here && otpsent" class="mt-4">
+                                <div v-if="success" class="bg-[#BBF7D0] p-4 rounded-full text-center">
+                                    <p>{{ success }}</p>
+                                </div>
+                                <div v-if="err" class="bg-[#fecaca] p-4 rounded-full text-center">
+                                    <p>{{ err }}</p>
+                                </div> <div v-if="err1" class="bg-[#fecaca] p-4 rounded-full text-center">
+                                    <p>{{ err1 }}</p>
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4"  v-if="!err">
+                                    <input placeholder="Enter your OTP" type="number" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.otp">
+                                    
+                                
+                                    <button class="rounded-full text text-white px-4 text-center bg-[#2563EB] hover:bg-[#2B9DD7] py-2" 
+                                    @click="sendOtp('verify', store.$state.form.otp)">
+                                        <p class="">Verify</p>
+                                    </button>
+                                </div>
                             </div>  
                             <div class="pt-8">Exride values your security. 
                                 <br> <br>Please enter your
@@ -151,7 +172,11 @@ const emit = defineEmits(['next'])
 const here = ref(1);
 const there = ref(0);
 const signup = ref(false);
+const otpsent = ref(false);
 const Name = ref(null);
+const success = ref("");
+const err = ref("");
+const err1 = ref("");
 
  const toggleFirstForm = () => {
    here.value=1;
@@ -218,6 +243,53 @@ const setPlace = (addressData) => {
 
 }
 
+async function sendOtp(checker, cody){
+    console.log(cody)
+
+                const formData1 = new FormData();
+                
+                // localStorage.setItem("lead")
+
+                formData1.append("smschecker", checker);
+                formData1.append("smstoken", "9647");
+                formData1.append("smscode", cody);
+                formData1.append("smsphone", store.$state.form.phone);
+
+               useFetch("https://exride.easypear.com/sms/otp.php", {
+                    // headers: {
+                    //             'Content-Type': 'application/x-www-form-urlencoded' // Set the content type to 'application/x-www-form-urlencoded'.
+                    //         },
+                    method: 'POST',
+                    body: formData1
+                    }).then((response) => {
+                        otpsent.value=true;
+                    console.log(response.data);
+                    try{
+                        if (JSON.parse(response.data.value) === 'pending') {
+                        
+                            success.value = 'We have sent a code to your phone +1' + store.$state.form.phone;
+                            err.value = '';
+                            console.log(err)
+                        } else if (JSON.parse(response.data.value) === 'approved') {
+                            success.value = '';
+                            success.value = 'OTP code succefully verified!';
+                            err.value = '';
+                            checkLead()
+                        }
+                    }catch{
+                        success.value = '';
+                        err.value = '';
+                        err1.value = ''
+                        if(checker==="create"){
+                        err.value = 'Error sending OTP. Please double check your information.';
+                        }else{
+                            err1.value = 'Error verifying OTP. Please double check your information.';
+                        }
+                        console.log(err)
+                    }
+                })
+}
+
 
  async function checkLead() {
     const formData = new FormData();
@@ -259,8 +331,8 @@ const setPlace = (addressData) => {
                 method: 'POST',
                 body: formData,
             }).then((response) => {
-                console.log(JSON.parse(response.data.value).data)
-                // localStorage.setItem("lead")
+             
+
 
                 if(!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0){
 

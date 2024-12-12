@@ -7,7 +7,7 @@
       <div class=" w-full flex justify-center items-center">
         
 
-        <div  class="text-center flex flex-col justify-center items-center">
+        <div v-if="loading"  class="text-center flex flex-col justify-center items-center">
           <img src="~assets/images/spinning-loading.gif"  class="w-45"/>
           
           <div class="mb-[30vh]">
@@ -246,6 +246,89 @@ const updateInventory = () => {
           ttl: 1000, // default 10000
         });
   })
+
+}
+
+const updateImages = () => {
+  const dataInfo = JSON.parse(localStorage.getItem("dataInfo"));
+    console.log(dataInfo);
+    loading.value=true;
+
+    const carside = dataURItoBlob(store.$state.form.images["car_side"]);
+    const carfrontangle = dataURItoBlob(store.$state.form.images["car_front_angle"]);
+    const carbackangle = dataURItoBlob(store.$state.form.images["car_back_angle"]);
+    const carseats = dataURItoBlob(store.$state.form.images["car_seats"]);
+    const cardash = dataURItoBlob(store.$state.form.images["car_dash"]);
+
+    otherImages.value.push(carfrontangle, carbackangle, carseats, cardash);
+
+    
+
+    const formData = new FormData();
+
+    formData.append('cf_1290', store.$state.form.vehicle_vin);
+    formData.append('leadid', store.$state.form.vehicle_vin);
+    formData.append('main_img', carside, `main_image.${carside.type.split('/')[1]}`);
+    formData.append('inspect_img', carside, `inspect_image.${carside.type.split('/')[1]}`);
+
+    for (let i = 0; i < otherImages.value.length; i++) {
+  const imgFile = otherImages.value[i];
+
+  // Get the MIME type and extract the extension
+  const mimeType = imgFile.type;
+  const extension = mimeType.split('/')[1]; // Extracting 'jpeg', 'png', etc.
+
+  // Append to FormData with dynamic extension
+  formData1.append(`img_${i + 1}`, imgFile, `image_${i + 1}.${extension}`);
+}
+    $fetch("https://exride.easypear.com/modules/Webforms/captureProduct.php", {
+    method: 'POST',
+    body: formData1,
+  }).then( response => {
+    console.log(response);
+    const data = JSON.parse(response).result;
+    console.log(data);
+    const idParts = data.id.split('x');
+    console.log(idParts);
+    const attach_lead_inv = new URLSearchParams({
+      'token': "293o9u239du823dilY0k4RLJxN2dJFoP",
+      'id': localStorage.getItem('leadid'),
+      'inventoryid': idParts[1],
+    });
+
+        const attach_str = attach_lead_inv.toString();
+
+        const attach_lead_url = "https://exride.easypear.com/carlist.php?" + attach_str;
+        console.log(attach_lead_url)
+
+        $fetch(attach_lead_url, {
+            method: 'GET',
+        }).then(response => {
+          const attach_lead_inv2 = new URLSearchParams({
+            'token': "jIy6ZSSH4MiScCOTLXy2z0lU8wDbIGIMMBPhFpWAL2mAo1fByOalOIuxiXAVbKaw",
+            'leadid': localStorage.getItem('leadid'),
+            'productid': idParts[1],
+          });
+
+          const attach_str2 = attach_lead_inv2.toString();
+
+          const attach_lead_url2 = "https://exride.easypear.com/createLeadProd.php?" + attach_str2;
+        console.log(attach_lead_url2)
+
+        $fetch(attach_lead_url2, {
+            method: 'GET',
+        }).then(response => {
+          console.log(response);
+          localStorage.setItem("success", "ok");
+          loading.value=false;
+          reloadNuxtApp({
+          path: "/",
+          ttl: 100, // default 10000
+        });
+        })
+    });
+
+  });
 
 }
 

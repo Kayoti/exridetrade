@@ -146,12 +146,12 @@ const success = ref("");
 const store = useAppStore();
 const emit = defineEmits(['next'])
 const delProd = ref("")
-
+const { firebaseLogout } = useFirebaseAuth();
 
 
 const isOpen = ref(false);
 
-const openModal = (selProduct) => {
+const openModal = (selProduct: string) => {
   
   delProd.value = selProduct;
   isOpen.value = true;
@@ -187,7 +187,7 @@ const delProduct= () => {
 
  async function getLead() {
     const formData = new FormData();
-    // console.log(localStorage.getItem("leadid"));
+     console.log(localStorage.getItem("leadid"));
     const leadid = localStorage.getItem("leadid");
 
             formData.append('mode', 'getLeadById');
@@ -225,7 +225,7 @@ const delProduct= () => {
   // Check if there are items
   if (responseData.length) {
     // Prepare an array of Promises to handle all fetch requests
-    const fetchPromises = responseData.map((item) => {
+    const fetchPromises = responseData.map((item: { product_id: any; }) => {
       const get_inv = new URLSearchParams({
         'token': "jIy6ZSSH4MiScCOTLXy2z0lU8wDbIGIMMBPhFpWAL2mAo1fByOalOIuxiXAVbKaw",
         'productid': item.product_id,
@@ -257,7 +257,7 @@ const delProduct= () => {
 }
 getLead();
 
-const editProduct = (selProduct) => {
+const editProduct = (selProduct: string) => {
   console.log(selProduct)
   
   console.log(products);
@@ -296,6 +296,10 @@ const editProduct = (selProduct) => {
 
 const Logout = () => {
   localStorage.removeItem("app_user")
+  firebaseLogout()
+  localStorage.removeItem("leadid")
+
+
   logedin.value = false;
   router.currentRoute
 

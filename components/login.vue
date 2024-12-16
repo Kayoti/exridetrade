@@ -46,9 +46,9 @@
 
                             <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4">
 
-                                <input placeholder="Enter your email" type="email"
+                                <!--                  <input placeholder="Enter your email" type="email"
                                     class="rounded-full py-3 px-5 border border-black/20 flex-grow"
-                                    v-model="store.$state.form.email" v-show="there">
+                                    v-model="store.$state.form.email" v-show="there">-->
 
                                 <div class="relative inline-flex w-full" v-show="here">
                                     <button type="button"
@@ -59,7 +59,7 @@
                                         class="rounded-e-full py-3 px-5 border border-s-0 border-black/20 flex-grow"
                                         v-model="store.$state.form.phone">
                                 </div>
-                                <button class="rounded-full text text-white px-4 text-center hover:bg-accent py-2"
+                                <button class="rounded-full text text-white px-4 text-center hover:bg-accent py-2 "  v-if="!isGoogleAuth"
                                     :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)"
                                     :class="{ 'bg-gray-200': !isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber), 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmpty && (isValidEmail || isValidPhoneNumber) }"
                                     @click="checkLead()">
@@ -177,13 +177,12 @@
 import Header from "@/components/Header.vue"
 import { useAppStore } from '@/stores/app';
 import { useAuthStore } from '@/stores/authStore';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 
 const store = useAppStore();
 const authStore = useAuthStore();
 const router = useRouter();
 const emit = defineEmits(['next'])
-const { signInWithGoogle, initUser, auth } = useFirebaseAuth();
+const { signInWithGoogle, auth, onAuthStateChanged } = useFirebaseAuth();
 const firebaseUser = ref()
 
 // const name = ref(null);
@@ -194,6 +193,7 @@ const here = ref(1);
 const there = ref(0);
 const signup = ref(false);
 const Name = ref(null);
+const isGoogleAuth = ref(false)
 
 const toggleFirstForm = () => {
     here.value = 1;
@@ -205,47 +205,46 @@ const toggleSecondForm = async () => {
     try {
         there.value = 1;
         here.value = 0;
+        isGoogleAuth.value = true
         await signInWithGoogle(); // Call the Google sign-in function
     } catch (error) {
         console.error("Error during Google sign-in:", error);
     }
 };
 
-onMounted(() => {
+//@ts-ignore
+onMounted(() => onAuthStateChanged(auth, (user) => {
+    console.log("*888888");
+    if (user) {
+        firebaseUser.value = user;
+        console.log('User logged in:', user);
 
-    onAuthStateChanged(auth, (user) => {
-        console.log("*888888")
-        if (user) {
-            firebaseUser.value = user
-            console.log('User logged in:', user);
+        //@ts-ignore
+        store.$state.form.email = user?.email;
+        //@ts-ignore
+        store.$state.form.phone = user?.phoneNumber;
+        //@ts-ignore
+        store.$state.form.mobile = user?.phoneNumber;
+
+        if (user?.displayName) {
+            const nameParts = user.displayName.split(' ');
 
             //@ts-ignore
-            store.$state.form.email = user?.email;
+            store.$state.form.firstname = nameParts[0];
             //@ts-ignore
-            store.$state.form.phone = user?.phoneNumber;
-            //@ts-ignore
-            store.$state.form.mobile = user?.phoneNumber;
-
-            if (user?.displayName) {
-                const nameParts = user.displayName.split(' ');
-
-                //@ts-ignore
-                store.$state.form.firstname = nameParts[0];
-                //@ts-ignore
-                store.$state.form.lastname = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ''; 
-            } else {
-                //@ts-ignore
-                store.$state.form.firstname = ''; 
-                //@ts-ignore
-                store.$state.form.lastname = '';
-            }
-
-            checkLead(); 
+            store.$state.form.lastname = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
         } else {
-            console.log('No user is logged in');
+            //@ts-ignore
+            store.$state.form.firstname = '';
+            //@ts-ignore
+            store.$state.form.lastname = '';
         }
-    });
-});
+
+        checkLead();
+    } else {
+        console.log('No user is logged in');
+    }
+}));
 
 const isValidEmail = computed(() => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

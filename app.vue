@@ -411,13 +411,13 @@ const Next = () => {
   localStorage.getItem('edit')?edit.value=false:edit.value=true;
   console.log(edit)
   if (step.value < 9) {
-    if (step.value === 6 && localStorage.getItem('edit')) {
-      step.value+=3;
-      console.log(step.value)
-    }else{
+    // if (step.value === 6 && localStorage.getItem('edit')) {
+    //   step.value+=3;
+    //   console.log(step.value)
+    // }else{
       step.value++;
       console.log(step.value)
-    }
+    // }
 
 
  

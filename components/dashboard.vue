@@ -73,7 +73,7 @@
               
                     <div class="border border-2 rounded-xl p-[14vw] md:p-3">
                       <div class="flex justify-center">
-                        <img :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'" alt="Front left profile" class=" max-h-20 rounded-xl">
+                        <img :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'" alt="Front left profile" class=" max-h-20 min-h-20 rounded-xl">
                       </div>
                         
                         <div class="mt-5  ">
@@ -257,7 +257,8 @@ const editProduct = (selProduct) => {
   console.log(products);
   for (let item of products.value) {
     const product = item["2"].product;
-    console.log( item["2"])
+    const images = item["2"].images;
+    console.log( images)
     if (product.productid === selProduct ) {
       console.log(product);
 
@@ -276,6 +277,11 @@ const editProduct = (selProduct) => {
       store.$state.form.vehicle_info.year = product['cf_1280'];
       store.$state.form.vehicle_info.make = product['cf_1282'];
       store.$state.form.vehicle_info.model = product['cf_1284'];
+      store.$state.form.images.car_side = images['main'] + '/public';
+      store.$state.form.images.car_front_angle = images['1'] + '/public';
+      store.$state.form.images.car_back_angle = images['2'] + '/public';
+      store.$state.form.images.car_seats = images['3'] + '/public';
+      store.$state.form.images.car_dash = images['4'] + '/public';
 
       console.log(store.$state.form.vehicle_info.model);
 

@@ -39,9 +39,14 @@
                                     <input placeholder="Enter your phone number" type="number" class="rounded-e-full py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.phone" >
                                 </div> 
                                 <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 " 
-                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="sendOtp('create', '')">
+                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="sendOtp('create', '')" v-if="here">
                                     <p class="" v-if="!otpsent">Next</p>
                                     <p class="" v-if="otpsent">Resend</p>
+                                </button>
+
+                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 " 
+                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="" v-if="there">
+                                    <p class="">Next</p>
                                 </button>
                             </div>
                             
@@ -54,7 +59,7 @@
                                 </div> <div v-if="err1" class="bg-[#fecaca] p-4 rounded-full text-center">
                                     <p>{{ err1 }}</p>
                                 </div>
-                                <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4"  v-if="!err">
+                                <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4"  v-if="!err&&here">
                                     <input placeholder="Enter your OTP" type="text" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.otp">
                                     
                                 

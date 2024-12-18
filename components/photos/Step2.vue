@@ -6,7 +6,7 @@
       
       <div class=" w-full flex justify-center items-center ">
         
-        <div class="flex flex-col gap-4 max-w-100 rounded-xl shadow-xl p-10">
+        <div class="flex flex-col gap-4 max-w-100 rounded-xl shadow-xl p-10  border-2 ">
             <h2 class="font-bold text-2xl pb-5 text-center"  >Review and Submit</h2>
             
             
@@ -35,20 +35,21 @@
                                     <button type="button" class="px-2 border-y border-s border-e rounded-s-2xl border-black/20 hover:bg-gray-200 focus:outline-none min-w-20">
                                         Mileage
                                     </button>
-                                    <input  type="number" class="rounded-e-2xl py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.vehicle_info.mileage" >
+                                    <input disabled  type="number" class="rounded-e-2xl py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.vehicle_info.mileage" >
                                 </div> 
 
                                 <div class="relative inline-flex w-full my-1 " >
                                     <button type="button" class="px-2 border-y border-s border-e rounded-s-2xl border-black/20 hover:bg-gray-200 focus:outline-none min-w-20">
                                         Price
                                     </button>
-                                    <input type="number" class="rounded-e-2xl py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.vehicle_info.asking_price" >
+                                    <input disabled type="number" class="rounded-e-2xl py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.vehicle_info.asking_price" >
                                     
                                 </div> 
 
-                                <div class="flex justify-end">
+                                <div class="flex justify-around">
         <!-- <i class="fa fa-user"></i> -->
-        <p class="outline outline-1 outline-blue-600 hover:bg-[#2563EB] hover:text-[#fff] me-2 px-3 py-2 rounded-2xl cursor-auto" @click="$emit('Next')">Submit</p>
+        <p class="outline outline-1 outline-blue-600 hover:bg-[#fff] bg-[#2563EB] hover:text-[#2563EB] text-[#fff] me-2 px-3 py-2 rounded-2xl cursor-pointer" @click="$emit('Backone')">Review</p>
+        <p class="outline outline-1 outline-blue-600 hover:bg-[#fff] bg-[#0ea5e9] hover:text-[#0ea5e9] text-[#fff] me-2 px-3 py-2 rounded-2xl cursor-pointer" @click="$emit('Next')">Submit</p>
         
       </div>
 

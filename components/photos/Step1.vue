@@ -16,31 +16,20 @@
         
             <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">Upload side of vehicle(Driver)</p>
 
-            <div
-              class="flex flex-col items-center justify-center border border-black/20 rounded-xl  mx-auto">
 
-              <img v-if="store.$state.form.images.car_side" :src="store.$state.form.images.car_side" id="car-side"
-                name="car_side" alt="">
+              <label for="side-btn"
+      class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+     
+      <img v-if="store.$state.form.images.car_side" :src="store.$state.form.images.car_side" id="car-side"
+                name="car_side" alt="" class="max-h-36">
               <img v-else src="~assets/images/car-side.png" id="car-side" alt="">
-              
-            </div>
+             
+              <p v-if="store.$state.form.images.car_side">EDIT IMAGE</p>
+              <p v-else>+ ADD IMAGE</p>
 
-            <div class="flex justify-end  w-full  mt-2 ">
-
-              <div class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                <input type="file" id="side-btn" @change="handleFile($event, 'car-side')" hidden />
-                <label for="side-btn">
-                  <span ></span>Upload Photo</label>
-              </div>
-
-
-              <!-- <button @click="$emit('openCameraModal')"
-                class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                <span></span>
-                Take Photo
-              </button> -->
-
-              </div>
+      <input type="file" id="side-btn" @change="handleFile($event, 'car-side')" hidden />
+      <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+    </label>
 
           </div>
 
@@ -48,139 +37,89 @@
 
           <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">Upload back angle of vehicle</p>
 
-          <div
-            class="flex flex-col items-center justify-center border border-black/20 rounded-xl mx-auto ">
-            <!-- <img src="~assets/images/car-side.png" class="max-w-48 mb-4"> -->
-            <img v-if="store.$state.form.images.car_back_angle" :src="store.$state.form.images.car_back_angle" id="car-back-angle"
-              name="car_back_angle" alt="">
+        
+
+            <label for="back-btn"
+      class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+     
+              <!-- <img src="~assets/images/car-side.png" class="max-w-48 mb-4"> -->
+              <img v-if="store.$state.form.images.car_back_angle" :src="store.$state.form.images.car_back_angle" id="car-back-angle"
+              name="car_back_angle" alt="" class="max-h-36">
             <img v-else src="~assets/images/car-back.png" id="car-back-angle" alt="">
-            
-          </div>
+             
+            <p v-if="store.$state.form.images.car_back_angle">EDIT IMAGE</p>
+            <p v-else>+ ADD IMAGE</p>
 
-          <div class="flex justify-end  w-full  mt-2 ">
-
-
-              <div class="rounded-xl p-2 font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                <input type="file" id="back-btn" @change="handleFile($event, 'car-back-angle')" hidden />
-                <label for="back-btn">
-                  <span class="mr-1"></span>Upload Photo</label>
-              </div>
-
-
-              <!-- <button @click="$emit('openCameraModal')"
-              class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                <span></span>
-                Take Photo
-              </button> -->
-
-
-              <!-- <div class=" ">
-                <button @click="$emit('Back')"
-                  class=" text-white bg-[#6b6b6b]  py-2 px-3 mr-2 rounded-full text-sm font-bold border border-[#6b6b6b] hover:bg-tertiary  hover:border-tertiary">
-                  Back</button>
-
-              </div> -->
-              <!-- <button class="rounded-xl py-2 bg-[#2563EB] font-bold text-white text-sm w-60 hover:bg-accent" @click="$emit('Back')">Upload Image</button> 
-                  <button class="rounded-xl py-2 bg-[#2563EB] font-bold text-white text-sm w-60 hover:bg-accent" @click="$emit('Next')">Take photo</button> -->
-            </div>
+      <input type="file" id="back-btn" @change="handleFile($event, 'car-back-angle')" hidden />
+      <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+    </label>
 
         </div>
 
         <div class="p-3 rounded-xl border border-2">
             <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">Upload front angle of vehicle</p>
 
-            <div
-              class="flex flex-col items-center justify-center border border-black/20 rounded-xl  mx-auto">
+              <label for="front-btn"
+      class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+     
               <!-- <img src="~assets/images/car-side.png" class="max-w-48 mb-4"> -->
               <img v-if="store.$state.form.images.car_front_angle" :src="store.$state.form.images.car_front_angle" id="car-front-angle"
-                name="car_front_angle" alt="">
+                name="car_front_angle" alt="" class="max-h-36">
               <img v-else src="~assets/images/car-back.png" id="car-front-angle" alt="">
+             
+      <p v-if="store.$state.form.images.car_front_angle">EDIT IMAGE</p>
+      <p v-else>+ ADD IMAGE</p>
 
-            </div>
-
-              <div class="flex justify-end  w-full  mt-2 ">
-
-                <div class="rounded-xl p-2 font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <input type="file" id="front-btn" @change="handleFile($event, 'car-front-angle')" hidden />
-                  <label for="front-btn">
-                    <span class="mr-1"></span>Upload Photo</label>
-                </div>
+      <input type="file" id="front-btn" @change="handleFile($event, 'car-front-angle')" hidden />
+      <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+    </label>
 
 
-                <!-- <button @click="$emit('openCameraModal')"
-                class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <span></span>
-                  Take Photo
-                </button> -->
-
-              </div>
+              
 
         </div>
 
         <div class="p-3 rounded-xl border border-2">
             <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">Upload seats and dash</p>
 
-            <div
-              class="flex flex-col items-center justify-center border border-black/20 rounded-xl  mx-auto ">
+            <label for="seats-btn"
+      class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+     
               <!-- <img src="~assets/images/car-side.png" class="max-w-48 mb-4"> -->
               <img v-if="store.$state.form.images.car_seats" :src="store.$state.form.images.car_seats" id="car-seats"
-                name="car_seats" alt="">
+                name="car_seats" alt="" class="max-h-36">
               <img v-else src="~assets/images/seat.png" id="car-seats" alt="">
              
-            </div>
+              <p v-if="store.$state.form.images.car_seats">EDIT IMAGE</p>
+              <p v-else>+ ADD IMAGE</p>
 
-            <div class="flex justify-end  w-full  mt-2 ">
-
-                <div class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <input type="file" id="seats-btn" @change="handleFile($event, 'car-seats')" hidden />
-                  <label for="seats-btn">
-                    <span class="mr-1"></span>Upload Photo</label>
-                </div>
-
-
-                <!-- <button @click="$emit('openCameraModal')"
-                class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <span></span>
-                  Take Photo
-                </button> -->
-
-              </div>
+      <input type="file" id="seats-btn" @change="handleFile($event, 'car-seats')" hidden />
+      <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+    </label>
 
         </div>
 
         <div class="p-3 rounded-xl border border-2 ">
             <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">Upload dash with car on</p>
 
-            <div
-              class="flex flex-col items-center justify-center border border-black/20 rounded-xl  mx-auto">
-              <!-- <img src="~assets/images/car-side.png" class="max-w-48 mb-4"> -->
-              <img v-if="store.$state.form.images.car_dash" :src="store.$state.form.images.car_dash" id="car-dash"
-                name="car_dash" alt="">
+            
+
+              <label for="dash-btn"
+      class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
+     
+      <img v-if="store.$state.form.images.car_dash" :src="store.$state.form.images.car_dash" id="car-dash"
+                name="car_dash" alt="" class="max-h-36">
               <img v-else src="~assets/images/dash.png" id="car-dash" alt="">
+             
+              <p v-if="store.$state.form.images.car_dash">EDIT IMAGE</p>
+              <p v-else>+ ADD IMAGE</p>
 
-            </div>
-
-              <div class="flex justify-end  w-full  mt-2 ">
-
-
-                <div class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <input type="file" id="dash-btn" @change="handleFile($event, 'car-dash')" hidden />
-                  <label for="dash-btn">
-                    <span class="mr-1"></span>Upload Photo</label>
-                </div>
-
-
-                <!-- <button @click="$emit('openCameraModal')"
-                class="rounded-xl p-2  font-bold  text-sm text-center hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] outline outline-[#0ea5e9]">
-                  <span></span>
-                  Take Photo
-                </button> -->
-
-
-               
-              </div>
+      <input type="file" id="dash-btn" @change="handleFile($event, 'car-dash')" hidden />
+      <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+    </label>
 
         </div>
+
 
     </div>
     

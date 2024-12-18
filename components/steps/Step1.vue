@@ -7,7 +7,7 @@
 
         <div class=" w-full flex justify-center items-center  ">
 
-          <div class="flex flex-col gap-4 w-full rounded-xl shadow-xl p-10">
+          <div class="flex flex-col gap-4 w-full rounded-xl shadow-xl p-10 border-2">
             <h2 class="font-bold text-2xl pb-5 text-center"  >Vehicle Upload</h2> 
             <div class="mt-4 flex flex-row justify-center border rounded-full bg-gray-200">
               <button class="w-1/2 py-1 rounded-full text-white" :class="{'text-white bg-[#2563EB]':here}" @click="toggleFirstForm">VIN</button> 
@@ -43,7 +43,7 @@
                 <option v-for="model in model" :key="model" :value="model.toLowerCase()">{{ model.toLowerCase() }}</option>
             </select>
 
-            <button class="rounded-full py-3 text-white w-full" :disabled="!isFormNotEmpty" :class="{'bg-gray-200':!isFormNotEmpty,'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty}" @click="$emit('Next')">Start Upload</button>
+            <button class="rounded-full py-3 text-white w-full" :disabled="!isFormNotEmpty" :class="{'bg-gray-200':!isFormNotEmpty,'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty}" @click="$emit('Next')">Next</button>
           </div>
 
           </div>

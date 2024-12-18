@@ -2,7 +2,7 @@
   <Header />
   <!-- <div class="" style="background-color: white !important;"> -->
 
-  <div class="flex flex-col md:flex-row  items-center md:items-start md:justify-around  ">
+  <div class="flex flex-col md:flex-row justify-around mx-5 sm:mx-0">
 
     <div v-if="isOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
       @click.self="closeModal">
@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <div class="flex flex-col rounded-xl border-2 items-center h-[70vh]  w-80 mb-2 md:me-2">
+    <div class="flex flex-col rounded-xl border-2 items-center h-[70vh]  my-4">
 
       <div class="bg-[#0ea5e9] w-11/12 h-20 rounded-lg mt-5"></div>
 
@@ -60,8 +60,8 @@
 
     </div>
 
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-[] ">
+    <div class="mt-5">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 " :class="{'md:grid-cols-1':products.length==1,'md:grid-cols-2':products.length==2, 'md:grid-cols-3':products.length>=3}">
 
       <div class="" v-for="product in products" :key="product.id">
 
@@ -70,7 +70,7 @@
           <div class="">
             <img
               :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'"
-              alt="Front left profile" class="w-full max-h-20 rounded-xl">
+              alt="Front left profile" class="w-full max-h-[28vh] sm:max-h-[20vh] rounded-xl">
           </div>
 
           <div class="mt-5  ">
@@ -125,12 +125,16 @@
 
       </div>
     </div>
-  </div>
-
-  <div class=" w-full flex justify-center  my-5">
-    <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#0ea5e9] hover:text-[#fff] text-[#0ea5e9] ms- outline outline-[#0ea5e9]"
+    <div class=" w-full flex justify-center items-center w-full ">
+    <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#fff] bg-[#0ea5e9] text-[#fff] hover:text-[#0ea5e9] mt-5 hover:outline hover:outline-[#0ea5e9] cursor-pointer"
       @click="Listpr()">+ Add Vehicle</a>
   </div>
+    </div>
+    
+   
+  </div>
+ 
+
   <!-- </div> -->
 </template>
 
@@ -283,11 +287,11 @@ const editProduct = (selProduct: string) => {
       store.$state.form.vehicle_info.year = product['cf_1280'];
       store.$state.form.vehicle_info.make = product['cf_1282'];
       store.$state.form.vehicle_info.model = product['cf_1284'];
-      store.$state.form.images.car_side = images['main'] + '/public';
-      store.$state.form.images.car_front_angle = images['1'] + '/public';
-      store.$state.form.images.car_back_angle = images['2'] + '/public';
-      store.$state.form.images.car_seats = images['3'] + '/public';
-      store.$state.form.images.car_dash = images['4'] + '/public';
+      store.$state.form.images.car_side = images?images['main'] + '/public':'';
+      store.$state.form.images.car_front_angle =  images?images['1'] + '/public':'';
+      store.$state.form.images.car_back_angle =  images?images['2'] + '/public':'';
+      store.$state.form.images.car_seats =  images?images['3'] + '/public':'';
+      store.$state.form.images.car_dash =  images?images['4'] + '/public':'';
 
       console.log(store.$state.form.vehicle_info.model);
 

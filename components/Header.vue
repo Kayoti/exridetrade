@@ -51,7 +51,7 @@
 
       <div class="md:flex items-center space-x- divide-x divide-black" v-show="logedin">
         <!-- <i class="fa fa-user"></i> -->
-        <p class="outline outline-1 outline-blue-600 hover:bg-[#2563EB] hover:text-[#fff] me-2 p-2 rounded-3xl cursor-auto" @click="Dash()">Dashboard</p>
+        <p class="text-center hover:bg-[#fff] bg-[#0ea5e9] hover:text-[#0ea5e9] text-[#fff]  hover:outline hover:outline-[#0ea5e9] me-2 p-2 rounded-3xl cursor-pointer" @click="Dash()">Dashboard</p>
         
       </div>
 

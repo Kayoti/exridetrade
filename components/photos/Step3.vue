@@ -143,6 +143,7 @@ const edit = ref();
     formData1.append('cf_1987', store.$state.form.vehicle_desc ?? '');
     formData1.append('cf_1288', store.$state.form.vehicle_info.mileage ?? '');
     formData1.append('cf_2007', store.$state.form.vehicle_info.asking_price ?? '');
+    formData1.append('cf_1800', store.$state.form.vehicle_info.asking_price ?? '');
     formData1.append('cf_1989', store.$state.form.vehicle_condition.accidents ?? '');
     formData1.append('cf_1991', store.$state.form.vehicle_condition.damages ?? '');
     formData1.append('cf_1993', store.$state.form.vehicle_condition.damages_details ?? '');
@@ -224,6 +225,7 @@ async function updateInventory () {
     'cf_1987': store.$state.form.vehicle_desc,
     'cf_1288': store.$state.form.vehicle_info.mileage,
     'cf_2007': store.$state.form.vehicle_info.asking_price,
+    'cf_1800': store.$state.form.vehicle_info.asking_price,
     'cf_1989': store.$state.form.vehicle_condition.accidents,
     'cf_1991': store.$state.form.vehicle_condition.damages,
     'cf_1993': store.$state.form.vehicle_condition.damages_details,
@@ -241,12 +243,8 @@ async function updateInventory () {
 
     // const data = JSON.parse(response).result;
     console.log(response);
-    localStorage.setItem("success", "ok");
-          loading.value=false;
-          reloadNuxtApp({
-          path: "/",
-          ttl: 1000, // default 10000
-        });
+    updateImages();
+ 
   })
 
 }
@@ -297,6 +295,12 @@ async function  updateImages (){
     body: formData,
   }).then( response => {
     console.log(response);
+    localStorage.setItem("success", "ok");
+          loading.value=false;
+          reloadNuxtApp({
+          path: "/",
+          ttl: 1000, // default 10000
+        });
   });
 
 }
@@ -308,7 +312,7 @@ onMounted(() => {
   edit.value = localStorage.getItem("edit");
   if(localStorage.getItem("edit")){
     updateInventory();
-    updateImages();
+   
   }else{
     createInventory();
   }

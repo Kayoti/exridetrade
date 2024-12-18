@@ -2,7 +2,7 @@
   <div class="h-full">
     <NuxtLayout>
       <Header v-if="step > 2" />
-      <div class=" mt-[20vh] " :class="(step > 2 && step < 9) ? 'flex flex-col md:flex-row justify-center items-center md:items-start md:justify-around mx-[10vw]' : ''">
+      <div class=" mt-[20vh] min-h-[90vh]" :class="(step > 2 && step < 9) ? 'flex flex-col md:flex-row justify-center items-center md:items-start md:justify-around mx-[10vw]' : ''">
       <div v-if="step > 2 && step < 9" class="flex flex-col rounded-xl border-2 items-center   mb-2 md:me-2 p-5 hidden md:block" >
     
         <div class="border border-2  py-1  p-2 rounded-xl w-40 mt-3 " :class="step===3?'bg-[#0ea5e9] border-[#0ea5e9] text-[#fff]':''">
@@ -36,7 +36,7 @@
           </div>
 
       </div>
-      <div >
+      <div>
       <transition name="fade">
         <Login :key="step" v-if="step === 1" @next="Next" @Back="Back" />
       </transition>
@@ -60,7 +60,7 @@
         <Step5 :key="step" v-if="step === 7" v-bind:final-image="imag" @openCameraModal="openCameraModal" @Next="Next" @Back="Back" />
       </transition>
       <transition name="fade">
-        <Step6 :key="step" v-if="step === 8" v-bind:final-image="imag" @openCameraModal="openCameraModal" @Next="Next" @Back="Back" />
+        <Step6 :key="step" v-if="step === 8" v-bind:final-image="imag" @openCameraModal="openCameraModal" @Next="Next" @Back="Back" @Backone="Backone" />
       </transition>
       <transition name="fade">
         <Step7 :key="step" v-if="step === 9" v-bind:final-image="imag" @openCameraModal="openCameraModal" @Next="Next" @Back="Back"   />
@@ -75,7 +75,7 @@
                   <Step2 v-if="step === 2" @Next="Next" @Back="Back"  /> -->
     </div>
     </div>
-   
+ 
     <Footer />
     <CameraModal @finalImage="finalImage" ref="CameraModalRef" />
     
@@ -84,7 +84,7 @@
   <!-- <Footer /> -->
 </template>
 
-<script setup lang="ts">
+76tfcx <script setup lang="ts">
 import Login from "@/components/login.vue"
 import Dashboard from "@/components/dashboard.vue"
 import Step1 from "@/components/steps/Step1.vue"
@@ -348,6 +348,7 @@ const draftInventory = () => {
     formData1.append('cf_1987', store.$state.form.vehicle_desc ?? '');
     formData1.append('cf_1288', store.$state.form.vehicle_info.mileage ?? '');
     formData1.append('cf_2007', store.$state.form.vehicle_info.asking_price ?? '');
+    formData1.append('cf_1800', store.$state.form.vehicle_info.asking_price ?? '');
     formData1.append('cf_1989', store.$state.form.vehicle_condition.accidents ?? '');
     formData1.append('cf_1991', store.$state.form.vehicle_condition.damages ?? '');
     formData1.append('cf_1993', store.$state.form.vehicle_condition.damages_details ?? '');
@@ -439,6 +440,16 @@ const Back = () => {
   setTimeout(() => {
     router.push('/')
   }, 0)
+}
+
+const Backone = () => {
+
+
+  step.value=3;
+  console.log(step)
+
+
+
 }
 
 const openCameraModal = () => {

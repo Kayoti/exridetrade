@@ -50,69 +50,84 @@
                                     class="rounded-full py-3 px-5 border border-black/20 flex-grow"
                                     v-model="store.$state.form.email" v-show="there">-->
 
-                                    <div class="relative inline-flex w-full"  v-show="here">
-                                    <button type="button" class="px-2 border-y border-s rounded-s-full border-black/20 bg-gray-100 hover:bg-gray-200 focus:outline-none ">
+                                <div class="relative inline-flex w-full" v-show="here">
+                                    <button type="button"
+                                        class="px-2 border-y border-s rounded-s-full border-black/20 bg-gray-100 hover:bg-gray-200 focus:outline-none ">
                                         +1
                                     </button>
-                                    <input placeholder="Enter your phone number" type="number" class="rounded-e-full py-3 px-5 border border-s-0 border-black/20 flex-grow" v-model="store.$state.form.phone" >
-                                </div> 
-                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 " 
-                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="sendOtp('create', '')" v-if="here">
+                                    <input placeholder="Enter your phone number" type="number"
+                                        class="rounded-e-full py-3 px-5 border border-s-0 border-black/20 flex-grow"
+                                        v-model="store.$state.form.phone">
+                                </div>
+                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 "
+                                    :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)"
+                                    :class="{ 'bg-gray-200': !isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber), 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmpty && (isValidEmail || isValidPhoneNumber) }"
+                                    @click="sendOtp('create', '')" v-if="here">
                                     <p class="" v-if="!otpsent">Next</p>
                                     <p class="" v-if="otpsent">Resend</p>
                                 </button>
 
-                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 " 
-                                :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)" :class="{'bg-gray-200':!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber),'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty && (isValidEmail || isValidPhoneNumber)}" @click="" v-if="there">
+                                <button class="rounded-full text text-white px-2 text-center hover:bg-accent py-2 "
+                                    :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)"
+                                    :class="{ 'bg-gray-200': !isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber), 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmpty && (isValidEmail || isValidPhoneNumber) }"
+                                    @click="" v-if="there">
                                     <p class="">Next</p>
                                 </button>
                             </div>
-                            
+
                             <div v-show="here && otpsent" class="mt-4">
                                 <div v-if="success" class="bg-[#BBF7D0] p-4 rounded-full text-center">
                                     <p>{{ success }}</p>
                                 </div>
                                 <div v-if="err" class="bg-[#fecaca] p-4 rounded-full text-center">
                                     <p>{{ err }}</p>
-                                </div> <div v-if="err1" class="bg-[#fecaca] p-4 rounded-full text-center">
+                                </div>
+                                <div v-if="err1" class="bg-[#fecaca] p-4 rounded-full text-center">
                                     <p>{{ err1 }}</p>
                                 </div>
-                                <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4"  v-if="!err&&here">
-                                    <input placeholder="Enter your OTP" type="text" class="rounded-full py-3 px-5 border border-black/20 flex-grow" v-model="store.$state.form.otp">
-                                    
-                                
-                                    <button class="rounded-full text text-white px-4 text-center bg-[#2563EB] hover:bg-[#2B9DD7] py-2" 
-                                    @click="sendOtp('verify', store.$state.form.otp)">
+                                <div class="flex flex-col md:flex-row gap-4 pt-4 md:pt-4" v-if="!err && here">
+                                    <input placeholder="Enter your OTP" type="text"
+                                        class="rounded-full py-3 px-5 border border-black/20 flex-grow"
+                                        v-model="store.$state.form.otp">
+
+
+                                    <button
+                                        class="rounded-full text text-white px-4 text-center bg-[#2563EB] hover:bg-[#2B9DD7] py-2"
+                                        @click="sendOtp('verify', store.$state.form.otp)">
                                         <p class="">Verify</p>
                                     </button>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="flex jusyify-center mt-5">
-    <button class="gsi-material-button rounded-button" id="googleSignin" @click="toggleSecondForm">
-        <div class="gsi-material-button-state"></div>
-        <div class="gsi-material-button-content-wrapper flex gap-2">
-            <div class="gsi-material-button-icon">
-                <svg 
-                    class="google-logo" 
-                    version="1.1" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 48 48" 
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                >
-                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
-                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
-                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
-                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
-                    <path fill="none" d="M0 0h48v48H0z"></path>
-                </svg>
-            </div>
-            <span class="gsi-material-button-contents">Sign in with Google</span>
-            <span style="display: none;">Sign in with Google</span>
-        </div>
-    </button>
-</div>
+                                <button class="gsi-material-button rounded-button" id="googleSignin"
+                                    @click="toggleSecondForm">
+                                    <div class="gsi-material-button-state"></div>
+                                    <div class="gsi-material-button-content-wrapper flex gap-2">
+                                        <div class="gsi-material-button-icon">
+                                            <svg class="google-logo" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 48 48" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                                <path fill="#EA4335"
+                                                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z">
+                                                </path>
+                                                <path fill="#4285F4"
+                                                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z">
+                                                </path>
+                                                <path fill="#FBBC05"
+                                                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z">
+                                                </path>
+                                                <path fill="#34A853"
+                                                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z">
+                                                </path>
+                                                <path fill="none" d="M0 0h48v48H0z"></path>
+                                            </svg>
+                                        </div>
+                                        <span class="gsi-material-button-contents">Sign in with Google</span>
+                                        <span style="display: none;">Sign in with Google</span>
+                                    </div>
+                                </button>
+                            </div>
 
-<!-- CSS -->
+                            <!-- CSS -->
 
 
 
@@ -276,7 +291,6 @@ const toggleSecondForm = async () => {
 
 //@ts-ignore
 onMounted(() => onAuthStateChanged(auth, (user) => {
-    console.log("*888888");
     if (user) {
         firebaseUser.value = user;
         console.log('User logged in:', user);
@@ -363,51 +377,51 @@ const setPlace = (addressData) => {
 
 }
 
-async function sendOtp(checker, cody){
+async function sendOtp(checker, cody) {
     console.log(cody)
 
-                const formData1 = new FormData();
-                
-                // localStorage.setItem("lead")
+    const formData1 = new FormData();
 
-                formData1.append("smschecker", checker);
-                formData1.append("smstoken", "9647");
-                formData1.append("smscode", cody);
-                formData1.append("smsphone", store.$state.form.phone);
+    // localStorage.setItem("lead")
 
-               useFetch("https://exride.easypear.com/sms/otp.php", {
-                    // headers: {
-                    //             'Content-Type': 'application/x-www-form-urlencoded' // Set the content type to 'application/x-www-form-urlencoded'.
-                    //         },
-                    method: 'POST',
-                    body: formData1
-                    }).then((response) => {
-                        otpsent.value=true;
-                    console.log(response.data);
-                    try{
-                        if (JSON.parse(response.data.value) === 'pending') {
-                        
-                            success.value = 'We have sent a code to your phone +1' + store.$state.form.phone;
-                            err.value = '';
-                            console.log(err)
-                        } else if (JSON.parse(response.data.value) === 'approved') {
-                            success.value = '';
-                            success.value = 'OTP code succefully verified!';
-                            err.value = '';
-                            checkLead()
-                        }
-                    }catch{
-                        success.value = '';
-                        err.value = '';
-                        err1.value = ''
-                        if(checker==="create"){
-                        err.value = 'Error sending OTP. Please double check your information.';
-                        }else{
-                            err1.value = 'Error verifying OTP. Please double check your information.';
-                        }
-                        console.log(err)
-                    }
-                })
+    formData1.append("smschecker", checker);
+    formData1.append("smstoken", "9647");
+    formData1.append("smscode", cody);
+    formData1.append("smsphone", store.$state.form.phone);
+
+    useFetch("https://exride.easypear.com/sms/otp.php", {
+        // headers: {
+        //             'Content-Type': 'application/x-www-form-urlencoded' // Set the content type to 'application/x-www-form-urlencoded'.
+        //         },
+        method: 'POST',
+        body: formData1
+    }).then((response) => {
+        otpsent.value = true;
+        console.log(response.data);
+        try {
+            if (JSON.parse(response.data.value) === 'pending') {
+
+                success.value = 'We have sent a code to your phone +1' + store.$state.form.phone;
+                err.value = '';
+                console.log(err)
+            } else if (JSON.parse(response.data.value) === 'approved') {
+                success.value = '';
+                success.value = 'OTP code succefully verified!';
+                err.value = '';
+                checkLead()
+            }
+        } catch {
+            success.value = '';
+            err.value = '';
+            err1.value = ''
+            if (checker === "create") {
+                err.value = 'Error sending OTP. Please double check your information.';
+            } else {
+                err1.value = 'Error verifying OTP. Please double check your information.';
+            }
+            console.log(err)
+        }
+    })
 }
 
 
@@ -429,14 +443,14 @@ async function checkLead() {
 
                 if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
 
-                    if (firebaseUser) {
-                           await createLead();
-                        console.log("fire*************")
-                    } else {
-                        signup.value = true; 
-                    }
+                    /**                    if (firebaseUser) {
+                                            signup.value = true;
+                                          ///  await createLead();
+                                        } else {
+                                            signup.value = true;
+                                        } */
+                    signup.value = true;
 
-                ;
                 } else {
                     authStore.setUser("login");
                     localStorage.setItem('app_user', "login");
@@ -456,7 +470,7 @@ async function checkLead() {
                 method: 'POST',
                 body: formData,
             }).then((response) => {
-             
+
 
 
                 if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
@@ -532,23 +546,24 @@ onMounted(() => {
 </script>
 
 <style>
-    .rounded-button {
-        border-radius: 25px;
-        padding: 10px 20px;
-        border: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        margin-left: 15%;
-    }
+.rounded-button {
+    border-radius: 25px;
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    margin-left: 15%;
+}
 
-    .gsi-material-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+.gsi-material-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    .google-logo {
-        width: 20px; /* Adjust the size here */
-        height: 20px;
-    }
+.google-logo {
+    width: 20px;
+    /* Adjust the size here */
+    height: 20px;
+}
 </style>

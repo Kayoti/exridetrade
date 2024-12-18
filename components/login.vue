@@ -116,16 +116,16 @@
 
 
 
-                            <div class="pt-8">Exride values your security. 
+                            <!-- <div class="pt-8">Exride values your security. 
                                 <button class="rounded-full text text-white px-4 text-center hover:bg-accent py-2 "  v-if="!isGoogleAuth"
                                     :disabled="!isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber)"
                                     :class="{ 'bg-gray-200': !isFormNotEmpty && (!isValidEmail || !isValidPhoneNumber), 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmpty && (isValidEmail || isValidPhoneNumber) }"
                                     @click="checkLead()">
                                     <p class="">Next</p>
                                 </button>
-                            </div>
-                            <div class="pt-8">Exride values your security.
-                                <br> <br>Please enter your
+                            </div> -->
+                            <div class="pt-8 text-center text-sm">Exride values your security.
+                                <br>Please enter your
                                 phone number or email to receive a one time password to login or
                                 sign-up.
                             </div>

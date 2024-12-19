@@ -72,11 +72,13 @@ function onSubmit() {
                 size="xl"
                 autocomplete="off"
                 class="max-w-sm"
+                input-class="rounded-full"
               >
                 <template #trailing>
                   <UButton
                     type="submit"
                     size="xs"
+                    color="primary"
                     :label="loading ? 'Subscribing' : 'Subscribe'"
                     :loading="loading"
                   />
@@ -98,7 +100,7 @@ function onSubmit() {
       <UColorModeButton size="sm" />
 
       <UButton
-        to="https://github.com/nuxt-ui-pro/landing"
+        to="https://github.com/nuxt-ui-pro/saas"
         target="_blank"
         icon="i-simple-icons-github"
         aria-label="GitHub"

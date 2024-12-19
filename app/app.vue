@@ -1,7 +1,13 @@
 <script setup lang="ts">
+const colorMode = useColorMode()
+
+const color = computed(() => colorMode.value === 'dark' ? '#111827' : 'white')
+
 useHead({
   meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+    { charset: 'utf-8' },
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { key: 'theme-color', name: 'theme-color', content: color }
   ],
   link: [
     { rel: 'icon', href: '/favicon.ico' }
@@ -12,20 +18,21 @@ useHead({
 })
 
 useSeoMeta({
-  ogImage: 'https://landing-template.nuxt.dev/social-card.png',
-  twitterImage: 'https://landing-template.nuxt.dev/social-card.png',
+  titleTemplate: '%s - Nuxt UI Pro - SaaS template',
+  ogImage: 'https://saas-template.nuxt.dev/social-card.png',
+  twitterImage: 'https://saas-template.nuxt.dev/social-card.png',
   twitterCard: 'summary_large_image'
 })
 </script>
 
 <template>
-  <AppHeader />
+  <div>
+    <NuxtLoadingIndicator />
 
-  <UMain>
-    <NuxtPage />
-  </UMain>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
 
-  <AppFooter />
-
-  <UNotifications />
+    <UNotifications />
+  </div>
 </template>

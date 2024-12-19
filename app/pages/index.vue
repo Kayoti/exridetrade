@@ -3,15 +3,6 @@
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/authStore'
 
-const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
-
-useSeoMeta({
-  title: page.value.title,
-  ogTitle: page.value.title,
-  description: page.value.description,
-  ogDescription: page.value.description
-})
-
 const store = useAppStore()
 const authStore = useAuthStore()
 const router = useRouter()

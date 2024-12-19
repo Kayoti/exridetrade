@@ -7,24 +7,28 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/image',
-    '@nuxt/ui'
+    '@nuxt/ui',
+    '@pinia/nuxt'
   ],
+
+  devtools: {
+    enabled: true
+  },
+  css: ['~/assets/css/main.css'],
 
   routeRules: {
     // Temporary workaround for prerender regression. see https://github.com/nuxt/nuxt/issues/27490
     '/': { prerender: true }
   },
 
-  devtools: {
-    enabled: true
+  future: {
+    compatibilityVersion: 4
   },
+
+  compatibilityDate: '2024-07-11',
 
   typescript: {
     strict: false
-  },
-
-  future: {
-    compatibilityVersion: 4
   },
 
   eslint: {
@@ -34,7 +38,5 @@ export default defineNuxtConfig({
         braceStyle: '1tbs'
       }
     }
-  },
-
-  compatibilityDate: '2024-07-11'
+  }
 })

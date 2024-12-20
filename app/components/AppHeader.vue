@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/authStore'
+
+const router = useRouter()
+const authStore = useAuthStore()
+const isAuthenticated = ref(false)
 /** const navigation = inject<Ref<NavItem[]>>('navigation', ref([]))
  *
  * import type { NavItem } from '@nuxt/content'
@@ -13,6 +18,16 @@ const links = [{
   label: 'Blog',
   to: '/blog'
 }] */
+
+const handleDashboardRedirect = () => {
+  router.push({ name: 'trade' })
+}
+
+onMounted(() => {
+  if (authStore.getUser) {
+    isAuthenticated.value = true
+  }
+})
 </script>
 
 <template>
@@ -29,11 +44,11 @@ const links = [{
 
     <template #right>
       <UButton
+      v-if="isAuthenticated"
         label="Dashboard"
-        color="white"
-        variant="ghost"
         trailing-icon=""
-        class="hidden lg:flex bg-sky-400 border-0 border-sky-700 text-white hover:bg-sky-600 hover:border-sky-900"
+        class=""
+        @click="handleDashboardRedirect()"
       />
       <!--      <UButton label="Sign in" color="gray" to="/login" />
       <UButton label="Sign up" icon="i-heroicons-arrow-right-20-solid" trailing color="black" to="/signup"

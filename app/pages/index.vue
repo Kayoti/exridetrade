@@ -149,29 +149,29 @@ async function checkLead() {
         method: 'POST',
         body: formData
       }).then(async (response) => {
-        console.log(JSON.parse(response.data.value).data)
-        // localStorage.setItem("lead")
+      console.log(JSON.parse(response.data.value).data)
+      // localStorage.setItem("lead")
 
-        if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
-          /** *        if (firebaseUser.value) {
+      if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
+        /** *        if (firebaseUser.value) {
             await createLead()
 
           } else {
             signup.value = true
           } */
-          console.log('to signup email, firebase*************')
-          signup.value = true
-        } else {
-          authStore.setUser('login')
-          localStorage.setItem('app_user', 'login')
-          localStorage.setItem('leadid', JSON.parse(response.data.value).data['leadid'])
+        console.log('to signup email, firebase*************')
+        signup.value = true
+      } else {
+        authStore.setUser('login')
+        localStorage.setItem('app_user', 'login')
+        localStorage.setItem('leadid', JSON.parse(response.data.value).data['leadid'])
 
-          /// emit('next')
-          console.log('success login email, firebase*************')
-          router.push({ name: 'trade' })
-          // signup.value = true
-        }
-      })
+        /// emit('next')
+        console.log('success login email, firebase*************')
+        router.push({ name: 'trade' })
+        // signup.value = true
+      }
+    })
   } else if (store.$state.form.phone) {
     formData.append('mode', 'getLeadByPhone')
     formData.append('phone', store.$state.form.phone)
@@ -181,17 +181,17 @@ async function checkLead() {
         method: 'POST',
         body: formData
       }).then((response) => {
-        if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
-          signup.value = true
-          console.log(signup)
-        } else {
-          authStore.setUser('login')
-          localStorage.setItem('app_user', 'login')
-          localStorage.setItem('leadid', JSON.parse(response.data.value).data['crmid'])
+      if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
+        signup.value = true
+        console.log(signup)
+      } else {
+        authStore.setUser('login')
+        localStorage.setItem('app_user', 'login')
+        localStorage.setItem('leadid', JSON.parse(response.data.value).data['crmid'])
 
-          router.push({ name: 'trade' })
-        }
-      })
+        router.push({ name: 'trade' })
+      }
+    })
   } else {
     console.log('Invalid user data')
   }
@@ -251,11 +251,17 @@ onMounted(() => {
 <template>
   <div>
     <ULandingSection>
-      <div v-if="!signup" class="flex flex-wrap gap-4 justify-center">
+      <div
+        v-if="!signup"
+        class="flex flex-wrap gap-4 justify-center"
+      >
         <UCard class="w-full md:w-[35%]">
           <div class="flex flex-col justify-center items-center pt-2">
-            <img src="~assets/images/exride_logo.png" class="w-[50%] sm:w-[40%] md:w-[30%] lg:w-[25%] xl:w-[20%]"
-              alt="Exride logo">
+            <img
+              src="~assets/images/exride_logo.png"
+              class="w-[50%] sm:w-[40%] md:w-[30%] lg:w-[25%] xl:w-[20%]"
+              alt="Exride logo"
+            >
 
             <h3 class="font-bold md:text-xl pt-1 text-center">
               Sign In or Sign Up
@@ -263,8 +269,18 @@ onMounted(() => {
           </div>
 
           <div class="flex flex-col font-bold gap-4 text-sm justify-between py-6 md:py-16 p-4 md:p-8">
-            <UFormGroup size="xl" label="Phone Number" hint="" description="" help="">
-              <UInput v-model="store.$state.form.phone" placeholder="Phone" type="tel">
+            <UFormGroup
+              size="xl"
+              label="Phone Number"
+              hint=""
+              description=""
+              help=""
+            >
+              <UInput
+                v-model="store.$state.form.phone"
+                placeholder="Phone"
+                type="tel"
+              >
                 <template #leading>
                   <span class="text-gray-500 dark:text-gray-400 text-xm">+1</span>
                 </template>
@@ -278,19 +294,37 @@ onMounted(() => {
             </div>
 
             <div class=" text-center">
-              <UButton type="button"
+              <UButton
+                type="button"
                 class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium  text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs"
-                @click="handleGoogleButton">
-                <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 19">
-                  <g fill="none" fill-rule="evenodd">
-                    <path fill="#4285F4"
-                      d="M17.64 9.204c0-.638-.057-1.252-.163-1.84H9v3.48h4.844a4.147 4.147 0 0 1-1.8 2.723v2.258h2.908c1.7-1.563 2.688-3.86 2.688-6.621Z" />
-                    <path fill="#34A853"
-                      d="M9 18c2.43 0 4.463-.808 5.951-2.188l-2.908-2.258c-.81.543-1.84.865-3.043.865a5.09 5.09 0 0 1-4.817-3.5H1.165v2.2A8.998 8.998 0 0 0 9 18Z" />
-                    <path fill="#FBBC05"
-                      d="M4.183 10.92A5.077 5.077 0 0 1 3.96 9.5c0-.503.087-.994.223-1.42V5.88H1.165A8.998 8.998 0 0 0 0 9.5c0 1.426.342 2.77.947 3.92l3.236-2.5Z" />
-                    <path fill="#EA4335"
-                      d="M9 3.579c1.32 0 2.504.455 3.438 1.346l2.577-2.577C13.46.808 11.43 0 9 0A8.998 8.998 0 0 0 1.165 5.88l3.236 2.5A5.09 5.09 0 0 1 9 3.579Z" />
+                @click="handleGoogleButton"
+              >
+                <svg
+                  class="w-4 h-4 mr-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 18 19"
+                >
+                  <g
+                    fill="none"
+                    fill-rule="evenodd"
+                  >
+                    <path
+                      fill="#4285F4"
+                      d="M17.64 9.204c0-.638-.057-1.252-.163-1.84H9v3.48h4.844a4.147 4.147 0 0 1-1.8 2.723v2.258h2.908c1.7-1.563 2.688-3.86 2.688-6.621Z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M9 18c2.43 0 4.463-.808 5.951-2.188l-2.908-2.258c-.81.543-1.84.865-3.043.865a5.09 5.09 0 0 1-4.817-3.5H1.165v2.2A8.998 8.998 0 0 0 9 18Z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M4.183 10.92A5.077 5.077 0 0 1 3.96 9.5c0-.503.087-.994.223-1.42V5.88H1.165A8.998 8.998 0 0 0 0 9.5c0 1.426.342 2.77.947 3.92l3.236-2.5Z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M9 3.579c1.32 0 2.504.455 3.438 1.346l2.577-2.577C13.46.808 11.43 0 9 0A8.998 8.998 0 0 0 1.165 5.88l3.236 2.5A5.09 5.09 0 0 1 9 3.579Z"
+                    />
                   </g>
                 </svg>
                 Sign in with Google
@@ -308,7 +342,10 @@ onMounted(() => {
         <UCard class="w-full md:w-[35%]">
           <div class="flex flex-col font-bold gap-4 text-sm justify-between py-6 md:py-16 p-4 md:p-8">
             <div class="flex flex-row items-center gap-3 md:gap-6">
-              <img src="~assets/images/profit.png" style="height: 32px; width: 32px">
+              <img
+                src="~assets/images/profit.png"
+                style="height: 32px; width: 32px"
+              >
               <div>
                 <p>Maximize Your Vehicle Value</p>
                 <ul class="pt-1 font-normal text-normal list-disc flex flex-col gap-1 pl-6">
@@ -319,7 +356,10 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex flex-row items-center gap-3 md:gap-6">
-              <img src="~assets/images/extra_services.png" style="height: 32px; width: 32px">
+              <img
+                src="~assets/images/extra_services.png"
+                style="height: 32px; width: 32px"
+              >
               <div>
                 <p>Dealer Power in Your Hands</p>
                 <ul class="pt-1 font-normal text-normal list-disc flex flex-col gap-1 pl-6">
@@ -330,7 +370,10 @@ onMounted(() => {
               </div>
             </div>
             <div class="flex flex-row items-center gap-3 md:gap-6">
-              <img src="~assets/images/fraud.png" style="height: 32px; width: 32px">
+              <img
+                src="~assets/images/fraud.png"
+                style="height: 32px; width: 32px"
+              >
               <div>
                 <p>Stop Scammers and Fraud</p>
                 <ul class="pt-1 font-normal text-normal list-disc flex flex-col gap-1 pl-6">
@@ -343,11 +386,17 @@ onMounted(() => {
           </div>
         </UCard>
       </div>
-      <div v-if="signup" class="flex flex-wrap gap-4 justify-center">
+      <div
+        v-if="signup"
+        class="flex flex-wrap gap-4 justify-center"
+      >
         <UCard class="w-full md:w-[45%]">
           <div class="flex flex-col justify-center items-center pt-2">
-            <img src="~assets/images/exride_logo.png" class="w-[50%] sm:w-[40%] md:w-[30%] lg:w-[25%] xl:w-[20%]"
-              alt="Exride logo">
+            <img
+              src="~assets/images/exride_logo.png"
+              class="w-[50%] sm:w-[40%] md:w-[30%] lg:w-[25%] xl:w-[20%]"
+              alt="Exride logo"
+            >
 
             <h3 class="font-bold md:text-xl pt-1 text-center">
               Sign In or Sign Up
@@ -356,25 +405,61 @@ onMounted(() => {
 
           <div class="flex flex-col font-bold gap-4 text-sm justify-between py-6 md:py-16 p-4 md:p-8">
             <UForm class="space-y-4">
-              <UFormGroup size="xl" label="FirstName" name="firstname" eager-validation>
-                <UInput v-model="store.$state.form.firstname" placeholder="FirstName" />
+              <UFormGroup
+                size="xl"
+                label="FirstName"
+                name="firstname"
+                eager-validation
+              >
+                <UInput
+                  v-model="store.$state.form.firstname"
+                  placeholder="FirstName"
+                />
               </UFormGroup>
 
-              <UFormGroup size="xl" label="LastName" name="lastname" eager-validation>
-                <UInput v-model="store.$state.form.lastname" placeholder="LastName" />
+              <UFormGroup
+                size="xl"
+                label="LastName"
+                name="lastname"
+                eager-validation
+              >
+                <UInput
+                  v-model="store.$state.form.lastname"
+                  placeholder="LastName"
+                />
               </UFormGroup>
 
-              <UFormGroup size="xl" label="Phone Number" hint="" description="" help="">
-                <UInput v-model="store.$state.form.phone" placeholder="Phone" type="tel">
+              <UFormGroup
+                size="xl"
+                label="Phone Number"
+                hint=""
+                description=""
+                help=""
+              >
+                <UInput
+                  v-model="store.$state.form.phone"
+                  placeholder="Phone"
+                  type="tel"
+                >
                   <template #leading>
                     <span class="text-gray-500 dark:text-gray-400 text-xm">+1</span>
                   </template>
                 </UInput>
               </UFormGroup>
 
-              <UFormGroup size="xl" label="Email" hint="" description="" help="">
-                <UInput v-model="store.$state.form.email" placeholder="you@example.com" icon="i-heroicons-envelope"
-                  type="email" />
+              <UFormGroup
+                size="xl"
+                label="Email"
+                hint=""
+                description=""
+                help=""
+              >
+                <UInput
+                  v-model="store.$state.form.email"
+                  placeholder="you@example.com"
+                  icon="i-heroicons-envelope"
+                  type="email"
+                />
               </UFormGroup>
 
               <!--           <GMapAutocomplete
@@ -384,9 +469,11 @@ onMounted(() => {
             </UForm>
 
             <div class=" text-center">
-              <UButton :loading="isLoading"
+              <UButton
+                :loading="isLoading"
                 class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium  text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs"
-                @click="createLead()">
+                @click="createLead()"
+              >
                 Continue
               </UButton>
             </div>
@@ -401,7 +488,11 @@ onMounted(() => {
       </div>
 
       <div class="flex flex-row justify-center pb-8">
-        <img src="~assets/images/partner-logos.png" alt="" class="max-w-xs md:max-w-3xl">
+        <img
+          src="~assets/images/partner-logos.png"
+          alt=""
+          class="max-w-xs md:max-w-3xl"
+        >
       </div>
 
       <!--      <div class="flex flex-row justify-center pb-8 animate-move-right-left">

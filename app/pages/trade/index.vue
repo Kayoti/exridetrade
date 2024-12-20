@@ -15,15 +15,16 @@ const store = useAppStore()
 const lead = ref()
 
 const cta = {
-  title: 'Get started',
+  title: 'Add Vehicle',
   description: '',
+  onClick: () => handleAddVehicle(),
   links: [
     {
-      label: 'Add Vehicle',
+      color: 'gray',
+      icon: 'i-heroicons-plus-20-solid',
       size: 'xl',
-      color: 'sky',
-      onClick: () => handleAddVehicle(),
-      icon: 'i-heroicons-plus'
+      class: 'ml-8',
+      variant: 'ghost'
     }
   ]
 }

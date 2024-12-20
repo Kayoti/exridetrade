@@ -3,16 +3,21 @@
     <slot />
 
     <div>
-      <button
+      <UButton
         v-if="hasPrevious"
         type="button"
+        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4"
         @click="goToPrev"
       >
         Previous
-      </button>
-      <button type="submit">
+      </UButton>
+
+      <UButton
+        type="submit"
+        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4"
+      >
         {{ isLastStep ? 'Submit' : 'Next' }}
-      </button>
+      </UButton>
     </div>
 
     <pre>{{ values }}</pre>

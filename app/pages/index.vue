@@ -168,7 +168,7 @@ async function checkLead() {
 
         /// emit('next')
         console.log('success login email, firebase*************')
-        router.push({ name: 'trade' })
+        router.push({ name: 'dashboard' })
         // signup.value = true
       }
     })
@@ -189,7 +189,7 @@ async function checkLead() {
         localStorage.setItem('app_user', 'login')
         localStorage.setItem('leadid', JSON.parse(response.data.value).data['crmid'])
 
-        router.push({ name: 'trade' })
+        router.push({ name: 'dashboard' })
       }
     })
   } else {
@@ -236,7 +236,7 @@ async function createLead() {
       // emit('next')
 
       // TODO handle response before redirecting //i.e update php side
-      router.push({ name: 'trade' })
+      router.push({ name: 'dashboard' })
     })
 }
 

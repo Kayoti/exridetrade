@@ -20,7 +20,7 @@ const links = [{
 }] */
 
 const handleDashboardRedirect = () => {
-  router.push({ name: 'trade' })
+  router.push({ name: 'dashboard' })
 }
 
 onMounted(() => {

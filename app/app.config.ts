@@ -20,6 +20,9 @@ export default defineAppConfig({
     input: {
       rounded: 'rounded-full' // rounded-lg
     },
+    select: {
+      rounded: 'rounded-full' // rounded-lg
+    },
     header: {
       wrapper: 'lg:!border-transparent bg-gray-50 dark:bg-gray-950',
       links: {

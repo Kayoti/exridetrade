@@ -1,11 +1,27 @@
+<!-- eslint-disable @typescript-eslint/ban-ts-comment -->
+<!-- eslint-disable @stylistic/spaced-comment -->
 <script setup lang="ts">
 import { Field, ErrorMessage } from 'vee-validate'
 import { object, string } from 'yup'
 import FormWizard from '@/components/Form/FormWizard.vue'
 import FormStep from '@/components/Form/FormStep.vue'
+import { useAppStore } from '@/stores/app'
 
+const store = useAppStore()
 const nuxtApp = useNuxtApp()
 const { activeHeadings, updateHeadings } = useScrollspy()
+const years = ref([])
+const make = ref([])
+const model = ref([])
+const apiToken = 'A1WFxpSVIyICJnEFncyWdjsnvVkxGmk5jvQ3Z5UdXCbHBY6nMYrjDOOXKqLc'
+
+const makeurl = encodeURI('https://carmakemodeldb.com/api/v1/car-lists/get/all/makes?api_token=' + apiToken)
+const modelurl = encodeURI('https://carmakemodeldb.com/api/v1/car-lists/get/all/models/')
+const yearurl = encodeURI('https://carmakemodeldb.com/api/v1/car-lists/get/years/desc' + '?api_token=' + apiToken)
+
+const vehicleDisplay = ref('')
+
+const isError = ref(false)
 
 const links = computed(() => [{
   id: 1,
@@ -68,29 +84,177 @@ nuxtApp.hooks.hookOnce('page:finish', () => {
   ])
 })
 
+const options = [
+  { label: 'Option 1', value: 'option-1' },
+  { label: 'Option 2', value: 'option-2' },
+  { label: 'Option 3', value: 'option-3' }
+]
 const state = reactive({
-  email: undefined,
-  name: undefined,
-  password: undefined
+  vehicle_vin: undefined
 })
 
-const stepSchemas = [
+const stepSchemas = ref([
   object({
-    email: string().email('Invalid email').required('Required'),
-    name: string().required('Required')
-  }),
-  object({
-    password: string()
-      .min(8, 'Must be at least 8 characters')
-      .required('Required')
+    vehicle_vin: string()
+      .required('VIN is required')
+      .length(17, 'VIN must be exactly 17 characters')
+      .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q')
   }),
   object({
     favoriteDrink: string().required('Required')
   })
-]
+])
 
 function onSubmit(formData) {
   console.log(JSON.stringify(formData, null, 2))
+}
+
+const vehicleStepItems = [{
+  key: 'vehicle_vin',
+  label: 'Vin',
+  description: ''
+}, {
+  key: 'manual',
+  label: 'Manual',
+  description: ''
+}]
+
+const handleVehicle = () => {
+  isError.value = false
+  store.$state.form.vehicle_info.model = ''
+  store.$state.form.vehicle_info.make = ''
+  store.$state.form.vehicle_info.year = ''
+  vehicleDisplay.value = ''
+
+  const formData = new FormData()
+  formData.append('vinNumber', store.$state.form.vehicle_vin)
+  formData.append('checkVin', true)
+
+  console.log(formData)
+  console.log(store.$state.form)
+  if (store.$state.form.vehicle_vin.length === 17) {
+    $fetch('https://exride.easypear.com/productProcess.php', {
+      method: 'POST',
+      body: formData
+    }).then((resp) => {
+      console.log(resp)
+      const dataInfo = JSON.parse(resp).data
+      localStorage.setItem('dataInfo', JSON.stringify(dataInfo))
+
+      store.$state.form.vehicle_info.year = dataInfo.year
+      store.$state.form.vehicle_info.make = dataInfo.make.toLowerCase().charAt(0).toUpperCase() + dataInfo.make.toLowerCase().slice(1)
+
+      if (store.$state.form.vehicle_info.make) {
+        nextTick(async () => {
+          fillModel(store.$state.form.vehicle_info.make)
+        })
+      }
+
+      store.$state.form.vehicle_info.model = dataInfo.model.toLowerCase()
+
+      console.log(store)
+
+      vehicleDisplay.value = dataInfo.year + ' ' + dataInfo.make + ' ' + store.$state.form.vehicle_info.model
+    })
+  }
+}
+
+const fillModel = (make) => {
+  model.value = []
+
+  if (make != '') {
+    $fetch(modelurl + make + '?api_token=' + apiToken, {
+
+      method: 'GET'
+    }).then((response) => {
+      console.log(response)
+      Object.values(response).forEach(i => model.value.push(i.model))
+      console.log(model)
+    })
+  }
+}
+await useFetch(yearurl).then((response) => {
+  Object.values(response.data.value).forEach(i => years.value.push(i.year))
+})
+
+await useFetch(makeurl).then((response) => {
+  // store.$state.form.vehicle_info.model = ''
+  Object.values(response.data.value).forEach(i => make.value.push(i.make))
+})
+
+const onChangeMake = () => {
+  // store.$state.form.vehicle_info.model = ''
+
+  fillModel(store.$state.form.vehicle_info.make)
+}
+
+watch(() => [store.$state.form.vehicle_info, store.$state.form.vehicle_vin], () => {
+  localStorage.setItem('form', JSON.stringify(store.$state.form))
+
+  localStorage.setItem('dataInfo', JSON.stringify(store.$state.form.vehicle_info))
+}, { deep: true })
+
+const isFormNotEmpty = computed(() => {
+  const year = store.$state.form.vehicle_info.year
+  const make = store.$state.form.vehicle_info.make
+  const model = store.$state.form.vehicle_info.model
+
+  return year !== '' && make !== '' && model !== ''
+})
+
+onMounted(() => {
+  console.log('**********g**************')
+  if (store.$state.form.vehicle_vin.length === 17) {
+    handleVehicle()
+  }
+  onChangeMake()
+})
+
+watch(
+  () => store.$state.form.vehicle_vin,
+  (_newValue, _oldValue) => {
+    handleVehicle()
+  }
+)
+
+watch(
+  () => store.$state.form.vehicle_info.make,
+  (_newValue, _oldValue) => {
+    store.$state.form.vehicle_info.model = ''
+    onChangeMake()
+  }
+)
+
+watch(
+  () => store.$state.form.vehicle_info.year,
+  (_newValue, _oldValue) => {
+    store.$state.form.vehicle_info.model = ''
+    store.$state.form.vehicle_info.make = ''
+    onChangeMake()
+  }
+)
+
+const handleVehicleTab = (index) => {
+  const item = vehicleStepItems[index]
+
+  if (item.key === 'manual') {
+    //@ts-ignore
+    stepSchemas.value[0] = object({
+      year: string().required('Year is required'),
+      make: string().required('Make is required'),
+      model: string().required('Model is required')
+    })
+  } else {
+    //@ts-ignore
+    stepSchemas.value[0] = object({
+      vehicle_vin: string()
+        .required('VIN is required')
+        .length(17, 'VIN must be exactly 17 characters')
+        .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q')
+    })
+  }
+
+  console.log(stepSchemas.value[0])
 }
 </script>
 
@@ -213,42 +377,96 @@ function onSubmit(formData) {
         </UCard> -->
 
         <UCard class="flex justify-center items-center w-full ">
-          <div class="w-full max-w-lg p-4">
+          <div class="flex items-center justify-center ">
             <FormWizard
               :validation-schema="stepSchemas"
-              :state="state"
+              :state="store.$state.form"
               @submit="onSubmit"
             >
-              <FormStep>
-                <UFormGroup
-                  label="Email"
-                  name="email"
+              <FormStep class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]">
+                <div class="text-center">
+                  <h2 class="font-bold text-2xl pb-5">
+                    Vehicle Upload
+                  </h2>
+                </div>
+                <UTabs
+                  :items="vehicleStepItems"
+                  class="w-full rounded-full"
+                  @change="handleVehicleTab"
                 >
-                  <UInput v-model="state.email" />
-                </UFormGroup>
-
-                <UFormGroup
-                  label="name"
-                  name="name"
-                >
-                  <UInput
-                    v-model="state.name"
-                    type="name"
-                  />
-                </UFormGroup>
+                  <template #item="{ item }">
+                    <div>
+                      <div
+                        v-if="item.key === 'vehicle_vin'"
+                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]"
+                      >
+                        <UFormGroup name="vehicle_vin">
+                          <UInput
+                            v-model="store.$state.form.vehicle_vin"
+                            size="xl"
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                            placeholder="Enter VIN number"
+                          />
+                        </UFormGroup>
+                        <UFormGroup name="vehicle_display">
+                          <UInput
+                            v-if="vehicleDisplay"
+                            v-model="vehicleDisplay"
+                            size="xl"
+                            disabled
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                            placeholder=""
+                          />
+                        </UFormGroup>
+                      </div>
+                      <div
+                        v-else-if="item.key === 'manual'"
+                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]"
+                      >
+                        <UFormGroup
+                          size="xl"
+                          name="year"
+                          label="Select Year"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.year"
+                            placeholder="Select..."
+                            :options="years"
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
+                        </UFormGroup>
+                        <UFormGroup
+                          size="xl"
+                          name="make"
+                          label="Select Make"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.make"
+                            placeholder="Select..."
+                            :options="make"
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
+                        </UFormGroup>
+                        <UFormGroup
+                          size="xl"
+                          name="model"
+                          label="Select Model"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.model"
+                            :value="model"
+                            placeholder="Select..."
+                            :options="model"
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
+                        </UFormGroup>
+                      </div>
+                    </div>
+                  </template>
+                </UTabs>
               </FormStep>
 
-              <FormStep>
-                <UFormGroup
-                  label="Password"
-                  name="password"
-                >
-                  <UInput
-                    v-model="state.password"
-                    type="password"
-                  />
-                </UFormGroup>
-              </FormStep>
+              <FormStep />
 
               <FormStep>
                 <Field

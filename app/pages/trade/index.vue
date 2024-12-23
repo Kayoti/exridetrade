@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { Field, ErrorMessage } from 'vee-validate'
-import * as yup from 'yup'
+import { object, string } from 'yup'
 import FormWizard from '@/components/Form/FormWizard.vue'
 import FormStep from '@/components/Form/FormStep.vue'
 
 const nuxtApp = useNuxtApp()
 const { activeHeadings, updateHeadings } = useScrollspy()
-const { data: page } = await useAsyncData('test', () => queryContent('/').findOne())
 
 const links = computed(() => [{
   id: 1,
@@ -69,23 +68,24 @@ nuxtApp.hooks.hookOnce('page:finish', () => {
   ])
 })
 
-const validationSchema = [
-  yup.object({
-    fullName: yup.string().required().label('Full Name'),
-    email: yup.string().required().email().label('Email Address')
+const state = reactive({
+  email: undefined,
+  name: undefined,
+  password: undefined
+})
+
+const stepSchemas = [
+  object({
+    email: string().email('Invalid email').required('Required'),
+    name: string().required('Required')
   }),
-  yup.object({
-    password: yup.string().min(8).required(),
-    confirmPass: yup
-      .string()
-      .required()
-      .oneOf([yup.ref('password')], 'Passwords must match')
+  object({
+    password: string()
+      .min(8, 'Must be at least 8 characters')
+      .required('Required')
   }),
-  yup.object({
-    favoriteDrink: yup
-      .string()
-      .required()
-      .oneOf(['coffee', 'tea', 'soda'], 'Choose a drink')
+  object({
+    favoriteDrink: string().required('Required')
   })
 ]
 
@@ -215,39 +215,39 @@ function onSubmit(formData) {
         <UCard class="flex justify-center items-center w-full ">
           <div class="w-full max-w-lg p-4">
             <FormWizard
-              :validation-schema="validationSchema"
+              :validation-schema="stepSchemas"
+              :state="state"
               @submit="onSubmit"
             >
               <FormStep>
-                <Field
-                  name="fullName"
-                  type="text"
-                  placeholder="Type your Full name"
-                />
-                <ErrorMessage name="fullName" />
-
-                <Field
+                <UFormGroup
+                  label="Email"
                   name="email"
-                  type="email"
-                  placeholder="Type your email"
-                />
-                <ErrorMessage name="email" />
+                >
+                  <UInput v-model="state.email" />
+                </UFormGroup>
+
+                <UFormGroup
+                  label="name"
+                  name="name"
+                >
+                  <UInput
+                    v-model="state.name"
+                    type="name"
+                  />
+                </UFormGroup>
               </FormStep>
 
               <FormStep>
-                <Field
+                <UFormGroup
+                  label="Password"
                   name="password"
-                  type="password"
-                  placeholder="Type a strong one"
-                />
-                <ErrorMessage name="password" />
-
-                <Field
-                  name="confirmPass"
-                  type="password"
-                  placeholder="Confirm your password"
-                />
-                <ErrorMessage name="confirmPass" />
+                >
+                  <UInput
+                    v-model="state.password"
+                    type="password"
+                  />
+                </UFormGroup>
               </FormStep>
 
               <FormStep>

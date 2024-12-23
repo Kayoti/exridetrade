@@ -1,5 +1,10 @@
 <template>
-  <form @submit="onSubmit">
+  <UForm
+    :schema="currentSchema"
+    :state="state"
+    class="space-y-4"
+    @submit="onSubmit"
+  >
     <slot />
 
     <div>
@@ -20,16 +25,19 @@
       </UButton>
     </div>
 
-    <pre>{{ values }}</pre>
-  </form>
+    <pre>{{ state }}</pre>
+  </UForm>
 </template>
 
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
 import { ref, computed, provide } from 'vue'
 
 const props = defineProps({
   validationSchema: {
+    type: Array,
+    required: true
+  },
+  state: {
     type: Array,
     required: true
   }
@@ -56,30 +64,21 @@ const hasPrevious = computed(() => {
   return currentStepIdx.value > 0
 })
 
-// extracts the indivdual step schema
+// extracts the individual step schema
 const currentSchema = computed(() => {
+  console.log(currentStepIdx.value)
+  console.log('schema=>', props.validationSchema)
   return props.validationSchema[currentStepIdx.value]
 })
 
-const { values, handleSubmit } = useForm({
-  // vee-validate will be aware of computed schema changes
-  validationSchema: currentSchema,
-  // turn this on so each step values won't get removed when you move back or to the next step
-  keepValuesOnUnmount: true
-})
-
-// We are using the "submit" handler to progress to next steps
-// and to submit the form if its the last step
-const onSubmit = handleSubmit((values) => {
+const onSubmit = () => {
   if (!isLastStep.value) {
     currentStepIdx.value++
-
     return
   }
 
-  // Let the parent know the form was filled across all steps
-  emit('submit', values)
-})
+  emit('submit', props.state)
+}
 
 function goToPrev() {
   if (currentStepIdx.value === 0) {

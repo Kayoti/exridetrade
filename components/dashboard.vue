@@ -60,6 +60,11 @@
 
     </div>
 
+    <div class=" w-full flex justify-center items-center w-full md:hidden">
+    <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#fff] bg-[#0ea5e9] text-[#fff] hover:text-[#0ea5e9] mt-5 hover:outline hover:outline-[#0ea5e9] cursor-pointer"
+      @click="Listpr()">+ Add Vehicle</a>
+  </div>
+
     <div class="mt-5">
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 " :class="{'md:grid-cols-1':products.length==1,'md:grid-cols-2':products.length==2, 'md:grid-cols-3':products.length>=3}">
 
@@ -67,15 +72,16 @@
 
 
         <div class="border border-2 w-70 rounded-xl p-3 ">
-          <div class="">
-            <img
-              :src="product[2]['images']?product[2]['images']['main'] + '/public':'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'"
-              alt="Front left profile" class="w-full max-h-[28vh] sm:max-h-[20vh] rounded-xl">
-          </div>
+          <div class="w-full">
+  <img
+    :src="product[2]['images'] ? product[2]['images']['main'] + '/public' : 'https://nyqtmkpxrtbpvuzuatsa.supabase.co/storage/v1/object/public/vehicle_images/default/frontLeft.jpg'"
+    alt="Front left profile"
+    class="w-full h-auto max-h-[28vh] sm:max-h-[20vh] object-cover rounded-xl">
+</div>
 
           <div class="mt-5  ">
             <p class="text-sm text-center font-bold mb-3">{{ product[2]['product']['cf_1280'] }} {{
-              product[2]['product']['cf_1282'].toUpperCase() }} {{ product[2]['product']['cf_1284'].toUpperCase() }}</p>
+              product[2]['product']['cf_1282'].toUpperCase() }} {{ product[2]['product']['cf_1284'].toUpperCase() }} {{ product[2]['product']['cf_1286'].toUpperCase() }}</p>
 
             <div class="flex items-center justify-center">
               <hr class="border-t border-2 border-gray-300 flex-grow" />
@@ -125,7 +131,7 @@
 
       </div>
     </div>
-    <div class=" w-full flex justify-center items-center w-full ">
+    <div class=" w-full md:flex justify-center items-center w-full hidden">
     <a class="text-lg rounded-xl py-2 px-4 hover:bg-[#fff] bg-[#0ea5e9] text-[#fff] hover:text-[#0ea5e9] mt-5 hover:outline hover:outline-[#0ea5e9] cursor-pointer"
       @click="Listpr()">+ Add Vehicle</a>
   </div>
@@ -287,6 +293,7 @@ const editProduct = (selProduct: string) => {
       store.$state.form.vehicle_info.year = product['cf_1280'];
       store.$state.form.vehicle_info.make = product['cf_1282'];
       store.$state.form.vehicle_info.model = product['cf_1284'];
+      store.$state.form.vehicle_info.trim = product['cf_1286'];
       store.$state.form.images.car_side = images?images['main'] + '/public':'';
       store.$state.form.images.car_front_angle =  images?images['1'] + '/public':'';
       store.$state.form.images.car_back_angle =  images?images['2'] + '/public':'';

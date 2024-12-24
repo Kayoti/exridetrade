@@ -37,10 +37,17 @@
             </select>
 
             <select class="rounded-full py-3 px-5 border border-black/20" 
-            v-model="store.$state.form.vehicle_info.model" 
+            v-model="store.$state.form.vehicle_info.model" @change="onChangeModel()"
                     v-show="there">
                 <option value="" disabled>Select Model</option>
                 <option v-for="model in model" :key="model" :value="model.toLowerCase()">{{ model.toLowerCase() }}</option>
+            </select>
+
+            <select class="rounded-full py-3 px-5 border border-black/20" 
+            v-model="store.$state.form.vehicle_info.trim" 
+                    v-show="there">
+                <option value="" disabled>Select Trim</option>
+                <option v-for="trim in trim" :key="trim" :value="trim.toLowerCase()">{{ trim.toLowerCase() }}</option>
             </select>
 
             <button class="rounded-full py-3 text-white w-full" :disabled="!isFormNotEmpty" :class="{'bg-gray-200':!isFormNotEmpty,'bg-[#2563EB] hover:bg-[#2B9DD7]':isFormNotEmpty}" @click="$emit('Next')">Next</button>
@@ -76,10 +83,12 @@ const bodyurl = encodeURI("https://carmakemodeldb.com/api/v1/car-lists/get/body-
 var makeurl = encodeURI("https://carmakemodeldb.com/api/v1/car-lists/get/all/makes?api_token=" + apiToken);
 var modelurl = encodeURI("https://carmakemodeldb.com/api/v1/car-lists/get/all/models/");
 const yearurl = encodeURI("https://carmakemodeldb.com/api/v1/car-lists/get/years/desc" + "?api_token=" + apiToken);
+var trimurl = encodeURI("https://carmakemodeldb.com/api/v1/car-lists/get/trims/");
 
 const years = ref([]);
 const make = ref([]);
 const model = ref([]);
+const trim = ref([]);
 
 const disp = ref("");
 
@@ -164,11 +173,29 @@ await useFetch(makeurl).then((response) => {
   }
 }
 
+const fillTrim = (caryear, carmake,carmodel) => {
+        trim.value = [];
+        
+        if(caryear != '' && carmake != '' && carmodel != ''){
+        useFetch(trimurl + caryear + "/" + carmake + "/" + carmodel + "?api_token=" + apiToken).then((response)=>{
+          console.log(response)
+            Object.values(response.data.value).forEach(i => trim.value.push(i.trim))
+            trim.value.push('No Trim Available')
+        })
+        }
+     }
+
 const onChangeMake = () => {
   // store.$state.form.vehicle_info.model = ''
 
   fillModel(store.$state.form.vehicle_info.make)
 }
+
+const onChangeModel = () => {
+        // store.$state.form.vehicle_info.trim =''
+
+        fillTrim(store.$state.form.vehicle_info.year, store.$state.form.vehicle_info.make, store.$state.form.vehicle_info.model)
+     }
 
 
 watch(() => [store.$state.form.vehicle_info, store.$state.form.vehicle_vin], () => {
@@ -188,6 +215,10 @@ const isFormNotEmpty = computed(() => {
  })
 
  onMounted(() => {
+  if(localStorage.getItem('edit')){
+    onChangeModel()
+
+   }
   if (store.$state.form.vehicle_vin.length === 17) {
     getCarDetails()
   }

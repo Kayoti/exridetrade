@@ -84,7 +84,7 @@
   <!-- <Footer /> -->
 </template>
 
-76tfcx <script setup lang="ts">
+<script setup lang="ts">
 import Login from "@/components/login.vue"
 import Dashboard from "@/components/dashboard.vue"
 import Step1 from "@/components/steps/Step1.vue"

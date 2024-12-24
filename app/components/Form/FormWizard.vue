@@ -7,7 +7,7 @@
   >
     <slot />
 
-    <div class="" >
+    <div class="">
       <UButton
         v-if="hasPrevious"
         type="button"
@@ -42,20 +42,6 @@ const props = defineProps({
     required: true
   }
 })
-
-const flattenObject = (obj, parentKey = '', res = {}) => {
-  for (let [key, value] of Object.entries(obj)) {
-    const newKey = parentKey ? `${parentKey}.${key}` : key
-    if (typeof value === 'object' && value !== null) {
-      flattenObject(value, newKey, res)
-    } else {
-      res[newKey] = value
-    }
-  }
-  return res
-}
-
-const flattenedState = ref(flattenObject(props.state))
 
 const emit = defineEmits(['submit'])
 const currentStepIdx = ref(0)

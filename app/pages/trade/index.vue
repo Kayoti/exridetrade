@@ -1,8 +1,7 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable @stylistic/spaced-comment -->
 <script setup lang="ts">
-import { Field, ErrorMessage } from 'vee-validate'
-import { object, string } from 'yup'
+import { object, string, number } from 'yup'
 import FormWizard from '@/components/Form/FormWizard.vue'
 import FormStep from '@/components/Form/FormStep.vue'
 import { useAppStore } from '@/stores/app'
@@ -74,6 +73,8 @@ const links = computed(() => [{
   description: 'Explore our core features'
 }])
 
+console.log(activeHeadings.value)
+
 nuxtApp.hooks.hookOnce('page:finish', () => {
   updateHeadings([
     document.querySelector('#vehicle'),
@@ -102,7 +103,13 @@ const stepSchemas = ref([
       .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q')
   }),
   object({
-    favoriteDrink: string().required('Required')
+    accidents: string().required('Vehicle condition is required'),
+    replace_vehicle: string().required('Replace vehicle option is required'),
+    damages: string().required('Condition is required'),
+    mileage: number()
+      .required('Mileage is required')
+      .typeError('Mileage must be a number')
+      .positive('Mileage must be a positive number')
   })
 ])
 
@@ -328,17 +335,17 @@ const handleVehicleTab = (index) => {
               <li>
                 <a :href="link.to" class="block w-full">
                   <div class="w-full p-4 border rounded-lg transition-colors" :class="[
-                      link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
+                    link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
                       : link.active ? 'text-blue-700 border-blue-300 bg-blue-50 dark:bg-gray-800 dark:border-blue-800 dark:text-blue-400'
                         : 'text-gray-900 bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-                    ]" role="alert">
+                  ]" role="alert">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-3">
                         <component :is="link.icon" class="w-5 h-5" :class="[
-                            link.completed ? 'text-green-500 dark:text-green-400'
+                          link.completed ? 'text-green-500 dark:text-green-400'
                             : link.active ? 'text-blue-500 dark:text-blue-400'
                               : 'text-gray-500 dark:text-gray-400'
-                          ]" />
+                        ]" />
                         <div class="space-y-1">
                           <h3 class="font-medium">{{ link.label }}</h3>
                           <p class="text-sm text-gray-500 dark:text-gray-400">{{ link.description }}</p>
@@ -485,8 +492,8 @@ const handleVehicleTab = (index) => {
                         Vehicle description
                       </div>
                     </template>
-                    <UTextarea class="" :padded="false" placeholder="Enter a brief description of your vehicle ...."
-                      v-model="store.$state.form.vehicle_desc" variant="none" />
+                    <UTextarea v-model="store.$state.form.vehicle_desc" class="" :padded="false"
+                      placeholder="Enter a brief description of your vehicle ...." variant="none" />
                   </UFormGroup>
 
                   <UFormGroup size="xl" hint="" description="" help=""

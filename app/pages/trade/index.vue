@@ -113,6 +113,13 @@ const stepSchemas = ref([
       .required('Mileage is required')
       .typeError('Mileage must be a number')
       .positive('Mileage must be a positive number')
+  }),
+  object({
+    lender: string().required('Lender is required'),
+    lien_amount: number()
+      .required('Lien amount is required')
+      .typeError('Lien amount must be a number')
+      .positive('Lien amount must be a positive number')
   })
 ])
 
@@ -160,10 +167,21 @@ const isReplaceVehicleItems = [{
   description: ''
 }]
 
+const lienItems = [{
+  key: 'No',
+  label: 'No',
+  description: ''
+}, {
+  key: 'Yes',
+  label: 'Yes',
+  description: ''
+}]
+
 const activeTab = ref(vehicleStepItems.findIndex(item => item.key === 'vehicle_vin'));
 const replaceActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.replace_vehicle));
 const damageActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.damages));
 const accidentActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.accidents));
+const lienActiveTab = ref(lienItems.findIndex(item => item.key === store.$state.form.vehicle_condition.lien));
 
 watch(
   () => store.$state.form.vehicle_info_type,
@@ -219,6 +237,17 @@ const updateValidationSchema = () => {
   })
 
   console.log(currentSchema)
+}
+
+
+const handleLienTab = (selectedTab: { key: number }) => {
+  //@ts-ignore
+  if (selectedTab === 1) {
+    store.$state.form.vehicle_condition.lien = 'Yes'
+  } else {
+    store.$state.form.vehicle_condition.lien = 'No'
+  }
+  updateValidationSchema()
 }
 
 const handleVehicle = () => {
@@ -592,7 +621,58 @@ const handleVehicleTab = (index) => {
                   </UFormGroup>
                 </div>
               </FormStep>
-              <FormStep />
+              <FormStep>
+                <div class="text-center">
+                  <h2 class="font-bold text-2xl pb-5">
+                    Lien
+                  </h2>
+                </div>
+
+                <div class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
+                  <div class="font-bold text-center mb-2">
+                    Are there any liens against this vehicle?
+                  </div>
+
+                  <UFormGroup size="xl" label="" hint="" description="" help="" name="mileage"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+
+
+
+
+                    <UTabs :items="lienItems" class="w-full" @change="handleLienTab" v-model="lienActiveTab">
+                      <template #item="{ item }">
+                        <div v-if="item.key === 'No'" class="space-y-3" />
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
+                          <UInput v-model="store.$state.form.vehicle_condition.lien_amount" placeholder="500"
+                            type="number" name="mileage" class=" no-arrows">
+                            <template #leading>
+                              <p class="text-gray-500 dark:text-gray-400 text-xs">
+                                $CAD
+                              </p>
+                            </template>
+                          </UInput>
+
+                          <UInput v-model="store.$state.form.vehicle_condition.lender" placeholder="BMO" type="text"
+                            name="lender" class="">
+                            <template #leading>
+                              <p class="text-gray-500 dark:text-gray-400 text-xs me-5">
+                                Lender
+                              </p>
+                            </template>
+                          </UInput>
+
+
+                          <!---                    <UButtonGroup size="sm" orientation="horizontal">
+
+                      <UButton icon="i-heroicons-clipboard-document" color="gray">Button</UButton>
+                      <UInput />
+                    </UButtonGroup> -->
+                        </div>
+                      </template>
+                    </UTabs>
+                  </UFormGroup>
+                </div>
+              </FormStep>
             </FormWizard>
           </div>
         </UCard>

@@ -105,7 +105,10 @@ const stepSchemas = ref([
   object({
     accidents: string().required('Vehicle condition is required'),
     replace_vehicle: string().required('Replace vehicle option is required'),
+    replace_vehicle_details: string(), // Initially optional
+    vehicle_desc: string().required('Vehicle description is required'),
     damages: string().required('Condition is required'),
+    damages_details: string(), // Initially optional
     mileage: number()
       .required('Mileage is required')
       .typeError('Mileage must be a number')
@@ -128,34 +131,49 @@ const vehicleStepItems = [{
 }]
 
 const isAccidentsItems = [{
-  key: 'no',
+  key: 'No',
   label: 'No',
   description: ''
 }, {
-  key: 'yes',
+  key: 'Yes',
   label: 'Yes',
   description: ''
 }]
 
 const isDamagesItems = [{
-  key: 'no',
+  key: 'No',
   label: 'No',
   description: ''
 }, {
-  key: 'yes',
+  key: 'Yes',
   label: 'Yes',
   description: ''
 }]
 
 const isReplaceVehicleItems = [{
-  key: 'no',
+  key: 'No',
   label: 'No',
   description: ''
 }, {
-  key: 'yes',
+  key: 'Yes',
   label: 'Yes',
   description: ''
 }]
+
+const activeTab = ref(vehicleStepItems.findIndex(item => item.key === 'vehicle_vin'));
+const replaceActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.replace_vehicle));
+const damageActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.damages));
+const accidentActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.accidents));
+
+watch(
+  () => store.$state.form.vehicle_info_type,
+  (newValue) => {
+    const index = vehicleStepItems.findIndex(item => item.key === newValue);
+    if (index !== -1) {
+      activeTab.value = index;
+    }
+  }
+);
 
 const handleReplaceVehicleTab = (selectedTab: { key: number }) => {
   //@ts-ignore
@@ -164,6 +182,8 @@ const handleReplaceVehicleTab = (selectedTab: { key: number }) => {
   } else {
     store.$state.form.replace_vehicle = 'No'
   }
+
+  updateValidationSchema()
 }
 
 const handleDamageVehicleTab = (selectedTab: { key: number }) => {
@@ -173,6 +193,7 @@ const handleDamageVehicleTab = (selectedTab: { key: number }) => {
   } else {
     store.$state.form.vehicle_condition.damages = 'No'
   }
+  updateValidationSchema()
 }
 
 const handleAccidentVehicleTab = (selectedTab: { key: number }) => {
@@ -182,6 +203,22 @@ const handleAccidentVehicleTab = (selectedTab: { key: number }) => {
   } else {
     store.$state.form.vehicle_condition.accidents = 'No'
   }
+
+
+}
+
+const updateValidationSchema = () => {
+  const currentSchema = stepSchemas.value[1]
+  stepSchemas.value[1] = currentSchema.shape({
+    replace_vehicle_details: store.$state.form.replace_vehicle === 'Yes'
+      ? string().required('Vehicle details are required')
+      : string(), // Optional if 'No'
+    damages_details: store.$state.form.vehicle_condition.damages === 'Yes'
+      ? string().required('Vehicle condition details are required')
+      : string() // Optional if 'No'
+  })
+
+  console.log(currentSchema)
 }
 
 const handleVehicle = () => {
@@ -335,17 +372,17 @@ const handleVehicleTab = (index) => {
               <li>
                 <a :href="link.to" class="block w-full">
                   <div class="w-full p-4 border rounded-lg transition-colors" :class="[
-                    link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
+                      link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
                       : link.active ? 'text-blue-700 border-blue-300 bg-blue-50 dark:bg-gray-800 dark:border-blue-800 dark:text-blue-400'
                         : 'text-gray-900 bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-                  ]" role="alert">
+                    ]" role="alert">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-3">
                         <component :is="link.icon" class="w-5 h-5" :class="[
-                          link.completed ? 'text-green-500 dark:text-green-400'
+                            link.completed ? 'text-green-500 dark:text-green-400'
                             : link.active ? 'text-blue-500 dark:text-blue-400'
                               : 'text-gray-500 dark:text-gray-400'
-                        ]" />
+                          ]" />
                         <div class="space-y-1">
                           <h3 class="font-medium">{{ link.label }}</h3>
                           <p class="text-sm text-gray-500 dark:text-gray-400">{{ link.description }}</p>
@@ -409,14 +446,15 @@ const handleVehicleTab = (index) => {
 
         <UCard class="flex justify-center items-center w-full ">
           <div class="flex items-center justify-center ">
-            <FormWizard :validation-schema="stepSchemas" :state="formState" @submit="onSubmit">
+            <FormWizard :validation-schema="stepSchemas" :state="store.$state.form" @submit="onSubmit">
               <FormStep class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]">
                 <div class="text-center">
                   <h2 class="font-bold text-2xl pb-5">
                     Vehicle Upload
                   </h2>
                 </div>
-                <UTabs :items="vehicleStepItems" class="w-full rounded-full" @change="handleVehicleTab">
+                <UTabs :items="vehicleStepItems" class="w-full rounded-full" @change="handleVehicleTab"
+                  v-model="activeTab">
                   <template #item="{ item }">
                     <div>
                       <div v-if="item.key === 'vehicle_vin'"
@@ -462,7 +500,7 @@ const handleVehicleTab = (index) => {
                 </div>
 
                 <div class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                  <UFormGroup size="xl" label="" hint="" description="" help=""
+                  <UFormGroup size="xl" label="" hint="" description="" help="" name="mileage"
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
@@ -470,7 +508,7 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
                     <UInput v-model="store.$state.form.vehicle_info.mileage" placeholder="Mileage" type="number"
-                      class=" no-arrows">
+                      name="mileage" class=" no-arrows">
                       <template #trailing>
                         <p class="text-gray-500 dark:text-gray-400 text-xs">
                           Kilometers
@@ -485,7 +523,7 @@ const handleVehicleTab = (index) => {
                     </UButtonGroup> -->
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help=""
+                  <UFormGroup size="xl" hint="" description="" help="" name="vehicle_desc"
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
@@ -496,7 +534,7 @@ const handleVehicleTab = (index) => {
                       placeholder="Enter a brief description of your vehicle ...." variant="none" />
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help=""
+                  <UFormGroup size="xl" hint="" description="" help="" name="accidents"
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
@@ -504,15 +542,16 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isAccidentsItems" class="w-full" @change="handleAccidentVehicleTab">
+                    <UTabs :items="isAccidentsItems" class="w-full" @change="handleAccidentVehicleTab"
+                      v-model="accidentActiveTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'no'" class="space-y-3" />
-                        <div v-else-if="item.key === 'yes'" class="space-y-3" />
+                        <div v-if="item.key === 'No'" class="space-y-3" />
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3" />
                       </template>
                     </UTabs>
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help=""
+                  <UFormGroup size="xl" hint="" description="" help="" name="damages_details"
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
@@ -520,18 +559,19 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isDamagesItems" class="w-full" @change="handleDamageVehicleTab">
+                    <UTabs :items="isDamagesItems" class="w-full" @change="handleDamageVehicleTab"
+                      v-model="damageActiveTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'no'" class="space-y-3" />
-                        <div v-else-if="item.key === 'yes'" class="space-y-3">
+                        <div v-if="item.key === 'No'" class="space-y-3" />
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
                           <UTextarea v-model="store.$state.form.vehicle_condition.damages_details" class=""
-                            :padded="false" placeholder="Describe damage ...." variant="none" />
+                            name="damages" :padded="false" placeholder="Describe damage ...." variant="none" />
                         </div>
                       </template>
                     </UTabs>
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help=""
+                  <UFormGroup size="xl" hint="" description="" help="" name="replace_vehicle_details"
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
                     <template #label>
                       <div class=" font-bold text-center mb-2 w-full max-w-full text-ellipsis overflow-hidden">
@@ -539,18 +579,20 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isReplaceVehicleItems" class="w-full" @change="handleReplaceVehicleTab">
+                    <UTabs :items="isReplaceVehicleItems" class="w-full" v-model="replaceActiveTab"
+                      @change="handleReplaceVehicleTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'no'" class="space-y-3" />
-                        <div v-else-if="item.key === 'yes'" class="space-y-3">
+                        <div v-if="item.key === 'No'" class="space-y-3" />
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
                           <UTextarea v-model="store.$state.form.replace_vehicle_details" class="" :padded="false"
-                            placeholder="Price range, make, model, etc ...." variant="none" />
+                            name="replace_vehicle" placeholder="Price range, make, model, etc ...." variant="none" />
                         </div>
                       </template>
                     </UTabs>
                   </UFormGroup>
                 </div>
               </FormStep>
+              <FormStep />
             </FormWizard>
           </div>
         </UCard>

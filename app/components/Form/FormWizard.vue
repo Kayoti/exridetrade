@@ -1,7 +1,7 @@
 <template>
   <UForm
     :schema="currentSchema"
-    :state="state"
+    :state="flattenedData"
     class="space-y-4 text-center"
     @submit="onSubmit"
   >
@@ -25,12 +25,12 @@
       </UButton>
     </div>
 
-    <pre>{{ state }}</pre>
+    <pre>{{ flattenedData }}</pre>
   </UForm>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, provide } from 'vue'
+import { ref, computed, provide, watch } from 'vue'
 
 const props = defineProps({
   validationSchema: {
@@ -38,7 +38,7 @@ const props = defineProps({
     required: true
   },
   state: {
-    type: Array,
+    type: Object,
     required: true
   }
 })
@@ -65,18 +65,55 @@ const hasPrevious = computed(() => {
 })
 
 // extracts the individual step schema
-const currentSchema = computed(() => {
+interface Schema {
+  _nodes: string[]
+}
+
+const currentSchema = computed<Schema>(() => {
   console.log(currentStepIdx.value)
-  console.log('schema=>', props.validationSchema)
-  return props.validationSchema[currentStepIdx.value]
+  const schema = props.validationSchema[currentStepIdx.value] as Schema
+  console.log('schema=>', schema)
+  return schema
+})
+
+function flattenFormData(formData, schemaNodes) {
+  console.log(schemaNodes)
+  const flattenedData = {}
+
+  function extractValues(data, path = '') {
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        const newPath = path ? `${path}.${key}` : key
+        if (typeof data[key] === 'object' && data[key] !== null && !Array.isArray(data[key])) {
+          extractValues(data[key], newPath)
+        } else {
+          const lastKey = key
+          if (schemaNodes?.includes(newPath) || schemaNodes?.includes(lastKey)) {
+            flattenedData[lastKey] = data[key]
+          }
+        }
+      }
+    }
+  }
+
+  extractValues(formData)
+  return flattenedData
+}
+
+const flattenedData = computed(() => {
+  console.log(currentSchema.value)
+  const schemaNodes = currentSchema.value?._nodes
+  return flattenFormData(props.state, schemaNodes)
 })
 
 const onSubmit = () => {
+  console.log('++++**', currentStepIdx.value)
   if (!isLastStep.value) {
     currentStepIdx.value++
     return
   }
-
+  console.log('submit**')
+  console.log(flattenedData.value)
   emit('submit', props.state)
 }
 
@@ -87,4 +124,9 @@ function goToPrev() {
 
   currentStepIdx.value--
 }
+
+watch(currentStepIdx, () => {
+  console.log('Current Step:', currentStepIdx.value)
+  console.log('Flattened Data:', flattenedData.value)
+})
 </script>

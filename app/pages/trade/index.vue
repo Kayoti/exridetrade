@@ -120,6 +120,9 @@ const stepSchemas = ref([
       .required('Lien amount is required')
       .typeError('Lien amount must be a number')
       .positive('Lien amount must be a positive number')
+  }),
+  object({
+    asking_price: number().required('Asking price is required').typeError('Asking price must be a number').positive('Asking price must be a positive number')
   })
 ])
 
@@ -177,21 +180,21 @@ const lienItems = [{
   description: ''
 }]
 
-const activeTab = ref(vehicleStepItems.findIndex(item => item.key === 'vehicle_vin'));
-const replaceActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.replace_vehicle));
-const damageActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.damages));
-const accidentActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.accidents));
-const lienActiveTab = ref(lienItems.findIndex(item => item.key === store.$state.form.vehicle_condition.lien));
+const activeTab = ref(vehicleStepItems.findIndex(item => item.key === 'vehicle_vin'))
+const replaceActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.replace_vehicle))
+const damageActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.damages))
+const accidentActiveTab = ref(isReplaceVehicleItems.findIndex(item => item.key === store.$state.form.vehicle_condition.accidents))
+const lienActiveTab = ref(lienItems.findIndex(item => item.key === store.$state.form.vehicle_condition.lien))
 
 watch(
   () => store.$state.form.vehicle_info_type,
   (newValue) => {
-    const index = vehicleStepItems.findIndex(item => item.key === newValue);
+    const index = vehicleStepItems.findIndex(item => item.key === newValue)
     if (index !== -1) {
-      activeTab.value = index;
+      activeTab.value = index
     }
   }
-);
+)
 
 const handleReplaceVehicleTab = (selectedTab: { key: number }) => {
   //@ts-ignore
@@ -221,8 +224,6 @@ const handleAccidentVehicleTab = (selectedTab: { key: number }) => {
   } else {
     store.$state.form.vehicle_condition.accidents = 'No'
   }
-
-
 }
 
 const updateValidationSchema = () => {
@@ -238,7 +239,6 @@ const updateValidationSchema = () => {
 
   console.log(currentSchema)
 }
-
 
 const handleLienTab = (selectedTab: { key: number }) => {
   //@ts-ignore
@@ -482,8 +482,8 @@ const handleVehicleTab = (index) => {
                     Vehicle Upload
                   </h2>
                 </div>
-                <UTabs :items="vehicleStepItems" class="w-full rounded-full" @change="handleVehicleTab"
-                  v-model="activeTab">
+                <UTabs v-model="activeTab" :items="vehicleStepItems" class="w-full rounded-full"
+                  @change="handleVehicleTab">
                   <template #item="{ item }">
                     <div>
                       <div v-if="item.key === 'vehicle_vin'"
@@ -571,8 +571,8 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isAccidentsItems" class="w-full" @change="handleAccidentVehicleTab"
-                      v-model="accidentActiveTab">
+                    <UTabs v-model="accidentActiveTab" :items="isAccidentsItems" class="w-full"
+                      @change="handleAccidentVehicleTab">
                       <template #item="{ item }">
                         <div v-if="item.key === 'No'" class="space-y-3" />
                         <div v-else-if="item.key === 'Yes'" class="space-y-3" />
@@ -588,8 +588,8 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isDamagesItems" class="w-full" @change="handleDamageVehicleTab"
-                      v-model="damageActiveTab">
+                    <UTabs v-model="damageActiveTab" :items="isDamagesItems" class="w-full"
+                      @change="handleDamageVehicleTab">
                       <template #item="{ item }">
                         <div v-if="item.key === 'No'" class="space-y-3" />
                         <div v-else-if="item.key === 'Yes'" class="space-y-3">
@@ -608,7 +608,7 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
 
-                    <UTabs :items="isReplaceVehicleItems" class="w-full" v-model="replaceActiveTab"
+                    <UTabs v-model="replaceActiveTab" :items="isReplaceVehicleItems" class="w-full"
                       @change="handleReplaceVehicleTab">
                       <template #item="{ item }">
                         <div v-if="item.key === 'No'" class="space-y-3" />
@@ -623,56 +623,104 @@ const handleVehicleTab = (index) => {
               </FormStep>
               <FormStep>
                 <div class="text-center">
-                  <h2 class="font-bold text-2xl pb-5">
+                  <h2 class="font-bold text-2xl">
                     Lien
                   </h2>
                 </div>
 
-                <div class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                  <div class="font-bold text-center mb-2">
+                <div class="flex flex-col items-center justify-center min-h-[300px]">
+                  <div class="font-bold text-center p-5">
                     Are there any liens against this vehicle?
                   </div>
 
-                  <UFormGroup size="xl" label="" hint="" description="" help="" name="mileage"
+                  <div
                     class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
-
-
-
-
-                    <UTabs :items="lienItems" class="w-full" @change="handleLienTab" v-model="lienActiveTab">
+                    <UTabs v-model="lienActiveTab" :items="lienItems" class="w-full" @change="handleLienTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3" />
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
-                          <UInput v-model="store.$state.form.vehicle_condition.lien_amount" placeholder="500"
-                            type="number" name="mileage" class=" no-arrows">
-                            <template #leading>
-                              <p class="text-gray-500 dark:text-gray-400 text-xs">
+                        <div v-if="item.key === 'No'" class="space-y-3 min-h-[150px]">
+                          <div class="min-h-[100px]" />
+                        </div>
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3 min-h-[150px]">
+                          <UFormGroup name="lien_amount">
+                            <UButtonGroup size="xl" orientation="horizontal"
+                              class="w-full rounded-full border overflow-hidden">
+                              <UButton color="gray"
+                                class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
+                                variant="ghost">
                                 $CAD
-                              </p>
-                            </template>
-                          </UInput>
+                              </UButton>
+                              <UInput v-model="store.$state.form.vehicle_condition.lien_amount" placeholder="5000"
+                                type="number" variant="ghost"
+                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow" />
+                            </UButtonGroup>
+                          </UFormGroup>
 
-                          <UInput v-model="store.$state.form.vehicle_condition.lender" placeholder="BMO" type="text"
-                            name="lender" class="">
-                            <template #leading>
-                              <p class="text-gray-500 dark:text-gray-400 text-xs me-5">
+                          <UFormGroup name="lender">
+                            <UButtonGroup size="xl" orientation="horizontal"
+                              class="w-full rounded-full border overflow-hidden">
+                              <UButton color="gray"
+                                class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500"
+                                variant="ghost">
                                 Lender
-                              </p>
-                            </template>
-                          </UInput>
-
-
-                          <!---                    <UButtonGroup size="sm" orientation="horizontal">
-
-                      <UButton icon="i-heroicons-clipboard-document" color="gray">Button</UButton>
-                      <UInput />
-                    </UButtonGroup> -->
+                              </UButton>
+                              <UInput v-model="store.$state.form.vehicle_condition.lender" placeholder="BMO" type="text"
+                                variant="ghost"
+                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                            </UButtonGroup>
+                          </UFormGroup>
                         </div>
                       </template>
                     </UTabs>
-                  </UFormGroup>
+                  </div>
                 </div>
               </FormStep>
+              <FormStep>
+                <div class="text-center">
+                  <h2 class="font-bold text-2xl">
+                    Asking Price
+                  </h2>
+                </div>
+
+                <div class="flex flex-col items-center justify-center min-h-[300px]">
+                  <div class="font-bold text-center space-y-2 mb-5">
+                    <p>
+                      We recommend a price between
+                      <strong class="text-md text-sky-500">$5280</strong> and
+                      <strong class="text-md text-sky-500">$8930</strong>
+                    </p>
+                    <p>
+                      based on our market valuation, but you're free to set any price you wish.
+                    </p>
+                  </div>
+
+
+                  <div
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    <UFormGroup name="asking_price">
+                      <UButtonGroup size="xl" orientation="horizontal"
+                        class="w-full rounded-full border overflow-hidden">
+                        <UButton color="gray"
+                          class="text-md font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
+                          variant="ghost">
+                          $
+                        </UButton>
+                        <UInput v-model="store.$state.form.vehicle_info.asking_price" placeholder="10000" type="number"
+                          variant="ghost"
+                          class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow" />
+                      </UButtonGroup>
+                    </UFormGroup>
+
+                    <UFormGroup name="range" label="Range">
+                      <URange v-model="store.$state.form.vehicle_info.asking_price" :step="100" :min="3960"
+                        :max="11162.5" />
+                    </UFormGroup>
+                  </div>
+                </div>
+              </FormStep>
+              <FormStep>
+
+              </FormStep>
+
             </FormWizard>
           </div>
         </UCard>

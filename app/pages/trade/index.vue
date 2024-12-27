@@ -21,6 +21,33 @@ const yearurl = encodeURI('https://carmakemodeldb.com/api/v1/car-lists/get/years
 
 const vehicleDisplay = ref('')
 
+const emit = defineEmits(['Next'])
+
+const imageLabels = {
+  car_side: 'Upload side of vehicle (Driver)',
+  car_back_angle: 'Upload back angle of vehicle',
+  car_front_angle: 'Upload front angle of vehicle',
+  car_seats: 'Upload seats and dash',
+  car_dash: 'Upload dash with car on'
+}
+
+const isFormNotEmptyImageStep = computed(() => {
+  return Object.values(store.$state.form.images).every(image => image !== '')
+})
+
+const handleFile = (event: Event, imageKey: string) => {
+  const input = event.target as HTMLInputElement
+  const file = input?.files?.[0]
+  if (file) {
+    const reader = new FileReader()
+    reader.onload = () => {
+      store.$state.form.images[imageKey] = reader.result as string
+      localStorage.setItem('form', JSON.stringify(store.$state.form))
+    }
+    reader.readAsDataURL(file)
+  }
+}
+
 const isError = ref(false)
 
 const links = computed(() => [{
@@ -115,11 +142,9 @@ const stepSchemas = ref([
       .positive('Mileage must be a positive number')
   }),
   object({
-    lender: string().required('Lender is required'),
-    lien_amount: number()
-      .required('Lien amount is required')
-      .typeError('Lien amount must be a number')
-      .positive('Lien amount must be a positive number')
+    lien: string().required()
+  //  lender: string(),
+  //  lien_amount: number()
   }),
   object({
     asking_price: number().required('Asking price is required').typeError('Asking price must be a number').positive('Asking price must be a positive number')
@@ -243,11 +268,28 @@ const updateValidationSchema = () => {
 const handleLienTab = (selectedTab: { key: number }) => {
   //@ts-ignore
   if (selectedTab === 1) {
+    console.log("*****8*888")
     store.$state.form.vehicle_condition.lien = 'Yes'
   } else {
     store.$state.form.vehicle_condition.lien = 'No'
   }
-  updateValidationSchema()
+
+  const currentSchema = stepSchemas.value[2]
+
+  stepSchemas.value[2] = currentSchema.shape({
+    lien: string().required(),
+    lender: store.$state.form.vehicle_condition.lien === 'Yes'
+      ? string().required('Lender is required')
+      : string(),
+    lien_amount: store.$state.form.vehicle_condition.lien === 'Yes'
+      ? number()
+          .required('Lien amount is required')
+          .typeError('Lien amount must be a number')
+          .positive('Lien amount must be a positive number')
+      : number()
+  })
+
+  console.log(stepSchemas.value[2])
 }
 
 const handleVehicle = () => {
@@ -397,37 +439,73 @@ const handleVehicleTab = (index) => {
       <div class="flex flex-col md:flex-row gap-6">
         <UCard class="relative min-w-[25%] pt-4">
           <ol class="space-y-4 w-full">
-            <template v-for="(link, index) in links" :key="index">
+            <template
+              v-for="(link, index) in links"
+              :key="index"
+            >
               <li>
-                <a :href="link.to" class="block w-full">
-                  <div class="w-full p-4 border rounded-lg transition-colors" :class="[
+                <a
+                  :href="link.to"
+                  class="block w-full"
+                >
+                  <div
+                    class="w-full p-4 border rounded-lg transition-colors"
+                    :class="[
                       link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
                       : link.active ? 'text-blue-700 border-blue-300 bg-blue-50 dark:bg-gray-800 dark:border-blue-800 dark:text-blue-400'
                         : 'text-gray-900 bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-                    ]" role="alert">
+                    ]"
+                    role="alert"
+                  >
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-3">
-                        <component :is="link.icon" class="w-5 h-5" :class="[
+                        <component
+                          :is="link.icon"
+                          class="w-5 h-5"
+                          :class="[
                             link.completed ? 'text-green-500 dark:text-green-400'
                             : link.active ? 'text-blue-500 dark:text-blue-400'
                               : 'text-gray-500 dark:text-gray-400'
-                          ]" />
+                          ]"
+                        />
                         <div class="space-y-1">
                           <h3 class="font-medium">{{ link.label }}</h3>
                           <p class="text-sm text-gray-500 dark:text-gray-400">{{ link.description }}</p>
                         </div>
                       </div>
                       <!-- Checkmark for completed steps -->
-                      <svg v-if="link.completed" class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 16 12">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M1 5.917 5.724 10.5 15 1.5" />
+                      <svg
+                        v-if="link.completed"
+                        class="w-4 h-4"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 16 12"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5.917 5.724 10.5 15 1.5"
+                        />
                       </svg>
                       <!-- Arrow for active step -->
-                      <svg v-else-if="link.active" class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 14 10">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M1 5h12m0 0L9 1m4 4L9 9" />
+                      <svg
+                        v-else-if="link.active"
+                        class="w-4 h-4"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 14 10"
+                      >
+                        <path
+                          stroke="currentColor"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M1 5h12m0 0L9 1m4 4L9 9"
+                        />
                       </svg>
                     </div>
                   </div>
@@ -475,46 +553,88 @@ const handleVehicleTab = (index) => {
 
         <UCard class="flex justify-center items-center w-full ">
           <div class="flex items-center justify-center ">
-            <FormWizard :validation-schema="stepSchemas" :state="store.$state.form" @submit="onSubmit">
+            <FormWizard
+              :validation-schema="stepSchemas"
+              :state="store.$state.form"
+              @submit="onSubmit"
+            >
               <FormStep class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]">
                 <div class="text-center">
                   <h2 class="font-bold text-2xl pb-5">
                     Vehicle Upload
                   </h2>
                 </div>
-                <UTabs v-model="activeTab" :items="vehicleStepItems" class="w-full rounded-full"
-                  @change="handleVehicleTab">
+                <UTabs
+                  v-model="activeTab"
+                  :items="vehicleStepItems"
+                  class="w-full rounded-full"
+                  @change="handleVehicleTab"
+                >
                   <template #item="{ item }">
                     <div>
-                      <div v-if="item.key === 'vehicle_vin'"
-                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
+                      <div
+                        v-if="item.key === 'vehicle_vin'"
+                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]"
+                      >
                         <UFormGroup name="vehicle_vin">
-                          <UInput v-model="store.$state.form.vehicle_vin" size="xl"
+                          <UInput
+                            v-model="store.$state.form.vehicle_vin"
+                            size="xl"
                             class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
-                            placeholder="Enter VIN number" />
+                            placeholder="Enter VIN number"
+                          />
                         </UFormGroup>
                         <UFormGroup name="vehicle_display">
-                          <UInput v-if="vehicleDisplay" v-model="vehicleDisplay" size="xl" disabled
+                          <UInput
+                            v-if="vehicleDisplay"
+                            v-model="vehicleDisplay"
+                            size="xl"
+                            disabled
                             class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
-                            placeholder="" />
+                            placeholder=""
+                          />
                         </UFormGroup>
                       </div>
-                      <div v-else-if="item.key === 'manual'"
-                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                        <UFormGroup size="xl" name="year" label="Select Year">
-                          <USelectMenu v-model="store.$state.form.vehicle_info.year" placeholder="Select..."
+                      <div
+                        v-else-if="item.key === 'manual'"
+                        class="space-y-3 flex flex-col items-center justify-center min-h-[300px]"
+                      >
+                        <UFormGroup
+                          size="xl"
+                          name="year"
+                          label="Select Year"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.year"
+                            placeholder="Select..."
                             :options="years"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
                         </UFormGroup>
-                        <UFormGroup size="xl" name="make" label="Select Make">
-                          <USelectMenu v-model="store.$state.form.vehicle_info.make" placeholder="Select..."
+                        <UFormGroup
+                          size="xl"
+                          name="make"
+                          label="Select Make"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.make"
+                            placeholder="Select..."
                             :options="make"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
                         </UFormGroup>
-                        <UFormGroup size="xl" name="model" label="Select Model">
-                          <USelectMenu v-model="store.$state.form.vehicle_info.model" :value="model"
-                            placeholder="Select..." :options="model"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                        <UFormGroup
+                          size="xl"
+                          name="model"
+                          label="Select Model"
+                        >
+                          <USelectMenu
+                            v-model="store.$state.form.vehicle_info.model"
+                            :value="model"
+                            placeholder="Select..."
+                            :options="model"
+                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                          />
                         </UFormGroup>
                       </div>
                     </div>
@@ -529,15 +649,27 @@ const handleVehicleTab = (index) => {
                 </div>
 
                 <div class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                  <UFormGroup size="xl" label="" hint="" description="" help="" name="mileage"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                  <UFormGroup
+                    size="xl"
+                    label=""
+                    hint=""
+                    description=""
+                    help=""
+                    name="mileage"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Vehicle Mileage
                       </div>
                     </template>
-                    <UInput v-model="store.$state.form.vehicle_info.mileage" placeholder="Mileage" type="number"
-                      name="mileage" class=" no-arrows">
+                    <UInput
+                      v-model="store.$state.form.vehicle_info.mileage"
+                      placeholder="Mileage"
+                      type="number"
+                      name="mileage"
+                      class=" no-arrows"
+                    >
                       <template #trailing>
                         <p class="text-gray-500 dark:text-gray-400 text-xs">
                           Kilometers
@@ -552,69 +684,140 @@ const handleVehicleTab = (index) => {
                     </UButtonGroup> -->
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help="" name="vehicle_desc"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                  <UFormGroup
+                    size="xl"
+                    hint=""
+                    description=""
+                    help=""
+                    name="vehicle_desc"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Vehicle description
                       </div>
                     </template>
-                    <UTextarea v-model="store.$state.form.vehicle_desc" class="" :padded="false"
-                      placeholder="Enter a brief description of your vehicle ...." variant="none" />
+                    <UTextarea
+                      v-model="store.$state.form.vehicle_desc"
+                      class=""
+                      :padded="false"
+                      placeholder="Enter a brief description of your vehicle ...."
+                      variant="none"
+                    />
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help="" name="accidents"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                  <UFormGroup
+                    size="xl"
+                    hint=""
+                    description=""
+                    help=""
+                    name="accidents"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Has this vehicle been in any accidents?
                       </div>
                     </template>
 
-                    <UTabs v-model="accidentActiveTab" :items="isAccidentsItems" class="w-full"
-                      @change="handleAccidentVehicleTab">
+                    <UTabs
+                      v-model="accidentActiveTab"
+                      :items="isAccidentsItems"
+                      class="w-full"
+                      @change="handleAccidentVehicleTab"
+                    >
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3" />
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3" />
+                        <div
+                          v-if="item.key === 'No'"
+                          class="space-y-3"
+                        />
+                        <div
+                          v-else-if="item.key === 'Yes'"
+                          class="space-y-3"
+                        />
                       </template>
                     </UTabs>
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help="" name="damages_details"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                  <UFormGroup
+                    size="xl"
+                    hint=""
+                    description=""
+                    help=""
+                    name="damages_details"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Does this vehicle have any damages?
                       </div>
                     </template>
 
-                    <UTabs v-model="damageActiveTab" :items="isDamagesItems" class="w-full"
-                      @change="handleDamageVehicleTab">
+                    <UTabs
+                      v-model="damageActiveTab"
+                      :items="isDamagesItems"
+                      class="w-full"
+                      @change="handleDamageVehicleTab"
+                    >
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3" />
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
-                          <UTextarea v-model="store.$state.form.vehicle_condition.damages_details" class=""
-                            name="damages" :padded="false" placeholder="Describe damage ...." variant="none" />
+                        <div
+                          v-if="item.key === 'No'"
+                          class="space-y-3"
+                        />
+                        <div
+                          v-else-if="item.key === 'Yes'"
+                          class="space-y-3"
+                        >
+                          <UTextarea
+                            v-model="store.$state.form.vehicle_condition.damages_details"
+                            class=""
+                            name="damages"
+                            :padded="false"
+                            placeholder="Describe damage ...."
+                            variant="none"
+                          />
                         </div>
                       </template>
                     </UTabs>
                   </UFormGroup>
 
-                  <UFormGroup size="xl" hint="" description="" help="" name="replace_vehicle_details"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                  <UFormGroup
+                    size="xl"
+                    hint=""
+                    description=""
+                    help=""
+                    name="replace_vehicle_details"
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <template #label>
                       <div class=" font-bold text-center mb-2 w-full max-w-full text-ellipsis overflow-hidden">
                         Are You Looking to Replace Your Vehicle and Receive an HST Credit on Your Sale?
                       </div>
                     </template>
 
-                    <UTabs v-model="replaceActiveTab" :items="isReplaceVehicleItems" class="w-full"
-                      @change="handleReplaceVehicleTab">
+                    <UTabs
+                      v-model="replaceActiveTab"
+                      :items="isReplaceVehicleItems"
+                      class="w-full"
+                      @change="handleReplaceVehicleTab"
+                    >
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3" />
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3">
-                          <UTextarea v-model="store.$state.form.replace_vehicle_details" class="" :padded="false"
-                            name="replace_vehicle" placeholder="Price range, make, model, etc ...." variant="none" />
+                        <div
+                          v-if="item.key === 'No'"
+                          class="space-y-3"
+                        />
+                        <div
+                          v-else-if="item.key === 'Yes'"
+                          class="space-y-3"
+                        >
+                          <UTextarea
+                            v-model="store.$state.form.replace_vehicle_details"
+                            class=""
+                            :padded="false"
+                            name="replace_vehicle"
+                            placeholder="Price range, make, model, etc ...."
+                            variant="none"
+                          />
                         </div>
                       </template>
                     </UTabs>
@@ -634,38 +837,68 @@ const handleVehicleTab = (index) => {
                   </div>
 
                   <div
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
-                    <UTabs v-model="lienActiveTab" :items="lienItems" class="w-full" @change="handleLienTab">
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
+                    <UTabs
+                      v-model="lienActiveTab"
+                      :items="lienItems"
+                      class="w-full"
+                      @change="handleLienTab"
+                    >
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3 min-h-[150px]">
+                        <div
+                          v-if="item.key === 'No'"
+                          class="space-y-3 min-h-[150px]"
+                        >
                           <div class="min-h-[100px]" />
                         </div>
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3 min-h-[150px]">
+                        <div
+                          v-else-if="item.key === 'Yes'"
+                          class="space-y-3 min-h-[150px]"
+                        >
                           <UFormGroup name="lien_amount">
-                            <UButtonGroup size="xl" orientation="horizontal"
-                              class="w-full rounded-full border overflow-hidden">
-                              <UButton color="gray"
+                            <UButtonGroup
+                              size="xl"
+                              orientation="horizontal"
+                              class="w-full rounded-full border overflow-hidden"
+                            >
+                              <UButton
+                                color="gray"
                                 class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
-                                variant="ghost">
+                                variant="ghost"
+                              >
                                 $CAD
                               </UButton>
-                              <UInput v-model="store.$state.form.vehicle_condition.lien_amount" placeholder="5000"
-                                type="number" variant="ghost"
-                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow" />
+                              <UInput
+                                v-model="store.$state.form.vehicle_condition.lien_amount"
+                                placeholder="5000"
+                                type="number"
+                                variant="ghost"
+                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow"
+                              />
                             </UButtonGroup>
                           </UFormGroup>
 
                           <UFormGroup name="lender">
-                            <UButtonGroup size="xl" orientation="horizontal"
-                              class="w-full rounded-full border overflow-hidden">
-                              <UButton color="gray"
+                            <UButtonGroup
+                              size="xl"
+                              orientation="horizontal"
+                              class="w-full rounded-full border overflow-hidden"
+                            >
+                              <UButton
+                                color="gray"
                                 class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500"
-                                variant="ghost">
+                                variant="ghost"
+                              >
                                 Lender
                               </UButton>
-                              <UInput v-model="store.$state.form.vehicle_condition.lender" placeholder="BMO" type="text"
+                              <UInput
+                                v-model="store.$state.form.vehicle_condition.lender"
+                                placeholder="BMO"
+                                type="text"
                                 variant="ghost"
-                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                                class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none"
+                              />
                             </UButtonGroup>
                           </UFormGroup>
                         </div>
@@ -693,34 +926,115 @@ const handleVehicleTab = (index) => {
                     </p>
                   </div>
 
-
                   <div
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2"
+                  >
                     <UFormGroup name="asking_price">
-                      <UButtonGroup size="xl" orientation="horizontal"
-                        class="w-full rounded-full border overflow-hidden">
-                        <UButton color="gray"
+                      <UButtonGroup
+                        size="xl"
+                        orientation="horizontal"
+                        class="w-full rounded-full border overflow-hidden"
+                      >
+                        <UButton
+                          color="gray"
                           class="text-md font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
-                          variant="ghost">
+                          variant="ghost"
+                        >
                           $
                         </UButton>
-                        <UInput v-model="store.$state.form.vehicle_info.asking_price" placeholder="10000" type="number"
+                        <UInput
+                          v-model="store.$state.form.vehicle_info.asking_price"
+                          placeholder="10000"
+                          type="number"
                           variant="ghost"
-                          class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow" />
+                          class="w-full border-l border-gray-300 focus:ring-2 focus:ring-sky-500 focus:outline-none no-arrow"
+                        />
                       </UButtonGroup>
                     </UFormGroup>
 
-                    <UFormGroup name="range" label="Range">
-                      <URange v-model="store.$state.form.vehicle_info.asking_price" :step="100" :min="3960"
-                        :max="11162.5" />
+                    <UFormGroup
+                      name="range"
+                      label="Range"
+                    >
+                      <URange
+                        v-model="store.$state.form.vehicle_info.asking_price"
+                        :step="100"
+                        :min="3960"
+                        :max="11162.5"
+                      />
                     </UFormGroup>
                   </div>
                 </div>
               </FormStep>
               <FormStep>
+                <div
+                  class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] p-2"
+                >
+                  <div class="mx-5">
+                    <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">
+                      Snapshots that sell
+                    </h2>
+                    <p class="pt-1 font-semibold text-sm pb-2 px-4">
+                      Remember, a well-presented car is a dealer's
+                      delight- the prettier
+                      the picture, the bigger the bucks.
+                    </p>
+                  </div>
 
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 m-6">
+                    <!-- Repeated Section for Different Images -->
+                    <div
+                      v-for="(label, key) in imageLabels"
+                      :key="key"
+                      class="p-3 rounded-xl border border-2"
+                    >
+                      <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">
+                        {{ label }}
+                      </p>
+
+                      <label
+                        :for="key + '-btn'"
+                        class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]"
+                      >
+                        <img
+                          v-if="store.$state.form.images[key]"
+                          :src="store.$state.form.images[key]"
+                          :alt="key"
+                          class="max-h-36"
+                        >
+                        <img
+                          v-else
+                          :src="`~assets/images/${key}.png`"
+                          :alt="key"
+                          class="max-h-36"
+                        >
+
+                        <p v-if="store.$state.form.images[key]">EDIT IMAGE</p>
+                        <p v-else>+ ADD IMAGE</p>
+
+                        <input
+                          :id="key + '-btn'"
+                          type="file"
+                          hidden
+                          @change="handleFile($event, key)"
+                        >
+                        <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="flex justify-end m-4">
+                    <button
+                      class="rounded-xl py-2 bg-[#2563EB] font-bold text-white px-5 text-center hover:bg-accent w-40"
+                      :disabled="!isFormNotEmptyImageStep"
+                      :class="{ 'bg-gray-200': !isFormNotEmptyImageStep, 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmptyImageStep }"
+                      @click="$emit('Next')"
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
               </FormStep>
-
             </FormWizard>
           </div>
         </UCard>

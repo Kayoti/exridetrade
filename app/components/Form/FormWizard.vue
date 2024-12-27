@@ -25,7 +25,7 @@
       </UButton>
     </div>
 
-    <pre>{{ flattenedData }}</pre>
+
   </UForm>
 </template>
 

@@ -24,7 +24,7 @@ const handleDashboardRedirect = () => {
 }
 
 onMounted(() => {
-  if (authStore.getUser) {
+  if (authStore.getUser()) {
     isAuthenticated.value = true
   }
 })

@@ -4,13 +4,13 @@ import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/authStore'
 
 const store = useAppStore()
-const authStore = useAuthStore()
 const router = useRouter()
 const emit = defineEmits(['next'])
 const { signInWithGoogle, auth, onAuthStateChanged } = useFirebaseAuth()
 const firebaseUser = ref()
 const isLoading = ref(false)
 const lead = ref()
+const authStore = useAuthStore()
 
 const autocompleteOptions = ref({
   componentRestrictions: {
@@ -164,13 +164,13 @@ async function checkLead() {
         signup.value = true
       } else {
         try {
-          lead.value = JSON.parse(response.data.value)?.data;
-          authStore.setUser('login');
-          localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
-          localStorage.setItem('leadid', lead.value['leadid']);
+          lead.value = JSON.parse(response.data.value)?.data
+          authStore.setUser('login')
+          localStorage.setItem('app_user', JSON.stringify(lead.value)) // Store as JSON string
+          localStorage.setItem('leadid', lead.value['leadid'])
         } catch (error) {
-          console.error('Error parsing JSON response:', error);
-          lead.value = null; // or handle the error as needed
+          console.error('Error parsing JSON response:', error)
+          lead.value = null // or handle the error as needed
         }
         /// emit('next')
         console.log('success login email, firebase*************')
@@ -192,13 +192,13 @@ async function checkLead() {
         console.log(signup)
       } else {
         try {
-          lead.value = JSON.parse(response.data.value)?.data;
-          authStore.setUser('login');
-          localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
-          localStorage.setItem('leadid', lead.value['leadid']);
+          lead.value = JSON.parse(response.data.value)?.data
+          authStore.setUser('login')
+          localStorage.setItem('app_user', JSON.stringify(lead.value)) // Store as JSON string
+          localStorage.setItem('leadid', lead.value['leadid'])
         } catch (error) {
-          console.error('Error parsing JSON response:', error);
-          lead.value = null; // or handle the error as needed
+          console.error('Error parsing JSON response:', error)
+          lead.value = null // or handle the error as needed
         }
 
         router.push({ name: 'dashboard' })
@@ -242,13 +242,13 @@ async function createLead() {
       // $response = Zend_Json::encode(array('success' => false, 'error' => array('message' => $failure)));
 
       try {
-        lead.value = JSON.parse(response.data.value)?.data;
-        authStore.setUser('login');
-        localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
-        localStorage.setItem('leadid', lead.value['leadid']);
+        lead.value = JSON.parse(response.data.value)?.data
+        authStore.setUser('login')
+        localStorage.setItem('app_user', JSON.stringify(lead.value)) // Store as JSON string
+        localStorage.setItem('leadid', lead.value['leadid'])
       } catch (error) {
-        console.error('Error parsing JSON response:', error);
-        lead.value = null; // or handle the error as needed
+        console.error('Error parsing JSON response:', error)
+        lead.value = null // or handle the error as needed
       }
       // emit('next')
 
@@ -258,7 +258,7 @@ async function createLead() {
 }
 
 onMounted(() => {
-  if (authStore.getUser) {
+  if (authStore.getUser()) {
     /// console.log("auuu")
     // emit('next')
   }

@@ -25,7 +25,7 @@
       </UButton>
     </div>
 
-
+    <!-- <pre>{{ state }}</pre> -->
   </UForm>
 </template>
 
@@ -70,15 +70,15 @@ interface Schema {
 }
 
 const currentSchema = computed<Schema>(() => {
-  console.log(currentStepIdx.value)
+  /// console.log(currentStepIdx.value)
   const schema = props.validationSchema[currentStepIdx.value] as Schema
-  console.log('schema=>', schema)
+  // console.log('schema=>', schema)
   return schema
 })
 
 function flattenFormData(formData, schemaNodes) {
-  console.log(schemaNodes)
-  console.log(formData)
+  // console.log(schemaNodes)
+  // console.log(formData)
   const flattenedData = {}
 
   function extractValues(data, path = '') {
@@ -86,8 +86,8 @@ function flattenFormData(formData, schemaNodes) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const newPath = path ? `${path}.${key}` : key
         if (typeof data[key] === 'object' && data[key] !== null && !Array.isArray(data[key])) {
-          console.log(newPath)
-          console.log(data[key])
+          // console.log(newPath)
+          // console.log(data[key])
           extractValues(data[key], newPath)
         } else {
           const lastKey = key
@@ -104,19 +104,19 @@ function flattenFormData(formData, schemaNodes) {
 }
 
 const flattenedData = computed(() => {
-  console.log(currentSchema.value)
+  /// console.log(currentSchema.value)
   const schemaNodes = currentSchema.value?._nodes
   return flattenFormData(props.state, schemaNodes)
 })
 
 const onSubmit = () => {
-  console.log('++++**', currentStepIdx.value)
+  // console.log('++++**', currentStepIdx.value)
   if (!isLastStep.value) {
     currentStepIdx.value++
     return
   }
-  console.log('submit**')
-  console.log(flattenedData.value)
+  // console.log('submit**')
+  // console.log(flattenedData.value)
   emit('submit', props.state)
 }
 
@@ -129,7 +129,7 @@ function goToPrev() {
 }
 
 watch(currentStepIdx, () => {
-  console.log('Current Step:', currentStepIdx.value)
-  console.log('Flattened Data:', flattenedData.value)
+  // console.log('Current Step:', currentStepIdx.value)
+  // console.log('Flattened Data:', flattenedData.value)
 })
 </script>

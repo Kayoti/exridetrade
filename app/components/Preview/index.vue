@@ -5,9 +5,9 @@
       <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
         <!-- Loop through images in store -->
         <div v-for="(imageData, index) in imageList" :key="index" class="duration-700 ease-in-out"
-          :class="{ 'hidden': index !== currentIndex }" data-carousel-item>
+          :class="{ hidden: index !== currentIndex }" data-carousel-item>
           <img :src="imageData" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-            :alt="'Image ' + (index + 1)" />
+            :alt="'Image ' + (index + 1)">
         </div>
       </div>
 
@@ -50,48 +50,101 @@
 
     <!-- Image Thumbnails Below Carousel -->
     <div class="grid grid-cols-5 gap-4 mt-4">
-      <div v-for="(imageData, index) in imageList" :key="'thumb-' + index" @click="currentIndex = index"
-        class="relative cursor-pointer">
-        <img :src="imageData" class="thumbnail" :alt="'Thumbnail ' + (index + 1)" />
+      <div v-for="(imageData, index) in imageList" :key="'thumb-' + index" class="relative cursor-pointer"
+        @click="currentIndex = index">
+        <img :src="imageData" class="thumbnail" :alt="'Thumbnail ' + (index + 1)">
         <div v-if="currentIndex === index"
           class="absolute inset-0 bg-blue-500 bg-opacity-50 flex justify-center items-center text-white rounded-lg text-sm">
           Selected
         </div>
       </div>
     </div>
+
+    <div class="grid">
+      <!-- Displaying user information -->
+      <div class="mb-4">
+        <h3 class="font-bold text-xl">
+          User Information
+        </h3>
+        <p><strong>First Name:</strong> {{ userInfo?.firstname || '' }}</p>
+        <p><strong>Last Name:</strong> {{ userInfo?.lastname || '' }}</p>
+        <p><strong>Email:</strong> {{ userInfo?.email || '' }}</p>
+        <p><strong>Phone:</strong> {{ userInfo?.phone || '' }}</p>
+      </div>
+
+      <!-- Displaying vehicle information -->
+      <div class="mb-4">
+        <h3 class="font-bold text-xl">
+          Vehicle Information
+        </h3>
+        <p><strong>Vehicle VIN:</strong> {{ userInfo?.vehicle_vin || '' }}</p>
+        <p><strong>Vehicle Description:</strong> {{ userInfo?.vehicle_desc || '' }}</p>
+        <p><strong>Vehicle Condition:</strong> {{ vehicleInfo?.vehicle_condition || '' }}</p>
+        <p><strong>Asking Price:</strong> ${{ vehicleInfo?.vehicle_info?.asking_price || '' }}</p>
+        <p>
+          <strong>Mileage:</strong> {{ vehicleInfo?.vehicle_info?.mileage || '' }}
+          {{ vehicleInfo?.vehicle_info?.mileage_unit || '' }}
+        </p>
+      </div>
+
+      <!-- Displaying location information -->
+      <div class="mb-4">
+        <h3 class="font-bold text-xl">
+          Location Information
+        </h3>
+        <p><strong>Location:</strong> {{ vehicleLocation?.location || '' }}</p>
+        <p><strong>City:</strong> {{ vehicleLocation?.city || '' }}</p>
+        <p><strong>Country:</strong> {{ vehicleLocation?.country || '' }}</p>
+      </div>
+
+      <!-- Displaying lien information -->
+      <div class="mb-4">
+        <h3 class="font-bold text-xl">
+          Lien Information
+        </h3>
+        <p><strong>Lien:</strong> {{ vehicleInfo?.lien ? 'Yes' : 'No' }}</p>
+        <p v-if="vehicleInfo?.lien">
+          <strong>Lien Amount:</strong> ${{ vehicleInfo?.lien_amount || '' }}
+        </p>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
-
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useAppStore } from '@/stores/app';
+import { ref } from 'vue'
+import { useAppStore } from '@/stores/app'
+import { useAuthStore} from '@/stores/authStore'
 
-const store = useAppStore();
+const store = useAppStore()
+const authStore = useAuthStore()
 
-// Extract images from the store state (base64 image data in this case)
+const userInfo = computed(() => store.$state.form)
+const vehicleInfo = computed(() => store.$state.form.vehicle_info)
+const vehicleLocation = computed(() => store.$state.form.vehicle_location)
 const imageList = [
   store.$state.form.images.car_back_angle,
   store.$state.form.images.car_dash,
   store.$state.form.images.car_front_angle,
   store.$state.form.images.car_seats,
-  store.$state.form.images.car_side,
-];
+  store.$state.form.images.car_side
+]
 
 // Track the current slide index
-const currentIndex = ref(0);
+const currentIndex = ref(0)
 
 // Navigate to the previous slide
 const previousSlide = () => {
-  currentIndex.value = (currentIndex.value - 1 + imageList.length) % imageList.length;
-};
+  currentIndex.value = (currentIndex.value - 1 + imageList.length) % imageList.length
+}
 
 // Navigate to the next slide
 const nextSlide = () => {
-  currentIndex.value = (currentIndex.value + 1) % imageList.length;
-};
+  currentIndex.value = (currentIndex.value + 1) % imageList.length
+}
 </script>
-
 
 <style scoped>
 /* Style for Thumbnail Images */
@@ -128,4 +181,3 @@ const nextSlide = () => {
   font-weight: bold;
 }
 </style>
-

@@ -14,16 +14,22 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  // Getter for user data
-  const getUser = computed(() => user.value)
+  const getUser = () => {
+    if (import.meta.client) {
+      const storedUser = localStorage.getItem('app_user')
+      return storedUser ? JSON.parse(storedUser) : null
+    }
+    return null
+  }
 
-  // Setter to update the user and persist in localStorage
+
   const setUser = (name) => {
     user.value = name
     if (import.meta.client) {
       localStorage.setItem('app_user', name)
     }
   }
+
 
   // Computed property to check if the user is authenticated
   const isAuthenticated = computed(() => !!user.value)

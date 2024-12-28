@@ -5,9 +5,9 @@ import { object, string, number } from 'yup'
 import FormWizard from '@/components/Form/FormWizard.vue'
 import FormStep from '@/components/Form/FormStep.vue'
 import { useAppStore } from '@/stores/app'
-import carSide from '~/assets/images/car-side.png'
-import carBackAngle from '~/assets/images/car-back.png'
-import carFrontAngle from '~/assets/images/car-front.png'
+import carSide from '~/assets/images/car_side.png'
+import carBackAngle from '~/assets/images/car_back.png'
+import carFrontAngle from '~/assets/images/car_front.png'
 import carSeats from '~/assets/images/seat.png'
 import carDash from '~/assets/images/dash.png'
 
@@ -26,25 +26,22 @@ const yearurl = encodeURI('https://carmakemodeldb.com/api/v1/car-lists/get/years
 
 const vehicleDisplay = ref('')
 
-const emit = defineEmits(['Next'])
-
 const imageLabels = {
-  'car-side': 'Upload side of vehicle (Driver)',
-  'car-back-angle': 'Upload back angle of vehicle',
-  'car-front-angle': 'Upload front angle of vehicle',
-  'car-seats': 'Upload seats and dash',
-  'car-dash': 'Upload dash with car on'
+  car_side: 'Upload side of vehicle (Driver)',
+  car_back_angle: 'Upload back angle of vehicle',
+  car_front_angle: 'Upload front angle of vehicle',
+  car_seats: 'Upload seats and dash',
+  car_dash: 'Upload dash with car on'
 }
 
 // Image imports for dynamic handling
 const imageSources = {
-  'car-side': carSide,
-  'car-back-angle': carBackAngle,
-  'car-front-angle': carFrontAngle,
-  'car-seats': carSeats,
-  'car-dash': carDash
+  car_side: carSide,
+  car_back_angle: carBackAngle,
+  car_front_angle: carFrontAngle,
+  car_seats: carSeats,
+  car_dash: carDash
 }
-
 
 const isFormNotEmptyImageStep = computed(() => {
   return Object.values(store.$state.form.images).every(image => image !== '')
@@ -60,6 +57,12 @@ const handleFile = (event: Event, imageKey: string) => {
       localStorage.setItem('form', JSON.stringify(store.$state.form))
     }
     reader.readAsDataURL(file)
+  }
+}
+
+const handleDeleteImage = (key) => {
+  if (store.$state.form.images[key]) {
+    store.$state.form.images[key] = null
   }
 }
 
@@ -158,26 +161,26 @@ const stepSchemas = ref([
   }),
   object({
     lien: string().required()
-  //  lender: string(),
-  //  lien_amount: number()
+    //  lender: string(),
+    //  lien_amount: number()
   }),
   object({
     asking_price: number().required('Asking price is required').typeError('Asking price must be a number').positive('Asking price must be a positive number')
   }),
   object({
-    'car-side': string().required('Please upload the side image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
+    car_side: string().required('Please upload the side image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
       return value !== imageSources['car-side']
     }),
-    'car-back-angle': string().required('Please upload the back angle image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
+    car_back_angle: string().required('Please upload the back angle image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
       return value !== imageSources['car-back-angle']
     }),
-    'car-front-angle': string().required('Please upload the front angle image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
+    car_front_angle: string().required('Please upload the front angle image of the vehicle').test('not-placeholder', 'Please upload the correct image', function (value) {
       return value !== imageSources['car-front-angle']
     }),
-    'car-seats': string().required('Please upload the seats and dash image').test('not-placeholder', 'Please upload the correct image', function (value) {
+    car_seats: string().required('Please upload the seats and dash image').test('not-placeholder', 'Please upload the correct image', function (value) {
       return value !== imageSources['car-seats']
     }),
-    'car-dash': string().required('Please upload the dash image with car on').test('not-placeholder', 'Please upload the correct image', function (value) {
+    car_dash: string().required('Please upload the dash image with car on').test('not-placeholder', 'Please upload the correct image', function (value) {
       return value !== imageSources['car-dash']
     })
   })
@@ -300,7 +303,7 @@ const updateValidationSchema = () => {
 const handleLienTab = (selectedTab: { key: number }) => {
   //@ts-ignore
   if (selectedTab === 1) {
-    console.log("*****8*888")
+    console.log('*****8*888')
     store.$state.form.vehicle_condition.lien = 'Yes'
   } else {
     store.$state.form.vehicle_condition.lien = 'No'
@@ -315,15 +318,15 @@ const handleLienTab = (selectedTab: { key: number }) => {
       : string(),
     lien_amount: store.$state.form.vehicle_condition.lien === 'Yes'
       ? number()
-          .required('Lien amount is required')
-          .typeError('Lien amount must be a number')
-          .positive('Lien amount must be a positive number')
+        .required('Lien amount is required')
+        .typeError('Lien amount must be a number')
+        .positive('Lien amount must be a positive number')
       : number()
   })
 
   console.log(stepSchemas.value[2])
 }
-const im = "~assets/images/car-side.png"
+const im = '~assets/images/car-side.png'
 const handleVehicle = () => {
   isError.value = false
   store.$state.form.vehicle_info.model = ''
@@ -475,17 +478,17 @@ const handleVehicleTab = (index) => {
               <li>
                 <a :href="link.to" class="block w-full">
                   <div class="w-full p-4 border rounded-lg transition-colors" :class="[
-                      link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
+                    link.completed ? 'text-green-700 border-green-300 bg-green-50 dark:bg-gray-800 dark:border-green-800 dark:text-green-400'
                       : link.active ? 'text-blue-700 border-blue-300 bg-blue-50 dark:bg-gray-800 dark:border-blue-800 dark:text-blue-400'
                         : 'text-gray-900 bg-gray-100 border-gray-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400'
-                    ]" role="alert">
+                  ]" role="alert">
                     <div class="flex items-center justify-between">
                       <div class="flex items-center gap-3">
                         <component :is="link.icon" class="w-5 h-5" :class="[
-                            link.completed ? 'text-green-500 dark:text-green-400'
+                          link.completed ? 'text-green-500 dark:text-green-400'
                             : link.active ? 'text-blue-500 dark:text-blue-400'
                               : 'text-gray-500 dark:text-gray-400'
-                          ]" />
+                        ]" />
                         <div class="space-y-1">
                           <h3 class="font-medium">{{ link.label }}</h3>
                           <p class="text-sm text-gray-500 dark:text-gray-400">{{ link.description }}</p>
@@ -804,38 +807,64 @@ const handleVehicleTab = (index) => {
                   </div>
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 m-6">
-                    <div v-for="(label, key) in imageLabels" :key="key" class="p-3 rounded-xl border border-2">
+
+                    <div v-for="(label, key) in imageLabels" :key="key" class="p-3 rounded-xs border relative">
                       <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">
                         {{ label }}
                       </p>
 
-                      <label :for="key + '-btn'"
-                        class="bg-white text-gray-500 font-semibold text-base rounded max-w-md h-52 flex flex-col items-center justify-center cursor-pointer border-2 border-gray-300 border-dashed mx-auto font-[sans-serif]">
-                        <img v-if="store.$state.form.images[key]" :src="store.$state.form.images[key]" :alt="key"
-                          :id="key" class="max-h-36">
-                        <img v-else :src="imageSources[key]" :alt="key" :id="key" class="max-h-36">
+                      <label :for="key + '-file-input'" :class="{
+                        'bg-white text-gray-500 font-semibold text-base rounded max-w-md flex flex-col items-center justify-center cursor-pointer mx-auto relative h-52': true,
+                        'border border-gray-300 border-dashed': !store.$state.form.images[key]
+                      }">
+                        <!-- Delete Button -->
+                        <button v-if="store.$state.form.images[key]"
+                          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-md border border-white"
+                          @click.prevent="handleDeleteImage(key)">
+                          ✕
+                        </button>
 
-                        <p v-if="store.$state.form.images[key]">EDIT IMAGE</p>
-                        <p v-else>+ ADD IMAGE</p>
+                        <!-- Image Preview: Fixed height for the image -->
+                        <img v-if="store.$state.form.images[key]" :id="key" :src="store.$state.form.images[key]"
+                          :alt="label" class="w-full h-40 object-cover">
 
-                        <input :id="key + '-btn'" type="file" hidden @change="handleFile($event, key)">
-                        <p class="text-xs font-medium text-gray-400 my-2">PNG, JPG and JPEG are Allowed.</p>
+                        <!-- Fallback Image if Not Uploaded -->
+                        <img v-else :id="key" :src="imageSources[key]" :alt="label" class="w-full h-36 object-cover">
+
+                        <!-- Image Edit/Add Text -->
+                        <div class="flex flex-col items-center justify-center flex-grow pt-2">
+                          <p v-if="store.$state.form.images[key]" class="text-sm font-semibold">
+                            - EDIT IMAGE
+                          </p>
+                          <p v-else class="text-sm font-semibold">
+                            + ADD IMAGE
+                          </p>
+                        </div>
+
+                        <!-- File Input -->
+                        <UFormGroup :name="key" class="px-2">
+                          <input :id="key + '-file-input'" type="file" hidden @change="handleFile($event, key)">
+                        </UFormGroup>
+
+                        <!-- Allowed File Types Message -->
+                        <div class="mb-3">
+                          <p class="text-xs font-medium text-gray-400" v-if="!store.$state.form.images[key]">
+                            PNG, JPG, and JPEG are allowed.
+                          </p>
+                        </div>
                       </label>
                     </div>
-                  </div>
 
-                  <div class="flex justify-end m-4">
-                    <button
-                      class="rounded-xl py-2 bg-[#2563EB] font-bold text-white px-5 text-center hover:bg-accent w-40"
-                      :disabled="!isFormNotEmptyImageStep"
-                      :class="{ 'bg-gray-200': !isFormNotEmptyImageStep, 'bg-[#2563EB] hover:bg-[#2B9DD7]': isFormNotEmptyImageStep }"
-                      @click="$emit('Next')">
-                      Next
-                    </button>
+
+
+
                   </div>
                 </div>
               </FormStep>
-              <FormStep></FormStep>
+              <FormStep>
+
+<Preview></Preview>
+              </FormStep>
             </FormWizard>
           </div>
         </UCard>

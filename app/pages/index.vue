@@ -10,6 +10,7 @@ const emit = defineEmits(['next'])
 const { signInWithGoogle, auth, onAuthStateChanged } = useFirebaseAuth()
 const firebaseUser = ref()
 const isLoading = ref(false)
+const lead = ref()
 
 const autocompleteOptions = ref({
   componentRestrictions: {
@@ -162,10 +163,15 @@ async function checkLead() {
         console.log('to signup email, firebase*************')
         signup.value = true
       } else {
-        authStore.setUser('login')
-        localStorage.setItem('app_user', 'login')
-        localStorage.setItem('leadid', JSON.parse(response.data.value).data['leadid'])
-
+        try {
+          lead.value = JSON.parse(response.data.value)?.data;
+          authStore.setUser('login');
+          localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
+          localStorage.setItem('leadid', lead.value['leadid']);
+        } catch (error) {
+          console.error('Error parsing JSON response:', error);
+          lead.value = null; // or handle the error as needed
+        }
         /// emit('next')
         console.log('success login email, firebase*************')
         router.push({ name: 'dashboard' })
@@ -185,9 +191,15 @@ async function checkLead() {
         signup.value = true
         console.log(signup)
       } else {
-        authStore.setUser('login')
-        localStorage.setItem('app_user', 'login')
-        localStorage.setItem('leadid', JSON.parse(response.data.value).data['crmid'])
+        try {
+          lead.value = JSON.parse(response.data.value)?.data;
+          authStore.setUser('login');
+          localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
+          localStorage.setItem('leadid', lead.value['leadid']);
+        } catch (error) {
+          console.error('Error parsing JSON response:', error);
+          lead.value = null; // or handle the error as needed
+        }
 
         router.push({ name: 'dashboard' })
       }
@@ -229,10 +241,15 @@ async function createLead() {
       console.log(response)
       // $response = Zend_Json::encode(array('success' => false, 'error' => array('message' => $failure)));
 
-      localStorage.removeItem('leadid')
-      localStorage.setItem('leadid', JSON.parse(response)['result'])
-      authStore.setUser('login')
-      localStorage.setItem('app_user', 'login')
+      try {
+        lead.value = JSON.parse(response.data.value)?.data;
+        authStore.setUser('login');
+        localStorage.setItem('app_user', JSON.stringify(lead.value)); // Store as JSON string
+        localStorage.setItem('leadid', lead.value['leadid']);
+      } catch (error) {
+        console.error('Error parsing JSON response:', error);
+        lead.value = null; // or handle the error as needed
+      }
       // emit('next')
 
       // TODO handle response before redirecting //i.e update php side

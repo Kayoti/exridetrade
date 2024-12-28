@@ -78,6 +78,7 @@ const currentSchema = computed<Schema>(() => {
 
 function flattenFormData(formData, schemaNodes) {
   console.log(schemaNodes)
+  console.log(formData)
   const flattenedData = {}
 
   function extractValues(data, path = '') {
@@ -85,6 +86,8 @@ function flattenFormData(formData, schemaNodes) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const newPath = path ? `${path}.${key}` : key
         if (typeof data[key] === 'object' && data[key] !== null && !Array.isArray(data[key])) {
+          console.log(newPath)
+          console.log(data[key])
           extractValues(data[key], newPath)
         } else {
           const lastKey = key

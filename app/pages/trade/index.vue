@@ -21,6 +21,8 @@ const make = ref([])
 const model = ref([])
 const formState = ref(store.$state.form)
 const user = ref()
+const task = ref(0)
+const steps = computed(() => links.map(link => link.label))
 
 onMounted(() => {
   user.value = authStore.getUser()
@@ -80,57 +82,29 @@ const handleDeleteImage = (key) => {
 
 const isError = ref(false)
 
-const links = computed(() => [{
-  id: 1,
-  completed: true,
-  label: 'Vehicle Upload',
-  to: '#vehicle',
-  icon: 'i-heroicons-cube-transparent',
-  active: false,
-  description: 'Explore our core features'
-}, {
-  id: 2,
-  completed: false,
-  label: 'General Info',
-  to: '#general',
-  icon: 'i-heroicons-credit-card',
-  active: true,
-  description: 'Explore our core features'
-}, {
-  id: 3,
-  completed: false,
-  label: 'Lien',
-  to: '#lien',
-  icon: 'i-heroicons-academic-cap',
-  active: activeHeadings.value.includes('lien'),
-  description: 'Explore our core features'
-}, {
-  id: 4,
-  completed: false,
-  label: 'Asking Price',
-  to: '#price',
-  icon: 'i-heroicons-question-mark-circle',
-  active: activeHeadings.value.includes('price'),
-  description: 'Explore our core features'
-}, {
-  id: 5,
-  completed: false,
-  label: 'Photos Upload',
-  to: '#photos',
-  icon: 'i-heroicons-question-mark-circle',
-  active: activeHeadings.value.includes('photos'),
-  description: 'Explore our core features'
-}, {
-  id: 6,
-  completed: false,
-  label: 'Review',
-  to: '#review',
-  icon: 'i-heroicons-question-mark-circle',
-  active: activeHeadings.value.includes('review'),
-  description: 'Explore our core features'
-}])
+const links = reactive([
+  { id: 1, label: 'Vehicle Upload', completed: false, icon: 'i-heroicons-cube-transparent', active: true },
+  { id: 2, label: 'General Info', completed: false, icon: 'i-heroicons-credit-card', active: false },
+  { id: 3, label: 'Lien', completed: false, icon: 'i-heroicons-academic-cap', active: false },
+  { id: 4, label: 'Asking Price', completed: false, icon: 'i-heroicons-question-mark-circle', active: false },
+  { id: 5, label: 'Photos Upload', completed: false, icon: 'i-heroicons-question-mark-circle', active: false },
+  { id: 6, label: 'Review', completed: false, icon: 'i-heroicons-question-mark-circle', active: false }
+]);
 
-console.log(activeHeadings.value)
+function onSubmit(formData) {
+  console.log(JSON.stringify(formData, null, 2))
+}
+
+const handleNav = (step) => {
+  task.value = step + 1
+
+  links.forEach((link, index) => {
+    link.completed = index < step + 1
+    link.active = index === step + 1
+  })
+
+  console.log(links)
+}
 
 nuxtApp.hooks.hookOnce('page:finish', () => {
   updateHeadings([
@@ -198,9 +172,7 @@ const stepSchemas = ref([
   })
 ])
 
-function onSubmit(formData) {
-  console.log(JSON.stringify(formData, null, 2))
-}
+
 
 const vehicleStepItems = [{
   key: 'vehicle_vin',
@@ -476,7 +448,7 @@ const handleVehicleTab = (index) => {
     })
   }
 
-  console.log(stepSchemas.value[0])
+  /// console.log(stepSchemas.value[0])
 }
 </script>
 
@@ -484,8 +456,33 @@ const handleVehicleTab = (index) => {
   <div>
     <ULandingSection>
       <div class="flex flex-col md:flex-row gap-6">
-        <UCard class="relative min-w-[25%] pt-4">
-          <ol class="space-y-4 w-full">
+        <UProgress
+          :value="task"
+          :max="steps"
+          indicator
+          class="md:hidden"
+        >
+          <template #step-0="{ step }">
+            <span class="text-lime-500">
+              <!-- <UIcon name="i-heroicons-arrow-down-circle" /> --> {{ step }}
+            </span>
+          </template>
+
+          <template #step-1="{ step }">
+            <span class="text-amber-500">
+              <!-- <UIcon name="i-heroicons-circle-stack" /> --> {{ step }}
+            </span>
+          </template>
+
+          <template #step-2="{ step }">
+            <span class="text-blue-500">
+              <!-- <UIcon name="i-heroicons-hand-thumb-up" /> --> {{ step }}
+            </span>
+          </template>
+        </UProgress>
+
+        <UCard class="relative min-w-[25%] pt-4 hidden md:block">
+          <ol class="space-y-4 w-full ">
             <template
               v-for="(link, index) in links"
               :key="index"
@@ -604,6 +601,7 @@ const handleVehicleTab = (index) => {
               :validation-schema="stepSchemas"
               :state="store.$state.form"
               @submit="onSubmit"
+              @navigate="handleNav"
             >
               <FormStep class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]">
                 <div class="text-center">
@@ -1113,7 +1111,7 @@ const handleVehicleTab = (index) => {
                   </div>
                 </div>
               </FormStep>
-              <FormStep>
+              <FormStep >
                 <Preview />
               </FormStep>
             </FormWizard>

@@ -11,7 +11,7 @@
       <UButton
         v-if="hasPrevious"
         type="button"
-        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4"
+        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4 me-5"
         @click="goToPrev"
       >
         Previous
@@ -43,7 +43,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit', 'navigate'])
 const currentStepIdx = ref(0)
 
 // Injects the starting step, child <form-steps> will use this to generate their ids
@@ -111,6 +111,8 @@ const flattenedData = computed(() => {
 
 const onSubmit = () => {
   // console.log('++++**', currentStepIdx.value)
+
+    emit('navigate', currentStepIdx.value)
   if (!isLastStep.value) {
     currentStepIdx.value++
     return

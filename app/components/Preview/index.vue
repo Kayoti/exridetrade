@@ -58,107 +58,147 @@
       </div>
     </div>
 
-    <div class="items-start">
+    <div class="mt-8">
+      <h2 class="font-bold text-xl">Preview Your Information Before Submission</h2>
+    </div>
+
+    <div class="items-start mt-8 rounded-lg border">
+      <UAccordion size="xl" :items="items" :ui="{ wrapper: 'flex flex-col w-full p-2' }">
+        <template #vehicle-info="{ item, index, open }">
+
+          <UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700"
+            :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+            <template #leading>
+            </template>
+
+            <div class="mt-3">
+              <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                <div class="flex flex-col text-start pb-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle VIN</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_vin || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle Description</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_desc || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start pt-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Asking Price</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.asking_price || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Make</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.make || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start pt-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Mileage</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.mileage || '' }} {{ vehicleInfo?.mileage_unit || ''
+                    }}
+                  </dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Model</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.model || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start pt-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Options</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.options.length > 0 ? vehicleInfo.options.join(', ')
+                    :
+                    '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Trim</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.trim || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start pt-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Year</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleInfo?.year || '' }}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <template #trailing>
+            </template>
+          </UButton>
 
 
-      <div class="mt-16">
-        <div class="mb-5" >
-          <h2 class="font-bold text-xl">Vehicle Information</h2>
-        </div>
-        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-          <div class="flex flex-col text-start pb-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle VIN</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_vin || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle Description</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_desc || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start pt-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Asking Price</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.asking_price || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Make</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.make || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start pt-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Mileage</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.mileage || '' }} {{ vehicleInfo?.mileage_unit || '' }}
-            </dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Model</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.model || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start pt-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Options</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.options.length > 0 ? vehicleInfo.options.join(', ') : ''
-              }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Trim</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.trim || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start pt-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Year</dt>
-            <dd class="text-lg font-semibold">{{ vehicleInfo?.year || '' }}</dd>
-          </div>
-        </dl>
-      </div>
+        </template>
 
 
-      <div class="mt-12">
-        <div class="mb-5">
-          <h2 class="font-bold text-xl">Vehicle Condition</h2>
-        </div>
-        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-          <div class="flex flex-col text-start pb-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Has this vehicle been in any accidents?</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.accidents || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Does this vehicle have any damages?</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.damages || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400" v-if="vehicleCondition?.damages === 'Yes'">
-              Damages Details</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.damages_details || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are there any liens against this vehicle?</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.lien || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3" v-if="vehicleCondition?.lien ==='Yes'">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Lender</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.lender || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start pt-3" v-if="vehicleCondition?.lien === 'Yes'">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Amount</dt>
-            <dd class="text-lg font-semibold">{{ vehicleCondition?.lien_amount || '' }}</dd>
-          </div>
-        </dl>
-      </div>
+
+        <template #vehicle-condition="{ item, index, open }">
+
+          <UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700"
+            :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+
+            <div class="mt-3">>
+              <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                <div class="flex flex-col text-start pb-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Has this vehicle been in any accidents?
+                  </dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.accidents || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Does this vehicle have any damages?</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.damages || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3" v-if="vehicleCondition?.damages === 'Yes'">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Damages Details</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.damages_details || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are there any liens against this vehicle?
+                  </dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.lien || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3" v-if="vehicleCondition?.lien === 'Yes'">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Lender</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.lender || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start pt-3" v-if="vehicleCondition?.lien === 'Yes'">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Amount</dt>
+                  <dd class="text-lg font-semibold">{{ vehicleCondition?.lien_amount || '' }}</dd>
+                </div>
+              </dl>
+            </div>
+          </UButton>
 
 
-      <div class="mt-12">
-        <div class="mb-5">
-          <h2 class="font-bold text-xl">Replacement Information</h2>
-        </div>
-        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-          <div class="flex flex-col text-start pb-3">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are You Looking to Replace Your Vehicle and
-              Receive an HST Credit on Your Sale?</dt>
-            <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle || '' }}</dd>
-          </div>
-          <div class="flex flex-col text-start py-3" v-if="replaceVehicleInfo.replace_vehicle === 'Yes'">
-            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Replace Vehicle Details</dt>
-            <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle_details || '' }}</dd>
-          </div>
-        </dl>
-      </div>
+        </template>
 
+
+
+
+
+        <template #replacement-info="{ item, index, open }">
+
+          <UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700"
+            :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
+            <template #leading>
+            </template>
+
+            <div class="mt-3">
+              <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                <div class="flex flex-col text-start pb-3">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are You Looking to Replace Your Vehicle
+                    and
+                    Receive an HST Credit on Your Sale?</dt>
+                  <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle || '' }}</dd>
+                </div>
+                <div class="flex flex-col text-start py-3" v-if="replaceVehicleInfo.replace_vehicle === 'Yes'">
+                  <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Replace Vehicle Details</dt>
+                  <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle_details || '' }}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <template #trailing>
+            </template>
+          </UButton>
+
+
+        </template>
+
+      </UAccordion>
 
     </div>
   </div>
@@ -212,24 +252,27 @@ const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % imageList.length
 }
 
-
 const items = [
   {
-    label: 'User Information',
-    icon: 'i-heroicons-information-circle',
-    slot: 'user-info'
-  },
-  {
     label: 'Vehicle Information',
-    icon: 'i-heroicons-information-circle',
-    slot: 'vehicle-info'
+    icon: 'i-heroicons-exclamation-circle',
+    defaultOpen: true,
+    slot: 'vehicle-info',
   },
   {
-    label: 'Replace Vehicle Information',
-    icon: 'i-heroicons-information-circle',
-    slot: 'replace-vehicle-info'
+    label: 'Vehicle Condition',
+    icon: 'i-heroicons-exclamation-circle',
+    defaultOpen: false,
+    slot: 'vehicle-condition',
+  },
+  {
+    label: 'Replacement Information',
+    icon: 'i-heroicons-exclamation-circle',
+    defaultOpen: false,
+    slot: 'replacement-info',
   },
 ]
+
 </script>
 
 <style scoped>

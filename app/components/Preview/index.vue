@@ -54,76 +54,143 @@
         @click="currentIndex = index">
         <img :src="imageData" class="thumbnail" :alt="'Thumbnail ' + (index + 1)">
         <div v-if="currentIndex === index"
-          class="absolute inset-0 bg-blue-500 bg-opacity-50 flex justify-center items-center text-white rounded-lg text-sm">
-          Selected
+          class="absolute inset-0 bg-blue-500 bg-opacity-50 flex justify-center items-center text-white rounded-lg text-sm" />
+      </div>
+    </div>
+
+    <div class="items-start">
+
+
+      <div class="mt-16">
+        <div class="mb-5" >
+          <h2 class="font-bold text-xl">Vehicle Information</h2>
         </div>
+        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+          <div class="flex flex-col text-start pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle VIN</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_vin || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Vehicle Description</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo.vehicle_desc || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start pt-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Asking Price</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.asking_price || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Make</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.make || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start pt-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Mileage</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.mileage || '' }} {{ vehicleInfo?.mileage_unit || '' }}
+            </dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Model</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.model || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start pt-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Options</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.options.length > 0 ? vehicleInfo.options.join(', ') : ''
+              }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Trim</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.trim || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start pt-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Year</dt>
+            <dd class="text-lg font-semibold">{{ vehicleInfo?.year || '' }}</dd>
+          </div>
+        </dl>
       </div>
+
+
+      <div class="mt-12">
+        <div class="mb-5">
+          <h2 class="font-bold text-xl">Vehicle Condition</h2>
+        </div>
+        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+          <div class="flex flex-col text-start pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Has this vehicle been in any accidents?</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.accidents || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Does this vehicle have any damages?</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.damages || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400" v-if="vehicleCondition?.damages === 'Yes'">
+              Damages Details</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.damages_details || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are there any liens against this vehicle?</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.lien || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3" v-if="vehicleCondition?.lien ==='Yes'">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Lender</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.lender || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start pt-3" v-if="vehicleCondition?.lien === 'Yes'">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Lien Amount</dt>
+            <dd class="text-lg font-semibold">{{ vehicleCondition?.lien_amount || '' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+
+      <div class="mt-12">
+        <div class="mb-5">
+          <h2 class="font-bold text-xl">Replacement Information</h2>
+        </div>
+        <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+          <div class="flex flex-col text-start pb-3">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Are You Looking to Replace Your Vehicle and
+              Receive an HST Credit on Your Sale?</dt>
+            <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle || '' }}</dd>
+          </div>
+          <div class="flex flex-col text-start py-3" v-if="replaceVehicleInfo.replace_vehicle === 'Yes'">
+            <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">Replace Vehicle Details</dt>
+            <dd class="text-lg font-semibold">{{ replaceVehicleInfo.replace_vehicle_details || '' }}</dd>
+          </div>
+        </dl>
+      </div>
+
+
     </div>
-
-    <div class="grid">
-      <!-- Displaying user information -->
-      <div class="mb-4">
-        <h3 class="font-bold text-xl">
-          User Information
-        </h3>
-        <p><strong>First Name:</strong> {{ userInfo?.firstname || '' }}</p>
-        <p><strong>Last Name:</strong> {{ userInfo?.lastname || '' }}</p>
-        <p><strong>Email:</strong> {{ userInfo?.email || '' }}</p>
-        <p><strong>Phone:</strong> {{ userInfo?.phone || '' }}</p>
-      </div>
-
-      <!-- Displaying vehicle information -->
-      <div class="mb-4">
-        <h3 class="font-bold text-xl">
-          Vehicle Information
-        </h3>
-        <p><strong>Vehicle VIN:</strong> {{ userInfo?.vehicle_vin || '' }}</p>
-        <p><strong>Vehicle Description:</strong> {{ userInfo?.vehicle_desc || '' }}</p>
-        <p><strong>Vehicle Condition:</strong> {{ vehicleInfo?.vehicle_condition || '' }}</p>
-        <p><strong>Asking Price:</strong> ${{ vehicleInfo?.vehicle_info?.asking_price || '' }}</p>
-        <p>
-          <strong>Mileage:</strong> {{ vehicleInfo?.vehicle_info?.mileage || '' }}
-          {{ vehicleInfo?.vehicle_info?.mileage_unit || '' }}
-        </p>
-      </div>
-
-      <!-- Displaying location information -->
-      <div class="mb-4">
-        <h3 class="font-bold text-xl">
-          Location Information
-        </h3>
-        <p><strong>Location:</strong> {{ vehicleLocation?.location || '' }}</p>
-        <p><strong>City:</strong> {{ vehicleLocation?.city || '' }}</p>
-        <p><strong>Country:</strong> {{ vehicleLocation?.country || '' }}</p>
-      </div>
-
-      <!-- Displaying lien information -->
-      <div class="mb-4">
-        <h3 class="font-bold text-xl">
-          Lien Information
-        </h3>
-        <p><strong>Lien:</strong> {{ vehicleInfo?.lien ? 'Yes' : 'No' }}</p>
-        <p v-if="vehicleInfo?.lien">
-          <strong>Lien Amount:</strong> ${{ vehicleInfo?.lien_amount || '' }}
-        </p>
-      </div>
-    </div>
-
-
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAppStore } from '@/stores/app'
-import { useAuthStore} from '@/stores/authStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const store = useAppStore()
 const authStore = useAuthStore()
 
-const userInfo = computed(() => store.$state.form)
-const vehicleInfo = computed(() => store.$state.form.vehicle_info)
+const userInfo = computed(() => ({
+  email: store.$state.form.email || '',
+  firstname: store.$state.form.firstname || '',
+  lastname: store.$state.form.lastname || '',
+  phone: store.$state.form.phone || ''
+}))
+
+const vehicleInfo = computed(() => ({
+  ...store.$state.form.vehicle_info,
+  vehicle_vin: store.$state.form.vehicle_vin || '',
+  vehicle_desc: store.$state.form.vehicle_desc || ''
+}));
 const vehicleLocation = computed(() => store.$state.form.vehicle_location)
+const vehicleCondition = computed(() => store.$state.form.vehicle_condition)
+const replaceVehicleInfo = computed(() => ({
+  replace_vehicle: store.$state.form.replace_vehicle || '',
+  replace_vehicle_details: store.$state.form.replace_vehicle_details || ''
+}))
+
 const imageList = [
   store.$state.form.images.car_back_angle,
   store.$state.form.images.car_dash,
@@ -144,6 +211,25 @@ const previousSlide = () => {
 const nextSlide = () => {
   currentIndex.value = (currentIndex.value + 1) % imageList.length
 }
+
+
+const items = [
+  {
+    label: 'User Information',
+    icon: 'i-heroicons-information-circle',
+    slot: 'user-info'
+  },
+  {
+    label: 'Vehicle Information',
+    icon: 'i-heroicons-information-circle',
+    slot: 'vehicle-info'
+  },
+  {
+    label: 'Replace Vehicle Information',
+    icon: 'i-heroicons-information-circle',
+    slot: 'replace-vehicle-info'
+  },
+]
 </script>
 
 <style scoped>

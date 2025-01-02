@@ -528,7 +528,7 @@ async function createLead() {
                     "email":store.$state.form.email,
                     "fname":store.$state.form.firstname,
                     "lname":store.$state.form.lastname,
-                    "phone":store.$state.form.phone,
+                    "phone":"+1" + store.$state.form.phone,
                     "leadid":localStorage.getItem("leadid")
 
                 },

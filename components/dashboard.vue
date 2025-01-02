@@ -2,7 +2,7 @@
   <Header />
   <!-- <div class="" style="background-color: white !important;"> -->
 
-  <div class="flex flex-col md:flex-row justify-around mx-5 sm:mx-0">
+  <div class="flex flex-col md:flex-row justify-around mx-5 sm:mx-0" v-show="logedin">
 
     <div v-if="isOpen" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center"
       @click.self="closeModal">
@@ -332,6 +332,9 @@ const Logout = () => {
  }
 
 onMounted(()=>{
+  if (localStorage.getItem("app_user")==="login") {
+  logedin.value = true;
+}
   localStorage.setItem('form', JSON.stringify(store.$state.form))
   localStorage.removeItem('edit');
 localStorage.removeItem('selProduct');

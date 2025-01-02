@@ -429,14 +429,14 @@ async function checkLead() {
 
                 if (!JSON.parse(response.data.value).data || JSON.parse(response.data.value).data.length === 0) {
 
-                    if (firebaseUser) {
-                           await createLead();
-                        console.log("fire*************")
-                    } else {
+                   // if (firebaseUser) {
+                     //      await createLead();
+                     //   console.log("fire*************")
+                    //} else {
                         signup.value = true; 
-                    }
+                    //}
 
-                ;
+                
                 } else {
                     authStore.setUser("login");
                     localStorage.setItem('app_user', "login");
@@ -515,7 +515,27 @@ async function createLead() {
             localStorage.setItem("leadid", JSON.parse(response)['result']);
             authStore.setUser("login");
             localStorage.setItem('app_user', "login");
+
+
+            useFetch("https://exride.easypear.com/firebase_req/testSignup.php",
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: {
+                    "token" : '293o9u239du823dilY0k4RLJxN2dJFoP',
+                    "email":store.$state.form.email,
+                    "fname":store.$state.form.firstname,
+                    "lname":store.$state.form.lastname,
+                    "phone":store.$state.form.phone,
+                    "leadid":localStorage.getItem("leadid")
+
+                },
+            }).then((response) => {
+                console.log(response);
             emit('next')
+            });
 
         });
 }

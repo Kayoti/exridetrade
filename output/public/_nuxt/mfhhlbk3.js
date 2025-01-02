@@ -1,1 +1,0 @@
-import{k as c,c as a,e as s,i as e,w as r,$ as p,bN as l,a0 as u,bO as d}from"./CYEOpasW.js";const m={};function f(n,i){const t=l,o=u,_=d;return a(),s("div",null,[e(t),e(o,null,{default:r(()=>[p(n.$slots,"default")]),_:3}),e(_)])}const k=c(m,[["render",f]]);export{k as default};

@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxthq/studio',
     '@vueuse/nuxt',
-    'nuxt-og-image',
+   // 'nuxt-og-image',
     '@pinia/nuxt'
   ],
 

@@ -238,11 +238,23 @@ async function createLead() {
   })
     .then((response) => {
       isLoading.value = false
-      console.log(response)
-      // $response = Zend_Json::encode(array('success' => false, 'error' => array('message' => $failure)));
+
+      let parsedResponse
+      if (typeof response === 'string') {
+        try {
+          parsedResponse = JSON.parse(response)
+        } catch (error) {
+          console.error('Error parsing response string:', error)
+          return
+        }
+      } else {
+        parsedResponse = response
+      }
+
+      console.log('Parsed Response:', parsedResponse?.data)
 
       try {
-        lead.value = JSON.parse(response.data.value)?.data
+        lead.value = parsedResponse?.data
         authStore.setUser('login')
         localStorage.setItem('app_user', JSON.stringify(lead.value)) // Store as JSON string
         localStorage.setItem('leadid', lead.value['leadid'])

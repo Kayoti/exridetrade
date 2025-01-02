@@ -14,11 +14,6 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
 
-  /** *  routeRules: {
-    '/api/search.json': { prerender: true },
-    '/docs': { redirect: '/docs/getting-started', prerender: false }
-  }, */
-
   devtools: {
     enabled: true
   },
@@ -33,12 +28,6 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-07-11',
 
-  /**  nitro: {
-    prerender: {
-      routes: ['/', '/docs'],
-      crawlLinks: true
-    }
-  }, */
 
   typescript: {
     strict: false

@@ -89,7 +89,7 @@ const links = reactive([
   { id: 4, label: 'Asking Price', completed: false, icon: 'i-heroicons-question-mark-circle', active: false },
   { id: 5, label: 'Photos Upload', completed: false, icon: 'i-heroicons-question-mark-circle', active: false },
   { id: 6, label: 'Review', completed: false, icon: 'i-heroicons-question-mark-circle', active: false }
-]);
+])
 
 function onSubmit(formData) {
   console.log(JSON.stringify(formData, null, 2))
@@ -171,8 +171,6 @@ const stepSchemas = ref([
     })
   })
 ])
-
-
 
 const vehicleStepItems = [{
   key: 'vehicle_vin',
@@ -308,7 +306,7 @@ const handleLienTab = (selectedTab: { key: number }) => {
       : number()
   })
 
-  console.log(stepSchemas.value[2])
+  // console.log(stepSchemas.value[2])
 }
 const im = '~assets/images/car-side.png'
 const handleVehicle = () => {
@@ -329,24 +327,32 @@ const handleVehicle = () => {
       method: 'POST',
       body: formData
     }).then((resp) => {
-      console.log(resp)
+      console.log(JSON.parse(resp))
       const dataInfo = JSON.parse(resp).data
       localStorage.setItem('dataInfo', JSON.stringify(dataInfo))
 
-      store.$state.form.vehicle_info.year = dataInfo.year
-      store.$state.form.vehicle_info.make = dataInfo.make.toLowerCase().charAt(0).toUpperCase() + dataInfo.make.toLowerCase().slice(1)
+      try {
+        store.$state.form.vehicle_info.year = dataInfo.year
+        store.$state.form.vehicle_info.make = dataInfo.make.toLowerCase().charAt(0).toUpperCase() + dataInfo.make.toLowerCase().slice(1)
 
-      if (store.$state.form.vehicle_info.make) {
-        nextTick(async () => {
-          fillModel(store.$state.form.vehicle_info.make)
-        })
+        if (store.$state.form.vehicle_info.make) {
+          nextTick(async () => {
+            fillModel(store.$state.form.vehicle_info.make)
+          })
+        }
+
+        store.$state.form.vehicle_info.model = dataInfo.model.toLowerCase()
+
+        console.log(store)
+
+        vehicleDisplay.value = dataInfo.year + ' ' + dataInfo.make + ' ' + store.$state.form.vehicle_info.model
+        store.$state.form.vehicle_display = vehicleDisplay.value
+      } catch (error) {
+        console.log(error)
+
+        vehicleDisplay.value = ''
+        store.$state.form.vehicle_display = ''
       }
-
-      store.$state.form.vehicle_info.model = dataInfo.model.toLowerCase()
-
-      console.log(store)
-
-      vehicleDisplay.value = dataInfo.year + ' ' + dataInfo.make + ' ' + store.$state.form.vehicle_info.model
     })
   }
 }
@@ -405,7 +411,17 @@ onMounted(() => {
 watch(
   () => store.$state.form.vehicle_vin,
   (_newValue, _oldValue) => {
-    handleVehicle()
+    if (store.$state.form.vehicle_vin.length === 17) {
+      stepSchemas.value[0] = object({
+        vehicle_vin: string()
+          .required('VIN is required')
+          .length(17, 'VIN must be exactly 17 characters')
+          .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q'),
+        vehicle_display: string()
+          .required('Please enter a valid VIN number')
+      })
+      handleVehicle()
+    }
   }
 )
 
@@ -431,6 +447,8 @@ const handleVehicleTab = (index) => {
 
   if (item.key === 'manual') {
     formState.value = store.$state.form.vehicle_info
+
+    store.$state.form.vehicle_vin = ''
     //@ts-ignore
     stepSchemas.value[0] = object({
       year: string().required('Year is required'),
@@ -438,13 +456,19 @@ const handleVehicleTab = (index) => {
       model: string().required('Model is required')
     })
   } else {
+    store.$state.form.vehicle_info.model = ''
+    store.$state.form.vehicle_info.make = ''
+    store.$state.form.vehicle_info.year = ''
+
     formState.value = store.$state.form
     //@ts-ignore
     stepSchemas.value[0] = object({
       vehicle_vin: string()
         .required('VIN is required')
         .length(17, 'VIN must be exactly 17 characters')
-        .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q')
+        .matches(/^[A-HJ-NPR-Z0-9]+$/, 'VIN can only contain alphanumeric characters excluding I, O, and Q'),
+      vehicle_display: string()
+        .required('Please enter a valid VIN number')
     })
   }
 
@@ -631,8 +655,8 @@ const handleVehicleTab = (index) => {
                         </UFormGroup>
                         <UFormGroup name="vehicle_display">
                           <UInput
-                            v-if="vehicleDisplay"
-                            v-model="vehicleDisplay"
+                            v-if="store.$state.form.vehicle_display"
+                            v-model="store.$state.form.vehicle_display"
                             size="xl"
                             disabled
                             class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
@@ -1111,7 +1135,7 @@ const handleVehicleTab = (index) => {
                   </div>
                 </div>
               </FormStep>
-              <FormStep >
+              <FormStep>
                 <Preview />
               </FormStep>
             </FormWizard>

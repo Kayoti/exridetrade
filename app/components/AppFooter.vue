@@ -42,7 +42,7 @@ const links = [{
 <template>
   <UFooter class="bg-[#222732]">
     <template #top>
-      <div class="flex justify-center mb-4">
+      <div class="flex justify-center mb-4 mt-3">
         <img
           src="~assets/images/exride_logo_light.png"
           class="h-10"

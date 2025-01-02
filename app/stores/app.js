@@ -8,6 +8,7 @@ export const useAppStore = defineStore('app', () => {
     email: '',
     otp: '',
     vehicle_vin: '',
+    vehicle_display: '',
     all_car_info: '',
     replace_vehicle: 'No',
     replace_vehicle_details: '',

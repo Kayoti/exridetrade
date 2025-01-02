@@ -7,23 +7,24 @@
   >
     <slot />
 
-    <div class="">
-      <UButton
-        v-if="hasPrevious"
-        type="button"
-        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4 me-5"
-        @click="goToPrev"
-      >
-        Previous
-      </UButton>
+<div :class="{'flex justify-center mt-4': !hasPrevious, 'flex justify-between  mt-4': hasPrevious}">
+  <UButton
+    v-if="hasPrevious"
+    type="button"
+    class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-[48%]"
+    @click="goToPrev"
+  >
+    Previous
+  </UButton>
 
-      <UButton
-        type="submit"
-        class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-xs mt-4"
-      >
-        {{ isLastStep ? 'Submit' : 'Next' }}
-      </UButton>
-    </div>
+  <UButton
+    type="submit"
+    class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-[48%]"
+  >
+    {{ isLastStep ? 'Submit' : 'Next' }}
+  </UButton>
+</div>
+
 
     <!-- <pre>{{ state }}</pre> -->
   </UForm>
@@ -72,7 +73,7 @@ interface Schema {
 const currentSchema = computed<Schema>(() => {
   /// console.log(currentStepIdx.value)
   const schema = props.validationSchema[currentStepIdx.value] as Schema
-  // console.log('schema=>', schema)
+   console.log('schema=>', schema)
   return schema
 })
 

@@ -11,9 +11,9 @@ provide('navigation', navigation)
   <div>
     <AppHeader />
 
-    <UMain>
+    <UContainer>
       <slot />
-    </UMain>
+    </UContainer>
 
     <AppFooter />
 

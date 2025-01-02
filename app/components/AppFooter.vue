@@ -1,16 +1,29 @@
 <script setup lang="ts">
 const links = [{
-  label: 'Resources',
+  label: '',
   children: [{
-    label: 'Help center'
+    label: 'About us',
+    class: 'text-white'
   }, {
-    label: 'Docs'
+    label: 'Contact us',
+    class: 'text-white'
   }, {
-    label: 'Roadmap'
+    label: 'Terms of use',
+    class: 'text-white'
   }, {
-    label: 'Changelog'
+    label: 'Privacy statement',
+    class: 'text-white'
   }]
 }, {
+  label: '',
+  children: [{
+    label: 'Listings',
+    class: 'text-white'
+  }, {
+    label: 'Loan Calculator',
+    class: 'text-white'
+  }]
+} /** {
   label: 'Features',
   children: [{
     label: 'Affiliates'
@@ -21,92 +34,73 @@ const links = [{
   }, {
     label: 'Sponsors'
   }]
-}, {
-  label: 'Company',
-  children: [{
-    label: 'About'
-  }, {
-    label: 'Pricing'
-  }, {
-    label: 'Careers'
-  }, {
-    label: 'Blog'
-  }]
-}]
+}, */
 
-const toast = useToast()
-
-const email = ref('')
-const loading = ref(false)
-
-function onSubmit() {
-  loading.value = true
-
-  setTimeout(() => {
-    toast.add({
-      title: 'Subscribed!',
-      description: 'You\'ve been subscribed to our newsletter.'
-    })
-
-    loading.value = false
-  }, 1000)
-}
+]
 </script>
 
 <template>
-  <UFooter>
+  <UFooter class="bg-[#222732]">
     <template #top>
-      <UFooterColumns :links="links">
-        <template #right>
-          <form @submit.prevent="onSubmit">
-            <UFormGroup
-              label="Subscribe to our newsletter"
-              :ui="{ container: 'mt-3' }"
+      <div class="flex justify-center mb-4">
+        <img
+          src="~assets/images/exride_logo_light.png"
+          class="h-10"
+          alt="ExRide Logo"
+        >
+      </div>
+      <div class="text-center text-sm leading-relaxed text-white py-8">
+        <p>
+          ExRide helps private sellers sell or trade their cars. We market the vehicles
+          to our extensive nationwide buyer network and guarantee every transaction
+          by handling payments, registrations, liens, and tax implications.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mt-5">
+        <div
+          v-for="category in links"
+          :key="category.label"
+        >
+          <ul class="space-y-2 list-none">
+            <li
+              v-for="child in category.children"
+              :key="child.label"
+              :class="child.class || ''"
             >
-              <UInput
-                v-model="email"
-                type="email"
-                placeholder="Enter your email"
-                :ui="{ icon: { trailing: { pointer: '' } } }"
-                required
-                size="xl"
-                autocomplete="off"
-                class="max-w-sm"
-                input-class="rounded-full"
-              >
-                <template #trailing>
-                  <UButton
-                    type="submit"
-                    size="xs"
-                    color="primary"
-                    :label="loading ? 'Subscribing' : 'Subscribe'"
-                    :loading="loading"
-                  />
-                </template>
-              </UInput>
-            </UFormGroup>
-          </form>
-        </template>
-      </UFooterColumns>
+              <a href="#">{{ child.label }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="text-center">
+          <p class="font-bold text-4xl text-[#7cccf4]">
+            416-529-3448
+          </p>
+          <p class="text-sm text-white">
+            22 Evans Ave., Toronto, ON M8Z 1J8
+          </p>
+        </div>
+      </div>
     </template>
 
     <template #left>
       <p class="text-gray-500 dark:text-gray-400 text-sm">
-        Copyright © {{ new Date().getFullYear() }}. All rights reserved.
+        Copyright © {{ new Date().getFullYear() }}. AExRide Inc. All rights reserved.
       </p>
     </template>
 
     <template #right>
       <UColorModeButton size="sm" />
 
-      <UButton
+      <!--      <UButton
         to="https://github.com/nuxt-ui-pro/saas"
         target="_blank"
         icon="i-simple-icons-github"
         aria-label="GitHub"
         color="gray"
         variant="ghost"
-      />
+      /> -->
     </template>
   </UFooter>
 </template>

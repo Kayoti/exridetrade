@@ -26,6 +26,8 @@ const handleDashboardRedirect = () => {
 onMounted(() => {
   if (authStore.getUser()) {
     isAuthenticated.value = true
+  } else {
+    console.log(authStore.getUser())
   }
 })
 </script>
@@ -44,7 +46,7 @@ onMounted(() => {
 
     <template #right>
       <UButton
-      v-if="isAuthenticated"
+        v-if="isAuthenticated"
         label="Dashboard"
         trailing-icon=""
         class=""

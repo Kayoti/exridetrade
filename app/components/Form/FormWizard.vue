@@ -1,21 +1,33 @@
 <template>
-  <UForm :schema="currentSchema" :state="flattenedData" class="space-y-4 text-center" @submit="onSubmit">
+  <UForm
+    :schema="currentSchema"
+    :state="flattenedData"
+    class="space-y-4 text-center"
+    @submit="onSubmit"
+  >
     <slot />
 
-    <div class="px-2" :class="{'flex justify-center ': !hasPrevious, 'flex justify-between  ': hasPrevious}">
-      <UButton v-if="hasPrevious" type="button"
+    <div
+      class="px-2"
+      :class="{ 'flex justify-center ': !hasPrevious, 'flex justify-between  ': hasPrevious }"
+    >
+      <UButton
+        v-if="hasPrevious"
+        type="button"
         class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full max-w-[48%]"
-        @click="goToPrev">
+        @click="goToPrev"
+      >
         Previous
       </UButton>
 
-      <UButton type="submit"
+      <UButton
+        type="submit"
         class="border border-gray-400 text-black hover:bg-gray-100 focus:outline-none font-medium text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:outline-none bg-white w-full "
-        :class="{ 'sm:max-w-[80%] md:max-w-[58%]': !hasPrevious, 'max-w-[48%]': hasPrevious }">
+        :class="{ 'sm:max-w-[80%] md:max-w-[58%]': !hasPrevious, 'max-w-[48%]': hasPrevious }"
+      >
         {{ isLastStep ? 'Submit' : 'Next' }}
       </UButton>
     </div>
-
 
     <!-- <pre>{{ state }}</pre> -->
   </UForm>
@@ -35,6 +47,8 @@ const props = defineProps({
   }
 })
 
+const router = useRouter();
+const { createInventory, loading } = useProductUtils()
 const emit = defineEmits(['submit', 'navigate'])
 const currentStepIdx = ref(0)
 
@@ -64,7 +78,7 @@ interface Schema {
 const currentSchema = computed<Schema>(() => {
   /// console.log(currentStepIdx.value)
   const schema = props.validationSchema[currentStepIdx.value] as Schema
-   console.log('schema=>', schema)
+  ///  console.log('schema=>', schema)
   return schema
 })
 
@@ -101,16 +115,27 @@ const flattenedData = computed(() => {
   return flattenFormData(props.state, schemaNodes)
 })
 
-const onSubmit = () => {
+const onSubmit = async () => {
   // console.log('++++**', currentStepIdx.value)
 
-    emit('navigate', currentStepIdx.value)
+  emit('navigate', currentStepIdx.value)
   if (!isLastStep.value) {
     currentStepIdx.value++
     return
   }
-  // console.log('submit**')
+
   // console.log(flattenedData.value)
+  try {
+    const inventoryResponse = await createInventory()
+
+    if (inventoryResponse.success) {
+      router.push({ name: 'dashboard' })
+    }
+    console.log('Inventory creation response:', inventoryResponse)
+  } catch (error) {
+    console.error('Error during inventory creation:', error)
+  }
+  console.log('submit**', loading.value)
   emit('submit', props.state)
 }
 

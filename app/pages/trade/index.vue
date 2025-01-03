@@ -92,7 +92,7 @@ const links = reactive([
 ])
 
 function onSubmit(formData) {
-  console.log(JSON.stringify(formData, null, 2))
+///  console.log(JSON.stringify(formData, null, 2))
 }
 
 const handleNav = (step) => {
@@ -481,7 +481,7 @@ const handleVehicleTab = (index) => {
 </script>
 
 <template>
-  <div>
+  <div id="u-container">
     <ULandingSection>
       <div class="flex flex-col md:flex-row gap-6">
         <div class="md:hidden">
@@ -527,8 +527,8 @@ const handleVehicleTab = (index) => {
                               : 'text-gray-500 dark:text-gray-400'
                           ]" />
                         <div class="space-y-1">
-                          <h3 class="font-medium">{{ link.label }}</h3>
-                          <p class="text-sm text-gray-500 dark:text-gray-400">{{ link.description }}</p>
+                          <h3 class="font-medium">{{ link?.label }}</h3>
+                          <p class="text-sm text-gray-500 dark:text-gray-400">{{ link?.description }}</p>
                         </div>
                       </div>
                       <!-- Checkmark for completed steps -->

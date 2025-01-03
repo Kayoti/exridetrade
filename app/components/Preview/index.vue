@@ -65,9 +65,9 @@
     </div>
 
     <div class="items-start mt-8 rounded-lg border">
-      <UAccordion size="xl" :items="items" :ui="{ wrapper: 'flex flex-col w-full p-2' }">
+      <UAccordion size="xl" :items="items" :ui="{ wrapper: 'flex flex-col w-full p-2 b' }">
         <template #vehicle-info="{ item, index, open }">
-          <UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700 "
+          <UButton color="gray" variant="ghost" class="border-b border-gray-200 dark:border-gray-700  "
             :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }">
             <template #leading />
 
@@ -299,19 +299,22 @@ const items = [
     label: 'Vehicle Information',
     icon: 'i-heroicons-exclamation-circle',
     defaultOpen: true,
-    slot: 'vehicle-info'
+    slot: 'vehicle-info',
+    class: 'text-sky-500  bg-transparent border-none mb-2'
   },
   {
     label: 'Vehicle Condition',
     icon: 'i-heroicons-exclamation-circle',
     defaultOpen: false,
-    slot: 'vehicle-condition'
+    slot: 'vehicle-condition',
+    class: 'text-sky-500  bg-transparent border-none mb-2'
   },
   {
     label: 'Replacement Information',
     icon: 'i-heroicons-exclamation-circle',
     defaultOpen: false,
-    slot: 'replacement-info'
+    slot: 'replacement-info',
+    class: 'text-sky-500  bg-transparent border-none mb-2'
   }
 ]
 </script>

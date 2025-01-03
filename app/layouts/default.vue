@@ -1,14 +1,17 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <div>
-    <AppHeader />
+  <div id="main-container">
+    <AppHeader id="app-header" />
 
     <UContainer>
-      <slot />
+      <div  class="min-h-screen flex flex-col">
+        <slot />
+      </div>
     </UContainer>
 
-    <AppFooter />
+    <AppFooter id="app-footer" />
   </div>
 </template>
+
+<script setup lang="ts">
+// Your setup script, if needed
+</script>

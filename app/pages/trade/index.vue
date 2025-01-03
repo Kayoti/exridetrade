@@ -588,7 +588,7 @@ const handleVehicleTab = (index) => {
           <div class="flex items-center justify-center ">
             <FormWizard :validation-schema="stepSchemas" :state="store.$state.form" @submit="onSubmit"
               @navigate="handleNav">
-              <FormStep >
+              <FormStep>
                 <div class="text-center">
                   <h2 class="font-bold text-2xl pb-5">
                     Vehicle Upload
@@ -617,13 +617,11 @@ const handleVehicleTab = (index) => {
                         </UFormGroup>
                         <UFormGroup size="xl" name="make" label="Select Make" class="w-full">
                           <USelectMenu v-model="store.$state.form.vehicle_info.make" placeholder="Select..."
-                            :options="make"
-                            class="" />
+                            :options="make" class="" />
                         </UFormGroup>
                         <UFormGroup size="xl" name="model" label="Select Model" class="w-full">
                           <USelectMenu v-model="store.$state.form.vehicle_info.model" :value="model"
-                            placeholder="Select..." :options="model"
-                            class="" />
+                            placeholder="Select..." :options="model" class="" />
                         </UFormGroup>
                       </div>
                     </div>
@@ -742,8 +740,7 @@ const handleVehicleTab = (index) => {
                     Are there any liens against this vehicle?
                   </div>
 
-                  <div
-                    class="w-full  rounded-lg p-2"
+                  <div class="w-full  rounded-lg p-2"
                     :class="store.$state.form.vehicle_condition.lien === 'Yes' ? 'border' : ''">
                     <UTabs v-model="lienActiveTab" :items="lienItems" class="w-full" @change="handleLienTab">
                       <template #item="{ item }">
@@ -803,8 +800,7 @@ const handleVehicleTab = (index) => {
                     </p>
                   </div>
 
-                  <div
-                    class="w-full border rounded-lg p-2">
+                  <div class="w-full border rounded-lg p-2">
                     <UFormGroup name="asking_price" class="">
                       <UButtonGroup size="xl" orientation="horizontal" class="w-full rounded-lg border overflow-hidden">
                         <UButton color="gray"
@@ -825,9 +821,9 @@ const handleVehicleTab = (index) => {
                   </div>
                 </div>
               </FormStep>
-              <FormStep class="" >
+              <FormStep class="w-full">
                 <div class=" p-2">
-                  <div class="mx-5">
+                  <div class="">
                     <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">
                       Snapshots that sell
                     </h2>
@@ -838,9 +834,10 @@ const handleVehicleTab = (index) => {
                     </p>
                   </div>
 
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 m-6">
-                    <div v-for="(label, key) in imageLabels" :key="key" class="p-3 rounded-xs border relative">
-                      <p class="pt-1 text-center text-sm font-semibold pb-2 px-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div v-for="(label, key) in imageLabels" :key="key" class=" relative"
+                      :class="{ 'p-3 w-full rounded-xs border': !store.$state.form.images[key] }">
+                      <p class="pt-1 text-center text-sm font-semibold pb-2 px-4" v-if="!store.$state.form.images[key]">
                         {{ label }}
                       </p>
 
@@ -848,26 +845,23 @@ const handleVehicleTab = (index) => {
                           ' text-gray-500 font-semibold text-base rounded max-w-md flex flex-col items-center justify-center cursor-pointer mx-auto relative h-52': true,
                           'border border-gray-300 border-dashed': !store.$state.form.images[key]
                         }">
-                        <!-- Delete Button -->
                         <button v-if="store.$state.form.images[key]"
                           class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-lg w-6 h-6 flex items-center justify-center shadow-md border border-white"
                           @click.prevent="handleDeleteImage(key)">
                           ✕
                         </button>
 
-                        <!-- Image Preview: Fixed height for the image -->
                         <img v-if="store.$state.form.images[key]" :id="key" :src="store.$state.form.images[key]"
                           :alt="label" class="w-full h-40 object-cover">
 
                         <!-- Fallback Image if Not Uploaded -->
                         <img v-else :id="key" :src="imageSources[key]" :alt="label" class="w-full h-36 object-cover">
 
-                        <!-- Image Edit/Add Text -->
                         <div class="flex flex-col items-center justify-center flex-grow pt-2">
-                          <p v-if="store.$state.form.images[key]" class="text-sm font-semibold">
+                          <!--        <p v-if="store.$state.form.images[key]" class="text-sm font-semibold">
                             - EDIT IMAGE
-                          </p>
-                          <p v-else class="text-sm font-semibold">
+                          </p>-->
+                          <p v-if="!store.$state.form.images[key]" class="text-sm font-semibold">
                             + ADD IMAGE
                           </p>
                         </div>

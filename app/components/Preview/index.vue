@@ -221,9 +221,7 @@
               <dl class="w-full text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                 <div class="flex flex-col text-start pb-3">
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
-                    Are You Looking to Replace Your Vehicle
-                    and
-                    Receive HST Credit on Your Sale?
+                    Are you looking to replace your vehicle and receive HST credit on your sale?
                   </dt>
                   <dd class="text-lg font-semibold">
                     {{ replaceVehicleInfo.replace_vehicle || '' }}

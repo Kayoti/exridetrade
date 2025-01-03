@@ -27,6 +27,8 @@ const handleLogout = () => {
   localStorage.removeItem('app_user')
   firebaseLogout()
   localStorage.removeItem('leadid')
+  localStorage.removeItem('form')
+  localStorage.removeItem('dataInfo')
 
   isSignOutLoading.value = true
 

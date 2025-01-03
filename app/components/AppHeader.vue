@@ -36,7 +36,7 @@ onMounted(() => {
     <template #logo>
       <img
         src="~assets/images/exride_logo.png"
-        class="w-[10%] sm:w-[5%] md:w-[10%] lg:w-[10%] xl:w-[8%]"
+        class="h-10"
         alt="Exride logo"
       >
       <!--      <UBadge label="SaaS" variant="subtle" class="mb-0.5" /> -->

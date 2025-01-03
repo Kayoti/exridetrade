@@ -1,5 +1,5 @@
 <template>
-  <div v-if="shouldShow">
+  <div v-if="shouldShow" class="min-w-[380px] px-2 sm:min-w-[350px] md:min-w-[600px] lg:min-w-[600px] xl:min-w-[700px]">
     <slot />
   </div>
 </template>

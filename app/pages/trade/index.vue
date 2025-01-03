@@ -482,7 +482,7 @@ const handleVehicleTab = (index) => {
       <div class="flex flex-col md:flex-row gap-6">
         <div class="md:hidden">
           <!---          <div class="flex items-start space-x-2.5 rtl:space-x-reverse mb-4">
-            <span class="flex items-center justify-center w-8 h-8 border border-sky-200 rounded-full shrink-0">
+            <span class="flex items-center justify-center w-8 h-8 border border-sky-200 rounded-lg shrink-0">
               1
             </span>
             <span>
@@ -490,7 +490,18 @@ const handleVehicleTab = (index) => {
               <p class="text-sm">{{ step }}</p>
             </span>
           </div>-->
-          <UProgress size="sm" :value="task" :max="steps" :indicator="false" class="md:hidden"></UProgress>
+          <UProgress size="xs" :value="task" :max="steps" :indicator="false" class="md:hidden">
+            <template #step-0="{ step }">
+
+            </template>
+            <template #step-1="{ step }">
+
+            </template>
+            <template #step-2="{ step }">
+
+            </template>
+
+          </UProgress>
         </div>
 
 
@@ -548,7 +559,7 @@ const handleVehicleTab = (index) => {
                   class="block relative cursor-pointer hover:opacity-75 transition-opacity"
                 >
                   <span
-                    class="absolute flex items-center justify-center w-10 h-10 rounded-full -start-14 ring-4 ring-white dark:ring-gray-900"
+                    class="absolute flex items-center justify-center w-10 h-10 rounded-lg -start-14 ring-4 ring-white dark:ring-gray-900"
                     :class="link.active ? 'bg-green-200 dark:bg-green-900' : 'bg-gray-100 dark:bg-gray-700'"
                   >
                     <component
@@ -577,46 +588,42 @@ const handleVehicleTab = (index) => {
           <div class="flex items-center justify-center ">
             <FormWizard :validation-schema="stepSchemas" :state="store.$state.form" @submit="onSubmit"
               @navigate="handleNav">
-              <FormStep class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[600px]">
+              <FormStep >
                 <div class="text-center">
                   <h2 class="font-bold text-2xl pb-5">
                     Vehicle Upload
                   </h2>
                 </div>
-                <UTabs v-model="activeTab" :items="vehicleStepItems" class="w-full rounded-full"
+                <UTabs v-model="activeTab" :items="vehicleStepItems" class="w-full rounded-lg"
                   @change="handleVehicleTab">
                   <template #item="{ item }">
                     <div>
                       <div v-if="item.key === 'vehicle_vin'"
                         class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                        <UFormGroup name="vehicle_vin">
-                          <UInput v-model="store.$state.form.vehicle_vin" size="xl"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
+                        <UFormGroup name="vehicle_vin" class="w-full">
+                          <UInput v-model="store.$state.form.vehicle_vin" size="xl" class=""
                             placeholder="Enter VIN number" />
                         </UFormGroup>
-                        <UFormGroup name="vehicle_display">
+                        <UFormGroup name="vehicle_display" class="w-full">
                           <UInput v-if="store.$state.form.vehicle_display" v-model="store.$state.form.vehicle_display"
-                            size="xl" disabled
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]"
-                            placeholder="" />
+                            size="xl" disabled class="" placeholder="" />
                         </UFormGroup>
                       </div>
                       <div v-else-if="item.key === 'manual'"
                         class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
-                        <UFormGroup size="xl" name="year" label="Select Year">
+                        <UFormGroup size="xl" name="year" label="Select Year" class="w-full">
                           <USelectMenu v-model="store.$state.form.vehicle_info.year" placeholder="Select..."
-                            :options="years"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                            :options="years" class="" />
                         </UFormGroup>
-                        <UFormGroup size="xl" name="make" label="Select Make">
+                        <UFormGroup size="xl" name="make" label="Select Make" class="w-full">
                           <USelectMenu v-model="store.$state.form.vehicle_info.make" placeholder="Select..."
                             :options="make"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                            class="" />
                         </UFormGroup>
-                        <UFormGroup size="xl" name="model" label="Select Model">
+                        <UFormGroup size="xl" name="model" label="Select Model" class="w-full">
                           <USelectMenu v-model="store.$state.form.vehicle_info.model" :value="model"
                             placeholder="Select..." :options="model"
-                            class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[500px]" />
+                            class="" />
                         </UFormGroup>
                       </div>
                     </div>
@@ -632,7 +639,7 @@ const handleVehicleTab = (index) => {
 
                 <div class="space-y-3 flex flex-col items-center justify-center min-h-[300px]">
                   <UFormGroup size="xl" label="" hint="" description="" help="" name="mileage"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Vehicle Mileage
@@ -655,7 +662,7 @@ const handleVehicleTab = (index) => {
                   </UFormGroup>
 
                   <UFormGroup size="xl" hint="" description="" help="" name="vehicle_desc"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Vehicle description
@@ -666,7 +673,7 @@ const handleVehicleTab = (index) => {
                   </UFormGroup>
 
                   <UFormGroup size="xl" hint="" description="" help="" name="accidents"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Has this vehicle been in any accidents?
@@ -683,7 +690,7 @@ const handleVehicleTab = (index) => {
                   </UFormGroup>
 
                   <UFormGroup size="xl" hint="" description="" help="" name="damages_details"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class="font-bold text-center mb-2">
                         Does this vehicle have any damages?
@@ -703,7 +710,7 @@ const handleVehicleTab = (index) => {
                   </UFormGroup>
 
                   <UFormGroup size="xl" hint="" description="" help="" name="replace_vehicle_details"
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class=" font-bold text-center mb-2 w-full max-w-full text-ellipsis overflow-hidden">
                         Are You Looking to Replace Your Vehicle and Receive an HST Credit on Your Sale?
@@ -736,16 +743,17 @@ const handleVehicleTab = (index) => {
                   </div>
 
                   <div
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
+                    class="w-full  rounded-lg p-2"
+                    :class="store.$state.form.vehicle_condition.lien === 'Yes' ? 'border' : ''">
                     <UTabs v-model="lienActiveTab" :items="lienItems" class="w-full" @change="handleLienTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3 min-h-[150px]">
+                        <div v-if="item.key === 'No'" class="space-y-3 min-h-[150px] mt-10">
                           <div class="min-h-[100px]" />
                         </div>
-                        <div v-else-if="item.key === 'Yes'" class="space-y-3 min-h-[150px]">
+                        <div v-else-if="item.key === 'Yes'" class="space-y-3 min-h-[150px] mt-10">
                           <UFormGroup name="lien_amount">
                             <UButtonGroup size="xl" orientation="horizontal"
-                              class="w-full rounded-full border overflow-hidden">
+                              class="w-full rounded-lg border overflow-hidden">
                               <UButton color="gray"
                                 class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
                                 variant="ghost">
@@ -759,7 +767,7 @@ const handleVehicleTab = (index) => {
 
                           <UFormGroup name="lender">
                             <UButtonGroup size="xl" orientation="horizontal"
-                              class="w-full rounded-full border overflow-hidden">
+                              class="w-full rounded-lg border overflow-hidden">
                               <UButton color="gray"
                                 class="text-mb font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500"
                                 variant="ghost">
@@ -796,10 +804,9 @@ const handleVehicleTab = (index) => {
                   </div>
 
                   <div
-                    class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] border rounded-lg p-2">
-                    <UFormGroup name="asking_price">
-                      <UButtonGroup size="xl" orientation="horizontal"
-                        class="w-full rounded-full border overflow-hidden">
+                    class="w-full border rounded-lg p-2">
+                    <UFormGroup name="asking_price" class="">
+                      <UButtonGroup size="xl" orientation="horizontal" class="w-full rounded-lg border overflow-hidden">
                         <UButton color="gray"
                           class="text-md font-bold text-gray-500 dark:text-gray-400 focus:ring-2 focus:ring-sky-500 px-5"
                           variant="ghost">
@@ -811,15 +818,15 @@ const handleVehicleTab = (index) => {
                       </UButtonGroup>
                     </UFormGroup>
 
-                    <UFormGroup name="range" label="Range">
+                    <UFormGroup name="range" label="Range" class="py-10 px-1">
                       <URange v-model="store.$state.form.vehicle_info.asking_price" :step="100" :min="3960"
                         :max="11162.5" />
                     </UFormGroup>
                   </div>
                 </div>
               </FormStep>
-              <FormStep>
-                <div class="min-w-[300px] sm:min-w-[350px] md:min-w-[400px] lg:min-w-[500px] xl:min-w-[650px] p-2">
+              <FormStep class="" >
+                <div class=" p-2">
                   <div class="mx-5">
                     <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">
                       Snapshots that sell
@@ -843,7 +850,7 @@ const handleVehicleTab = (index) => {
                         }">
                         <!-- Delete Button -->
                         <button v-if="store.$state.form.images[key]"
-                          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center shadow-md border border-white"
+                          class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-lg w-6 h-6 flex items-center justify-center shadow-md border border-white"
                           @click.prevent="handleDeleteImage(key)">
                           ✕
                         </button>

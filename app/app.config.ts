@@ -11,17 +11,17 @@ export default defineAppConfig({
       }
     },
     button: {
-      rounded: 'rounded-full', // rounded-lg
+      rounded: 'rounded-lg', // rounded-lg
       default: {
         size: 'md',
         color: 'sky'
       }
     },
     input: {
-      rounded: 'rounded-full' // rounded-lg
+      rounded: 'rounded-lg' // rounded-lg
     },
     select: {
-      rounded: 'rounded-full' // rounded-lg
+      rounded: 'rounded-lg' // rounded-lg
     },
     header: {
       wrapper: 'lg:!border-transparent bg-gray-50 dark:bg-gray-950',

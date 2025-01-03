@@ -223,7 +223,7 @@
                   <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400">
                     Are You Looking to Replace Your Vehicle
                     and
-                    Receive an HST Credit on Your Sale?
+                    Receive HST Credit on Your Sale?
                   </dt>
                   <dd class="text-lg font-semibold">
                     {{ replaceVehicleInfo.replace_vehicle || '' }}

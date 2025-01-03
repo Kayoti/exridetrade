@@ -711,7 +711,7 @@ const handleVehicleTab = (index) => {
                     class="w-full border rounded-lg p-2">
                     <template #label>
                       <div class=" font-bold text-center mb-2 w-full max-w-full text-ellipsis overflow-hidden">
-                        Are You Looking to Replace Your Vehicle and Receive an HST Credit on Your Sale?
+                        Are You Looking to Replace Your Vehicle and Receive HST Credit on Your Sale?
                       </div>
                     </template>
 

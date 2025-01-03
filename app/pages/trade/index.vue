@@ -279,7 +279,26 @@ const updateValidationSchema = () => {
       : string() // Optional if 'No'
   })
 
-  console.log(currentSchema)
+  //console.log(currentSchema)
+}
+
+const updateValidationSchema2 = () => {
+  const currentSchema = stepSchemas.value[2]
+
+  stepSchemas.value[2] = currentSchema.shape({
+    lien: string().required(),
+    lender: store.$state.form.vehicle_condition.lien === 'Yes'
+      ? string().required('Lender is required')
+      : string(),
+    lien_amount: store.$state.form.vehicle_condition.lien === 'Yes'
+      ? number()
+        .required('Lien amount is required')
+        .typeError('Lien amount must be a number')
+        .positive('Lien amount must be a positive number')
+      : string()
+  })
+
+  console.log(stepSchemas.value[2])
 }
 
 const handleLienTab = (selectedTab: { key: number }) => {
@@ -291,24 +310,9 @@ const handleLienTab = (selectedTab: { key: number }) => {
     store.$state.form.vehicle_condition.lien = 'No'
   }
 
-  const currentSchema = stepSchemas.value[2]
-
-  stepSchemas.value[2] = currentSchema.shape({
-    lien: string().required(),
-    lender: store.$state.form.vehicle_condition.lien === 'Yes'
-      ? string().required('Lender is required')
-      : string(),
-    lien_amount: store.$state.form.vehicle_condition.lien === 'Yes'
-      ? number()
-          .required('Lien amount is required')
-          .typeError('Lien amount must be a number')
-          .positive('Lien amount must be a positive number')
-      : number()
-  })
-
-  // console.log(stepSchemas.value[2])
+  updateValidationSchema2()
 }
-const im = '~assets/images/car-side.png'
+
 const handleVehicle = () => {
   isError.value = false
   store.$state.form.vehicle_info.model = ''
@@ -644,7 +648,7 @@ const handleVehicleTab = (index) => {
                       </div>
                     </template>
                     <UInput v-model="store.$state.form.vehicle_info.mileage" placeholder="Mileage" type="number"
-                      name="mileage" class=" no-arrows">
+                      name="mileage" class=" no-arrows py-2 mb-3">
                       <template #trailing>
                         <p class="text-gray-500 dark:text-gray-400 text-xs">
                           Kilometers
@@ -740,12 +744,15 @@ const handleVehicleTab = (index) => {
                     Are there any liens against this vehicle?
                   </div>
 
-                  <div class="w-full  rounded-lg p-2"
+                  <div class="w-full  rounded-lg p-2 border"
                     :class="store.$state.form.vehicle_condition.lien === 'Yes' ? 'border' : ''">
                     <UTabs v-model="lienActiveTab" :items="lienItems" class="w-full" @change="handleLienTab">
                       <template #item="{ item }">
-                        <div v-if="item.key === 'No'" class="space-y-3 min-h-[150px] mt-10">
-                          <div class="min-h-[100px]" />
+                        <div v-if="item.key === 'No'"
+                          class="space-y-3 min-h-[150px] mt-10 flex items-center justify-center">
+                          <div class="min-h-[100px]">
+                            <p>No liens on this vehicle.</p>
+                          </div>
                         </div>
                         <div v-else-if="item.key === 'Yes'" class="space-y-3 min-h-[150px] mt-10">
                           <UFormGroup name="lien_amount">
@@ -836,25 +843,29 @@ const handleVehicleTab = (index) => {
 
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div v-for="(label, key) in imageLabels" :key="key" class=" relative"
-                      :class="{ 'p-3 w-full rounded-xs border': !store.$state.form.images[key] }">
-                      <p class="pt-1 text-center text-sm font-semibold pb-2 px-4" v-if="!store.$state.form.images[key]">
-                        {{ label }}
-                      </p>
+                      :class="{ 'p-3 w-full rounded-xl border': !store.$state.form.images[key] }">
+
 
                       <label :for="key + '-file-input'" :class="{
                           ' text-gray-500 font-semibold text-base rounded max-w-md flex flex-col items-center justify-center cursor-pointer mx-auto relative h-52': true,
-                          'border border-gray-300 border-dashed': !store.$state.form.images[key]
+                          'border-none border-gray-300 border-dashed': !store.$state.form.images[key]
                         }">
+
                         <button v-if="store.$state.form.images[key]"
                           class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-lg w-6 h-6 flex items-center justify-center shadow-md border border-white"
                           @click.prevent="handleDeleteImage(key)">
                           ✕
                         </button>
 
+                        <p class="pt-1 text-center text-sm font-semibold pb-2 px-4"
+                          v-if="!store.$state.form.images[key]">
+                          {{ label }}
+                        </p>
+
                         <img v-if="store.$state.form.images[key]" :id="key" :src="store.$state.form.images[key]"
                           :alt="label" class="w-full h-40 object-cover">
 
-                        <!-- Fallback Image if Not Uploaded -->
+                      
                         <img v-else :id="key" :src="imageSources[key]" :alt="label" class="w-full h-36 object-cover">
 
                         <div class="flex flex-col items-center justify-center flex-grow pt-2">

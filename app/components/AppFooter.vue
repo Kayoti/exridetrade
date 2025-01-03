@@ -86,7 +86,7 @@ const links = [{
 
     <template #left>
       <p class="text-gray-500 dark:text-gray-400 text-sm">
-        Copyright © {{ new Date().getFullYear() }}. AExRide Inc. All rights reserved.
+        Copyright © {{ new Date().getFullYear() }}. At ExRide Inc. All rights reserved.
       </p>
     </template>
 

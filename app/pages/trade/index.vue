@@ -834,7 +834,7 @@ const handleVehicleTab = (index) => {
                     <h2 class="text-2xl font-bold text-center w-full pb-4 pt-2">
                       Snapshots that sell
                     </h2>
-                    <p class="pt-1 font-semibold text-sm pb-2 px-4">
+                    <p class="pt-1 mb-3 font-semibold text-sm pb-2 px-4">
                       Remember, a well-presented car is a dealer's
                       delight- the prettier
                       the picture, the bigger the bucks.
@@ -865,7 +865,7 @@ const handleVehicleTab = (index) => {
                         <img v-if="store.$state.form.images[key]" :id="key" :src="store.$state.form.images[key]"
                           :alt="label" class="w-full h-40 object-cover">
 
-                      
+
                         <img v-else :id="key" :src="imageSources[key]" :alt="label" class="w-full h-36 object-cover">
 
                         <div class="flex flex-col items-center justify-center flex-grow pt-2">
